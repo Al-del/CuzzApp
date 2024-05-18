@@ -88,12 +88,15 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Button(
                         onClick = {
-                            visible.value = false
+                            //GO to form Register
+                            val intent = Intent(this@MainActivity, Register::class.java)
+                            startActivity(intent)
+
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Pink, containerColor = LightYellow),
                         modifier = Modifier.fillMaxWidth(0.8f)
                     ) {
-                        Text(text = "Go to Second Activity")
+                        Text(text = "Don't have an account? Register now!")
                     }
                 }
             }
