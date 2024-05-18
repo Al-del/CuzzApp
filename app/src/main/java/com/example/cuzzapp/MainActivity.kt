@@ -25,11 +25,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-
-val LighterRed = Color(0xFFFA7070)
-val Pink = Color(0xFFFEFDED)
-val LightOrange = Color(0xFFC6EBC5)
-val LightYellow = Color(0xFFC6EBC5)
+import com.example.cuzzapp.ui.theme.LightOrange
+import com.example.cuzzapp.ui.theme.LightYellow
+import com.example.cuzzapp.ui.theme.LighterRed
+import com.example.cuzzapp.ui.theme.Pink
 
 class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi

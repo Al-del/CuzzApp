@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "891176421689",
+    "project_id": "cuzzapp-9a058",
+    "storage_bucket": "cuzzapp-9a058.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891176421689:android:40f1a289b310e332ff80e8",
+        "android_client_info": {
+          "package_name": "com.example.cuzzapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2QW9v9xIzpT9ppXeRIY91Us7T69mXVbo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

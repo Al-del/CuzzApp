@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.ui.res.painterResource
+import com.example.cuzzapp.ui.theme.*
 
 sealed class Screen(val route: String, val label: String, val icon: Int) {
     object Home : Screen("home", "Home", R.drawable.home)
@@ -34,7 +35,10 @@ fun AppNavigator() {
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    BottomNavigation {
+    BottomNavigation(
+        backgroundColor = LighterRed, // Set the background color of the BottomNavigation
+        contentColor = Pink // Set the default content color of the BottomNavigation
+    ) {
         val items = listOf(Screen.Home, Screen.Search, Screen.Profile)
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -49,7 +53,9 @@ fun BottomNavigationBar(navController: NavController) {
                         popUpTo(navController.graph.startDestinationId)
                         launchSingleTop = true
                     }
-                }
+                },
+                selectedContentColor = LightOrange, // Set the color of the selected item
+                unselectedContentColor = LightYellow // Set the color of the unselected item
             )
         }
     }
