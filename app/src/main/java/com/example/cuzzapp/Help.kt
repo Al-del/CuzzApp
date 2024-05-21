@@ -18,6 +18,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.ui.res.painterResource
 import com.example.cuzzapp.ui.theme.*
 
+public var url_photo:String = ""
+public var points:Int = 0
+val API_KEY = "AIzaSyD3_fr9w1VJZ9JhVTR3Qw6d7WXYyIs-Vig"
+val YOUTUBE_API_SERVICE_NAME = "youtube"
+val YOUTUBE_API_VERSION = "v3"
 sealed class Screen(val route: String, val label: String, val icon: Int) {
     object Home : Screen("home", "Home", R.drawable.home)
     object Search : Screen("search", "Ranking", R.drawable.ranking)
@@ -27,7 +32,7 @@ sealed class Screen(val route: String, val label: String, val icon: Int) {
 fun AppNavigator() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = Screen.Home.route) {
-            composable(Screen.Home.route) { HomeScreen() }
+        composable(Screen.Home.route) { HomeScreen() }
         composable(Screen.Search.route) { RankingScreen() }
         composable(Screen.Profile.route) { ProfileScreen() }
     }
@@ -50,7 +55,7 @@ fun BottomNavigationBar(navController: NavController) {
                 selected = currentRoute == screen.route,
                 onClick = {
                     navController.navigate(screen.route) {
-                        popUpTo(navController.graph.startDestinationId)
+                        popUpTo(Screen.Home.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 },

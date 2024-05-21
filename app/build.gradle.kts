@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    id("com.google.relay") version "0.3.00"
 }
 
 android {
@@ -63,6 +64,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -78,5 +80,8 @@ dependencies {
 
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.compose.material:material:1.0.5")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
+
+    implementation("io.coil-kt:coil-compose:1.4.0")
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
 }
