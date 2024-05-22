@@ -1,7 +1,9 @@
 package com.example.cuzzapp
 
 import API_KEY
+import BottomNavigationBar
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -65,6 +67,12 @@ import kotlinx.coroutines.withContext
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Divider
+import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.compose.rememberNavController
+import coil.decode.withInterruptibleSource
+import video_l
+
 var videos = listOf<Map<String, String>>()
 class HomeScreen : ComponentActivity() {
 
@@ -72,21 +80,23 @@ class HomeScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyDrawer(rememberScaffoldState())
+            MyDrawer(this,rememberScaffoldState())
 
         }
     }
 }
 @Composable
-fun HOmescreen() {
+fun HOmescreen(homeScreen: HomeScreen) {
     var searchQuery by remember { mutableStateOf("") }
 
     println("Current searchQuery: $searchQuery") // Add this line
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()
+        .background(Color(0xFF262323)) // Set background color to 262323
+    ) {
         LoadImageFromUrl(url = url_photo, points = points)
         Rectangle2(searchQuery, { newQuery -> searchQuery = newQuery })
-        DisplayVideos(searchQuery)
+        DisplayVideos(homeScreen,searchQuery)
 
     }
 }
@@ -113,6 +123,8 @@ fun LoadImageFromUrl(url: String, points: Int) {
 
         Text(
             text = "Points: $points",
+            color = Color.White, // Set the color of the text to white
+
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .offset(x = (-20).dp, y = (10).dp) // Move the text up and to the left
@@ -134,9 +146,9 @@ fun Rectangle2(searchQuery: String, onQueryChange: (String) -> Unit, modifier: M
             textColor = Color(0xff1c1b1f),
         ),
         modifier = modifier
-            .offset(x = 55.dp, y = 38.dp)
+            .offset(x = 55.dp, y = 30.dp)
             .requiredWidth(width = 250.dp)
-            .requiredHeight(height = 50.dp)
+            .requiredHeight(height = 45.dp)
             .clip(shape = RoundedCornerShape(100.dp)
             ))
     Image(
@@ -144,7 +156,7 @@ fun Rectangle2(searchQuery: String, onQueryChange: (String) -> Unit, modifier: M
         contentDescription = "search",
         colorFilter = ColorFilter.tint(Color(0xff1c1b1f)),
         modifier = modifier
-            .offset(x = 260.dp, y = 45.dp)
+            .offset(x = 260.dp, y = 35.dp)
             .requiredSize(size = 35.dp))
 }
 
@@ -159,6 +171,7 @@ suspend fun getEducationalVideos(query: String, maxResults: Int = 5): List<Map<S
     val response = client.newCall(request).execute()
     val jsonString = response.body?.string()
     val jsonObject = JSONObject(jsonString)
+    println(jsonString)
     val items = jsonObject.getJSONArray("items")
     val videos = mutableListOf<Map<String, String>>()
     for (i in 0 until items.length()) {
@@ -167,7 +180,9 @@ suspend fun getEducationalVideos(query: String, maxResults: Int = 5): List<Map<S
             "title" to item.getJSONObject("snippet").getString("title"),
             "description" to item.getJSONObject("snippet").getString("description"),
             "url" to "https://www.youtube.com/watch?v=${item.getJSONObject("id").getString("videoId")}",
-            "thumbnail" to item.getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("default").getString("url") // Add this line
+            "thumbnail" to item.getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("default").getString("url"), // Add this line
+            "id" to item.getJSONObject("id").getString("videoId") // Add this line
+
         )
         videos.add(video)
     }
@@ -205,7 +220,7 @@ fun searchVideosByText(query: String, maxResults: Int = 5): List<Map<String, Str
 }
 
 @Composable
-fun DisplayVideos(searchQuery: String) {
+fun DisplayVideos(homeScreen: HomeScreen,searchQuery: String) {
     var videos by remember { mutableStateOf(emptyList<Map<String, String>>()) }
 
     LaunchedEffect(searchQuery) {
@@ -221,6 +236,7 @@ fun DisplayVideos(searchQuery: String) {
     Box(modifier = Modifier.fillMaxSize()) { // Add this Box
         LazyColumn(
             modifier = Modifier
+
                 .fillMaxHeight(0.8f)
                 .align(Alignment.BottomCenter) // Align to bottom
                 .offset(y = -offsetHeight) // Move the LazyColumn up by 10% of the screen height
@@ -231,7 +247,8 @@ fun DisplayVideos(searchQuery: String) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    elevation = 8.dp
+                    backgroundColor = Color(0xFFA91D3A), // Set background color to A91D3A
+                            elevation = 8.dp
                 ) {
                     Row(
                         modifier = Modifier.padding(8.dp),
@@ -240,10 +257,22 @@ fun DisplayVideos(searchQuery: String) {
                         val painter = rememberImagePainter(data = video["thumbnail"])
                         Image(
                             painter = painter,
+
                             contentDescription = "Video Thumbnail",
                             modifier = Modifier
+                                .clickable {
+                                    video_l.title = video["title"].toString()
+                                    video_l.description = video["description"].toString()
+                                    video_l.url = video["url"].toString()
+                                    video_l.thumbnail = video["thumbnail"].toString()
+                                    video_l.id = video["id"].toString()
+                                    println(videos[index])
+                                    val intent = Intent(homeScreen, Video::class.java)
+                                    startActivity(homeScreen, intent, null)
+                                }
                                 .size(120.dp)
                                 .clip(RoundedCornerShape(8.dp))
+
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
@@ -251,7 +280,12 @@ fun DisplayVideos(searchQuery: String) {
                             style = MaterialTheme.typography.h6,
                             modifier = Modifier.padding(8.dp)
                         )
+
                     }
+                    Divider(
+                        color = Color.White,
+                        modifier = Modifier
+                            .requiredWidth(width = 355.dp))
                 }
             }
         }
@@ -259,8 +293,9 @@ fun DisplayVideos(searchQuery: String) {
 }
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MyDrawer(scaffoldState: ScaffoldState) {
+fun MyDrawer(homeScreen: HomeScreen,scaffoldState: ScaffoldState) {
     val coroutineScope = rememberCoroutineScope()
+    val navController = rememberNavController() // Create a NavController
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -346,7 +381,9 @@ fun MyDrawer(scaffoldState: ScaffoldState) {
         },
         content = {
             // Your content
-            HOmescreen()
-        }
+            HOmescreen(homeScreen)
+        },
+        bottomBar = { BottomNavigationBar(navController) } // Add the BottomNavigationBar
+
     )
 }

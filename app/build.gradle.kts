@@ -3,13 +3,21 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     id("com.google.relay") version "0.3.00"
-}
+    id("com.chaquo.python") version "15.0.1"
 
+
+}
 android {
+    flavorDimensions += "pyVersion"
+    productFlavors {
+        create("py310") { dimension = "pyVersion" }
+        create("py311") { dimension = "pyVersion" }
+    }
     namespace = "com.example.cuzzapp"
     compileSdk = 34
 
     defaultConfig {
+
         applicationId = "com.example.cuzzapp"
         minSdk = 24
         targetSdk = 34
@@ -19,6 +27,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        ndk {
+            abiFilters  += listOf("arm64-v8a", "x86_64")
         }
     }
 
@@ -84,4 +95,34 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:1.4.0")
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
+
+    implementation("io.sanghun:compose-video:1.2.0")
+    implementation("androidx.media3:media3-exoplayer:1.1.0") // [Required] androidx.media3 ExoPlayer dependency
+    implementation("androidx.media3:media3-session:1.1.0") // [Required] MediaSession Extension dependency
+    implementation("androidx.media3:media3-ui:1.1.0") // [Required] Base Player UI
+
+    implementation("androidx.media3:media3-exoplayer-dash:1.1.0") // [Optional] If your media item is DASH
+    implementation("androidx.media3:media3-exoplayer-hls:1.1.0") // [Optional] If your media item is HLS (m3u8..)
+
+ //   implementation("com.chaquo.python:gradle:15.0.1")
+
+    implementation( "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28")
+
+
+}
+
+chaquopy {
+    productFlavors {
+        getByName("py310") { version = "3.10" }
+        getByName("py311") { version = "3.11" }
+    }
+    defaultConfig {
+        version = "3.10"
+        pip {
+            // A requirement specifier, with or without a version number:
+            install("requests==2.24.0")
+            install("youtube-dl")
+
+        }
+    }
 }

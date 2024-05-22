@@ -89,6 +89,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import points
 import url_photo
+import username_true
 import java.io.ByteArrayOutputStream
 
 class Register : ComponentActivity() {
@@ -160,6 +161,7 @@ fun LogIn(modifier: Modifier = Modifier) {
                         // User found
                         println("User found: ${user.name}")
                         println("Link to profile: ${user.photoUrl}")
+                        username_true = user.name
                         url_photo = user.photoUrl
                         points = user.Points
                         navigateToOtherActivity = true
