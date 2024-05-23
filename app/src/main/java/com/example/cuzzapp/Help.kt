@@ -1,5 +1,7 @@
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -10,7 +12,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.cuzzapp.HomeScreen
 import com.example.cuzzapp.R
 import com.example.cuzzapp.RankingScreen
-import com.example.cuzzapp.ui.theme.ProfileScreen
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -25,7 +26,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
+import com.example.cuzzapp.Profile
+import com.example.cuzzapp.Register
 import com.example.cuzzapp.ui.theme.*
 import com.google.firebase.database.FirebaseDatabase
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -35,12 +39,12 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 public var url_photo:String = ""
 public var points:Int = 0
-val API_KEY = "AIzaSyDOHuQ-1zNUgHOLOPJGpK8lK8ySFfjErS0"
+val API_KEY = "AIzaSyBJ7GE586ZHxxk1HJFeYsaMDFMRvJdAYDU"
 val YOUTUBE_API_SERVICE_NAME = "youtube"
 val YOUTUBE_API_VERSION = "v3"
 sealed class Screen(val route: String, val label: String, val icon: Int) {
     object Home : Screen("home", "Home", R.drawable.home)
-    object Search : Screen("search", "Ranking", R.drawable.ranking)
+    object Ranking : Screen("search", "Ranking", R.drawable.ranking)
     object Profile : Screen("profile", "Profile", R.drawable.profile)
 }
 @Composable
@@ -48,30 +52,43 @@ fun AppNavigator() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) { HomeScreen() }
-        composable(Screen.Search.route) { RankingScreen() }
-        composable(Screen.Profile.route) { ProfileScreen() }
+        composable(Screen.Ranking.route) { RankingScreen() }
+        composable(Screen.Profile.route) { Profile() }
     }
+    BottomNavigationBar()
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun BottomNavigationBar() {
+    val context = LocalContext.current // Get the local context to use startActivity
+    val navController = rememberNavController() // Remember a NavController
     BottomNavigation(
         backgroundColor = LighterRed, // Set the background color of the BottomNavigation
         contentColor = Pink // Set the default content color of the BottomNavigation
     ) {
-        val items = listOf(Screen.Home, Screen.Search, Screen.Profile)
-
+        val items = listOf(Screen.Home, Screen.Ranking, Screen.Profile)
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
-        items.forEach { screen ->
+
+        items.forEachIndexed { index, screen ->
             BottomNavigationItem(
                 icon = { Icon(painterResource(screen.icon), contentDescription = null) },
                 label = { Text(screen.label) },
-                selected = currentRoute == screen.route,
+                selected = currentRoute == screen.route, // Add this line
                 onClick = {
-                    navController.navigate(screen.route) {
-                        popUpTo(Screen.Home.route) { inclusive = true }
-                        launchSingleTop = true
+                    when(index) {
+                        0 -> {
+                            val intent = Intent(context, HomeScreen::class.java)
+                            context.startActivity(intent)
+                        }
+                        1 -> {
+                            val intent = Intent(context, RankingScreen::class.java)
+                            context.startActivity(intent)
+                        }
+                        2 -> {
+                            val intent = Intent(context, Profile::class.java)
+                            context.startActivity(intent)
+                        }
                     }
                 },
                 selectedContentColor = LightOrange, // Set the color of the selected item
@@ -80,12 +97,14 @@ fun BottomNavigationBar(navController: NavController) {
         }
     }
 }
+
 class video_one{
     var title:String = ""
     var description:String = ""
     var url:String = ""
     var thumbnail:String = ""
     var id:String = ""
+
 }
 public var video_l:video_one = video_one()
 public var username_true:String = ""
@@ -97,6 +116,7 @@ fun YouTubePlayer_ok(
     val context = LocalContext.current // Get the local context to show the toast
     AndroidView(
         modifier = Modifier
+            .offset(x = 0.dp, y = 50.dp)
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp)),
@@ -121,7 +141,8 @@ fun YouTubePlayer_ok(
                             val accountsRef = database.getReference("accounts")
 
                             // Update the points to 100
-                            accountsRef.child(username_true).child("Points").setValue(points+ 100)
+                            points+= 100
+                            accountsRef.child(username_true).child("points").setValue(points)
                         }
                     }
                 })

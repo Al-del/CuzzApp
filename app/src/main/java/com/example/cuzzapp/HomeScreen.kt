@@ -1,6 +1,7 @@
 package com.example.cuzzapp
 
 import API_KEY
+import AppNavigator
 import BottomNavigationBar
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -68,7 +69,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Divider
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.decode.withInterruptibleSource
 import video_l
@@ -80,6 +87,7 @@ class HomeScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            println("url $url_photo")
             MyDrawer(this,rememberScaffoldState())
 
         }
@@ -87,7 +95,7 @@ class HomeScreen : ComponentActivity() {
 }
 @Composable
 fun HOmescreen(homeScreen: HomeScreen) {
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by remember { mutableStateOf("calculus") }
 
     println("Current searchQuery: $searchQuery") // Add this line
 
@@ -218,28 +226,26 @@ fun searchVideosByText(query: String, maxResults: Int = 5): List<Map<String, Str
     }
     return videos
 }
-
 @Composable
-fun DisplayVideos(homeScreen: HomeScreen,searchQuery: String) {
+fun DisplayVideos(homeScreen: HomeScreen, searchQuery: String) {
     var videos by remember { mutableStateOf(emptyList<Map<String, String>>()) }
 
     LaunchedEffect(searchQuery) {
         videos = getEducationalVideos(searchQuery, 5)
     }
 
-    // Get the screen height
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val gradientBrush = Brush.verticalGradient(
+        colors = listOf(Color(0xFFCF0A0A), Color(0xFF262323)),
+        startY = 0f,
+        endY = 500f
+    )
 
-    // Calculate 10% of the screen height
-    val offsetHeight = screenHeight * 0.1f
-
-    Box(modifier = Modifier.fillMaxSize()) { // Add this Box
+    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier
-
                 .fillMaxHeight(0.8f)
-                .align(Alignment.BottomCenter) // Align to bottom
-                .offset(y = -offsetHeight) // Move the LazyColumn up by 10% of the screen height
+                .align(Alignment.BottomCenter)
+                .offset(y = -LocalConfiguration.current.screenHeightDp.dp * 0.1f)
         ) {
             items(videos.size) { index ->
                 val video = videos[index]
@@ -247,45 +253,47 @@ fun DisplayVideos(homeScreen: HomeScreen,searchQuery: String) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    backgroundColor = Color(0xFFA91D3A), // Set background color to A91D3A
-                            elevation = 8.dp
+                    elevation = 8.dp,
+                    backgroundColor = Color.Transparent, // Set background color to Transparent
+                    contentColor = Color.White // Set content color to White
                 ) {
-                    Row(
-                        modifier = Modifier.padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val painter = rememberImagePainter(data = video["thumbnail"])
-                        Image(
-                            painter = painter,
-
-                            contentDescription = "Video Thumbnail",
-                            modifier = Modifier
-                                .clickable {
-                                    video_l.title = video["title"].toString()
-                                    video_l.description = video["description"].toString()
-                                    video_l.url = video["url"].toString()
-                                    video_l.thumbnail = video["thumbnail"].toString()
-                                    video_l.id = video["id"].toString()
-                                    println(videos[index])
-                                    val intent = Intent(homeScreen, Video::class.java)
-                                    startActivity(homeScreen, intent, null)
-                                }
-                                .size(120.dp)
-                                .clip(RoundedCornerShape(8.dp))
-
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = video["title"].toString(),
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(8.dp)
-                        )
-
-                    }
-                    Divider(
-                        color = Color.White,
+                    Box(
                         modifier = Modifier
-                            .requiredWidth(width = 355.dp))
+                            .fillMaxSize()
+                            .background(brush = gradientBrush) // Set background to gradient
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val painter = rememberImagePainter(data = video["thumbnail"])
+                            Image(
+                                painter = painter,
+                                contentDescription = "Video Thumbnail",
+                                modifier = Modifier
+                                    .clickable {
+                                        video_l.title = video["title"].toString()
+                                        video_l.description = video["description"].toString()
+                                        video_l.url = video["url"].toString()
+                                        video_l.thumbnail = video["thumbnail"].toString()
+                                        video_l.id = video["id"].toString()
+                                        println(videos[index])
+                                        val intent = Intent(homeScreen, Video::class.java)
+                                        startActivity(homeScreen, intent, null)
+                                    }
+                                    .size(120.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = video["title"].toString(),
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.padding(8.dp),
+                                color = Color.White
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -296,7 +304,7 @@ fun DisplayVideos(homeScreen: HomeScreen,searchQuery: String) {
 fun MyDrawer(homeScreen: HomeScreen,scaffoldState: ScaffoldState) {
     val coroutineScope = rememberCoroutineScope()
     val navController = rememberNavController() // Create a NavController
-
+val context = LocalContext.current // Get the local context to use startActivity
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = {
@@ -324,6 +332,32 @@ fun MyDrawer(homeScreen: HomeScreen,scaffoldState: ScaffoldState) {
                     Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
 
                 Button(
+                    onClick = {
+                        val intent = Intent(context, asis::class.java)
+                        startActivity(context, intent, null)
+
+                    },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+                ) {
+                    Text("Asistenta")
+                }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
+                Button(
+                    onClick = { },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+                ) {
+                    Text("Ranking")
+                }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
+                Button(
                     onClick = { },
                     shape = RoundedCornerShape(80.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
@@ -342,48 +376,26 @@ fun MyDrawer(homeScreen: HomeScreen,scaffoldState: ScaffoldState) {
                         .requiredWidth(width = 170.dp)
                         .requiredHeight(height = 40.dp)
                 ) {
-                    Text("Button 2")
+                    Text("Profile")
                 }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                ) {
-                    Text("Button 3")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                ) {
-                    Text("Button 4")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                ) {
-                    Text("Button 5")
-                }
+
             }
         },
         content = {
             // Your content
             HOmescreen(homeScreen)
         },
-        bottomBar = { BottomNavigationBar(navController) } // Add the BottomNavigationBar
+        bottomBar = { AppNavigator(navController) } // Pass the NavController to AppNavigator
 
     )
+}
+
+@Composable
+fun AppNavigator(navController: NavHostController) { // Add NavController as a parameter
+    NavHost(navController, startDestination = Screen.Home.route) {
+        composable(Screen.Home.route) { HomeScreen() }
+        composable(Screen.Ranking.route) { RankingScreen() }
+        composable(Screen.Profile.route) { Profile() }
+    }
+    BottomNavigationBar()
 }

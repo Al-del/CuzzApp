@@ -161,6 +161,8 @@ fun LogIn(modifier: Modifier = Modifier) {
                         // User found
                         println("User found: ${user.name}")
                         println("Link to profile: ${user.photoUrl}")
+                        println("Points: ${user.Points}")
+                        println("Stateteus: ${user.Points} ${user.email}")
                         username_true = user.name
                         url_photo = user.photoUrl
                         points = user.Points
