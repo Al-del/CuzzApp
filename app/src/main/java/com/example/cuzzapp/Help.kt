@@ -59,9 +59,10 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 public var url_photo:String = ""
+public var username_for_all:String = ""
 public var points:Int = 0
 public var descriptiones:String = ""
-val API_KEY = "AIzaSyAOYoOXNP1sIOPeIErbIO9pbM0WtAjLomo"
+val API_KEY = "AIzaSyBRiRRItMTBZtx-Xvq_MBVM-t1Kp_KSSB0"
 val YOUTUBE_API_SERVICE_NAME = "youtube"
 val YOUTUBE_API_VERSION = "v3"
 sealed class Screen(val route: String, val label: String, val icon: Int) {
@@ -108,6 +109,7 @@ fun BottomNavigationBar() {
                             context.startActivity(intent)
                         }
                         2 -> {
+                            username_for_all = username_true
                             val intent = Intent(context, Profile::class.java)
                             context.startActivity(intent)
                         }

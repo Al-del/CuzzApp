@@ -61,6 +61,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import points
 import url_photo
+import username_for_all
 
 class RankingScreen : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -156,6 +157,11 @@ class RankingScreen : ComponentActivity() {
                                             painter = rememberImagePainter(user.photoUrl),
                                             contentDescription = "User Icon",
                                             modifier = Modifier.clip(CircleShape)
+                                                .clickable {
+                                                    username_for_all = user.name
+                                                    val intent = Intent(this@RankingScreen, Profile::class.java)
+                                                    startActivity(intent)
+                                                }
                                         )
                                     }
 

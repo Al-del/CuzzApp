@@ -188,7 +188,7 @@ fun LogIn(modifier: Modifier = Modifier) {
         contentColor = Color.White, // Change this to your desired color
         backgroundColor = Color(0xff2C3E50))
 ) {
-    Text("Log in")
+    Text("Log in", color = Color.White)
 }
         }
         Text(
@@ -212,7 +212,8 @@ fun LogIn(modifier: Modifier = Modifier) {
                 .requiredWidth(width = 300.dp)
                 .requiredHeight(height = 60.dp)
                 .clickable {
-
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
                 }
         )
 

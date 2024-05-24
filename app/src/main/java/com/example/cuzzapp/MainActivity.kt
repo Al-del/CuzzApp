@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
@@ -154,7 +155,11 @@ class MainActivity : ComponentActivity() {
         var usernames by remember { mutableStateOf(TextFieldValue()) }
         var password_ by remember { mutableStateOf(TextFieldValue()) }
         var confirmPassword by remember { mutableStateOf(TextFieldValue()) }
-
+        val gradientBrush = Brush.verticalGradient(
+            colors = listOf(Color(0xFFED213A), Color(0xFF93291E)),
+            startY = 0f,
+            endY = 500f
+        )
         Box(
             modifier = modifier
                 .fillMaxWidth()
@@ -443,6 +448,18 @@ class MainActivity : ComponentActivity() {
                         }
                     }
             )
+            Image(
+                painter = painterResource(id = R.drawable.cuzzapp),
+                contentDescription = "Icon",
+
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 70.dp,
+                        y = -340.dp
+                    )
+                    .requiredSize(size = 170.dp)
+                    .clip(shape = RoundedCornerShape(100.dp)))
         }
     }
 

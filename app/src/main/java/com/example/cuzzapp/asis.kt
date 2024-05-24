@@ -173,7 +173,7 @@ class asis : ComponentActivity() {
     interface OpenAIApi {
         @Headers(
             "Content-Type: application/json",
-            "Authorization: Bearer API_KEY"
+            "Authorization: Bearer sk-proj-VMQAv8g6fquZjMD1U0y8T3BlbkFJ5FSxP3Yi3XNcGzUrrgBX"
         )
         @POST("v1/chat/completions")
         fun getChatResponse(@Body request: ChatGPTRequest): Call<ChatGPTResponse>
