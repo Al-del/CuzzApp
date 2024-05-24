@@ -87,6 +87,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import descriptiones
 import points
 import url_photo
 import username_true
@@ -166,6 +167,7 @@ fun LogIn(modifier: Modifier = Modifier) {
                         username_true = user.name
                         url_photo = user.photoUrl
                         points = user.Points
+                        descriptiones = user.state
                         navigateToOtherActivity = true
                     }
                 }

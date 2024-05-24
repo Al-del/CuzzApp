@@ -1,5 +1,6 @@
 package com.example.cuzzapp
 
+import Drawer_final
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -76,7 +77,7 @@ class asis : ComponentActivity() {
 
         setContent {
             val scaf_state = rememberScaffoldState()
-            MyDrawer_3(scaffoldState =scaf_state)
+            Drawer_final(scaf_state, {final()})
         }
     }
 
@@ -85,7 +86,7 @@ class asis : ComponentActivity() {
     fun ChatScreen() {
         var message by remember { mutableStateOf("") }
         val messages = remember { mutableStateListOf<String>() }
-
+        messages.add("Cuza: Hello! How can I help you today?")
         Scaffold(
             modifier = Modifier.background(color = Color(0xff000000)),
             bottomBar = {
@@ -104,7 +105,7 @@ class asis : ComponentActivity() {
                         onClick = {
                             getChatGPTResponse(message) { response ->
                                 messages.add("User: $message")
-                                messages.add("AI: $response")
+                                messages.add("Cuza: $response")
                                 message = ""
                             }
                         }
@@ -121,7 +122,7 @@ class asis : ComponentActivity() {
             ) {
                 items(messages.size) { index ->
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()  .offset(y = 40.dp),
                         horizontalArrangement = if (messages[index].startsWith("User:")) Arrangement.End else Arrangement.Start
                     ) {
                         Box(
@@ -257,6 +258,19 @@ class asis : ComponentActivity() {
 
         }
     }
+    @Composable
+    fun final(){
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+        ) {
+            CuzzAppTheme {
+
+                ChatScreen()
+            }
+        }
+    }
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @Composable
     fun MyDrawer_3(scaffoldState: ScaffoldState) {
@@ -291,7 +305,7 @@ class asis : ComponentActivity() {
 
                     androidx.compose.material.Button(
                         onClick = {
-                            val intent = Intent(context, asis::class.java)
+                            val intent = Intent(context, Shop::class.java)
                             context.startActivity(intent)
 
                         },
@@ -300,8 +314,12 @@ class asis : ComponentActivity() {
                         modifier = Modifier
                             .requiredWidth(width = 170.dp)
                             .requiredHeight(height = 40.dp)
+                            .clickable {
+                                val intent = Intent(context, asis::class.java)
+                                context.startActivity(intent)
+                            }
                     ) {
-                        Text("Asistenta")
+                        Text("Shop")
                     }
                     Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
                     androidx.compose.material.Button(
@@ -311,6 +329,10 @@ class asis : ComponentActivity() {
                         modifier = Modifier
                             .requiredWidth(width = 170.dp)
                             .requiredHeight(height = 40.dp)
+                            .clickable {
+                                val intent = Intent(context, RankingScreen::class.java)
+                                context.startActivity(intent)
+                            }
                     ) {
                         Text("Ranking")
                     }
@@ -326,6 +348,10 @@ class asis : ComponentActivity() {
                         modifier = Modifier
                             .requiredWidth(width = 170.dp)
                             .requiredHeight(height = 40.dp)
+                            .clickable {
+                                val intent = Intent(context, HomeScreen::class.java)
+                                context.startActivity(intent)
+                            }
                     ) {
                         Text("Home")
                     }
@@ -337,6 +363,10 @@ class asis : ComponentActivity() {
                         modifier = Modifier
                             .requiredWidth(width = 170.dp)
                             .requiredHeight(height = 40.dp)
+                            .clickable {
+                                val intent = Intent(context, Profile::class.java)
+                                context.startActivity(intent)
+                            }
                     ) {
                         Text("Profile")
                     }
@@ -344,15 +374,7 @@ class asis : ComponentActivity() {
                 }
             },
             content = {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Black)
-                    ) {
-                        CuzzAppTheme {
-                            ChatScreen()
-                        }
-                    }
+
 
 
 

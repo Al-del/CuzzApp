@@ -155,8 +155,8 @@ fun Rectangle2(searchQuery: String, onQueryChange: (String) -> Unit, modifier: M
         ),
         modifier = modifier
             .offset(x = 55.dp, y = 30.dp)
-            .requiredWidth(width = 250.dp)
-            .requiredHeight(height = 45.dp)
+            .requiredWidth(width = 220.dp)
+            .requiredHeight(height = 50.dp)
             .clip(shape = RoundedCornerShape(100.dp)
             ))
     Image(
@@ -164,7 +164,7 @@ fun Rectangle2(searchQuery: String, onQueryChange: (String) -> Unit, modifier: M
         contentDescription = "search",
         colorFilter = ColorFilter.tint(Color(0xff1c1b1f)),
         modifier = modifier
-            .offset(x = 260.dp, y = 35.dp)
+            .offset(x = 220.dp, y = 35.dp)
             .requiredSize(size = 35.dp))
 }
 
@@ -342,6 +342,10 @@ val context = LocalContext.current // Get the local context to use startActivity
                     modifier = Modifier
                         .requiredWidth(width = 170.dp)
                         .requiredHeight(height = 40.dp)
+                        .clickable {
+                            val intent = Intent(context, asis::class.java)
+                            startActivity(context, intent, null)
+                        }
                 ) {
                     Text("Asistenta")
                 }
@@ -353,12 +357,19 @@ val context = LocalContext.current // Get the local context to use startActivity
                     modifier = Modifier
                         .requiredWidth(width = 170.dp)
                         .requiredHeight(height = 40.dp)
+                        .clickable {
+                            val intent = Intent(context, RankingScreen::class.java)
+                            startActivity(context, intent, null)
+                        }
                 ) {
                     Text("Ranking")
                 }
                 Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
                 Button(
-                    onClick = { },
+                    onClick = {
+                        val intent = Intent(context, HomeScreen::class.java)
+                        startActivity(context, intent, null)
+                    },
                     shape = RoundedCornerShape(80.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
                     modifier = Modifier
@@ -369,7 +380,11 @@ val context = LocalContext.current // Get the local context to use startActivity
                 }
                 Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
                 Button(
-                    onClick = { },
+                    onClick = {
+                        val intent = Intent(context, Profile::class.java)
+                        startActivity(context, intent, null)
+
+                    },
                     shape = RoundedCornerShape(80.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
                     modifier = Modifier
@@ -377,6 +392,26 @@ val context = LocalContext.current // Get the local context to use startActivity
                         .requiredHeight(height = 40.dp)
                 ) {
                     Text("Profile")
+                }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
+
+                Button(
+                    onClick = {
+                        val intent = Intent(context, Shop::class.java)
+                        startActivity(context, intent, null)
+
+                    },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+                        .clickable {
+                            val intent = Intent(context, asis::class.java)
+                            startActivity(context, intent, null)
+                        }
+                ) {
+                    Text("Shop")
                 }
 
             }

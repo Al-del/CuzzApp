@@ -1,8 +1,22 @@
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
@@ -15,12 +29,16 @@ import com.example.cuzzapp.RankingScreen
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.ui.res.painterResource
@@ -28,8 +46,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
+import coil.compose.rememberImagePainter
 import com.example.cuzzapp.Profile
 import com.example.cuzzapp.Register
+import com.example.cuzzapp.Shop
+import com.example.cuzzapp.asis
 import com.example.cuzzapp.ui.theme.*
 import com.google.firebase.database.FirebaseDatabase
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -39,7 +60,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 public var url_photo:String = ""
 public var points:Int = 0
-val API_KEY = "AIzaSyBJ7GE586ZHxxk1HJFeYsaMDFMRvJdAYDU"
+public var descriptiones:String = ""
+val API_KEY = "AIzaSyAOYoOXNP1sIOPeIErbIO9pbM0WtAjLomo"
 val YOUTUBE_API_SERVICE_NAME = "youtube"
 val YOUTUBE_API_VERSION = "v3"
 sealed class Screen(val route: String, val label: String, val icon: Int) {
@@ -149,4 +171,135 @@ fun YouTubePlayer_ok(
             }
         }
     )
+}
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter",
+    "UnusedMaterial3ScaffoldPaddingParameter"
+)
+@Composable
+fun Drawer_final(scaffoldState: ScaffoldState, action: @Composable () -> Unit) {
+    val coroutineScope = rememberCoroutineScope()
+    val navController = rememberNavController() // Create a NavController
+    val context = LocalContext.current // Get the local context to use startActivity
+    androidx.compose.material.Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize() // Fill the parent
+                    .background(Color(0xFFD9D9D9)), // Set background color
+                verticalArrangement = Arrangement.Center, // Center vertically
+                horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+            ) {
+                Box(
+                ) {
+                    val painter = rememberImagePainter(data = url_photo)
+                    Image(
+                        painter = painter,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+
+                            }
+                            .size(200.dp) // Set the size of the image
+                            .clip(CircleShape) // Clip the image to a circle
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
+                androidx.compose.material.Button(
+                    onClick = {
+                        val intent = Intent(context, asis::class.java)
+                        context.startActivity(intent)
+
+                    },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+                        .clickable {
+                            val intent = Intent(context, asis::class.java)
+                            context.startActivity(intent)
+                        }
+                ) {
+                    Text("Asistenta")
+                }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
+
+                androidx.compose.material.Button(
+                    onClick = {
+                        val intent = Intent(context, Shop::class.java)
+                        context.startActivity(intent)
+
+                    },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+                        .clickable {
+                            val intent = Intent(context, asis::class.java)
+                            context.startActivity(intent)
+                        }
+                ) {
+                    Text("Shop")
+                }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
+                androidx.compose.material.Button(
+                    onClick = { },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+                        .clickable {
+                            val intent = Intent(context, RankingScreen::class.java)
+                            context.startActivity(intent)
+                        }
+                ) {
+                    Text("Ranking")
+                }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
+                androidx.compose.material.Button(
+                    onClick = {
+
+                        val inent = Intent(context, HomeScreen::class.java)
+                        context.startActivity(inent)
+                    },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+                        .clickable {
+                            val intent = Intent(context, HomeScreen::class.java)
+                            context.startActivity(intent)
+                        }
+                ) {
+                    Text("Home")
+                }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
+                androidx.compose.material.Button(
+                    onClick = { },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+                        .clickable {
+                            val intent = Intent(context, Profile::class.java)
+                            context.startActivity(intent)
+                        }
+                ) {
+                    Text("Profile")
+                }
+
+            }
+        },
+        content = {
+
+            action()
+        },
+
+        )
 }
