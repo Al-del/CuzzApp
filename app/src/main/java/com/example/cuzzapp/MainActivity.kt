@@ -155,6 +155,8 @@ class MainActivity : ComponentActivity() {
         var usernames by remember { mutableStateOf(TextFieldValue()) }
         var password_ by remember { mutableStateOf(TextFieldValue()) }
         var confirmPassword by remember { mutableStateOf(TextFieldValue()) }
+        var selectedRole by remember { mutableStateOf("") }
+
         val gradientBrush = Brush.verticalGradient(
             colors = listOf(Color(0xFFED213A), Color(0xFF93291E)),
             startY = 0f,
@@ -232,6 +234,7 @@ class MainActivity : ComponentActivity() {
                         .requiredWidth(width = 290.dp)
                 )
 
+
                 TextField(
                     value = usernames,
                     onValueChange = { usernames = it },
@@ -292,6 +295,8 @@ class MainActivity : ComponentActivity() {
                         unfocusedIndicatorColor = Color.Transparent
                     ),
                 )
+
+
                 Image(
                     painter = painterResource(id = R.drawable.email),
                     contentDescription = "mail",
@@ -328,6 +333,32 @@ class MainActivity : ComponentActivity() {
                         )
                         .requiredSize(size = 24.dp)
                 )
+
+                Column (modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .offset(y = 390.dp)
+                    .fillMaxWidth())
+                {
+                    Text("Select Role",  color = LightOrange)
+                    Row {
+                        RadioButton(
+                            selected = selectedRole == "Student",
+                            onClick = { selectedRole = "Student"
+                           }
+                        )
+                        Text("Student",  color = LightOrange)
+                    }
+                    Row {
+                        RadioButton(
+                            selected = selectedRole == "Teacher",
+                            onClick = { selectedRole = "Teacher" }
+                        )
+                        Text("Teacher",  color = LightOrange)
+                    }
+                }
+
+
+
                 Button(
                     onClick = {
                         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -335,7 +366,7 @@ class MainActivity : ComponentActivity() {
                     },
                     modifier = Modifier
                         .align(Alignment.Center) // Center the button
-                        .offset(y = 10.dp) // Move the button down
+                        .offset(y = 300.dp) // Move the button down
                         .fillMaxWidth(0.5f)
                         .clip(RoundedCornerShape(10)), // Adjust the corner radius as needed
                     colors = ButtonDefaults.buttonColors(
@@ -407,6 +438,7 @@ class MainActivity : ComponentActivity() {
                             password = password_.text // Replace with actual password
                             Points = 0
                             state = "" // Replace with actual state
+                            role = selectedRole
                         }
 
                         // Get a reference to the Firebase database
