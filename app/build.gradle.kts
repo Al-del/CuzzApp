@@ -113,17 +113,27 @@ dependencies {
 }
 
 chaquopy {
+
     productFlavors {
-        getByName("py310") { version = "3.10" }
-        getByName("py311") { version = "3.11" }
+        getByName("py310") { version = "3.8" }
+        getByName("py311") { version = "3.8" } // change this to 3.10
     }
     defaultConfig {
-        version = "3.10"
+        version = "3.8" // ensure this is 3.10
         pip {
+
             // A requirement specifier, with or without a version number:
             install("requests==2.24.0")
             install("youtube-dl")
+            install("torch")
+            install("torchvision")
+            install("numpy")
+            install("Pillow")
+            install("six")
+            install("tqdm")
+
 
         }
+
     }
 }

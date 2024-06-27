@@ -7,4 +7,5 @@
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_asis">asis</string>
     <string name="title_activity_shop">Shop</string>
+    <string name="title_activity_image_to_book">Image__to_book</string>
 </resources>
