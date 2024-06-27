@@ -3,16 +3,11 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     id("com.google.relay") version "0.3.00"
-    id("com.chaquo.python") version "15.0.1"
 
 
 }
 android {
-    flavorDimensions += "pyVersion"
-    productFlavors {
-        create("py310") { dimension = "pyVersion" }
-        create("py311") { dimension = "pyVersion" }
-    }
+
     namespace = "com.example.cuzzapp"
     compileSdk = 34
 
@@ -110,20 +105,17 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    implementation ("androidx.compose.material:material-icons-extended")
+
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    //retrofit-converter-moshi
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    //okhttp
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+    //moshi
+    implementation ("com.squareup.moshi:moshi-kotlin:1.15.1")
 }
 
-chaquopy {
-    productFlavors {
-        getByName("py310") { version = "3.10" }
-        getByName("py311") { version = "3.11" }
-    }
-    defaultConfig {
-        version = "3.10"
-        pip {
-            // A requirement specifier, with or without a version number:
-            install("requests==2.24.0")
-            install("youtube-dl")
-
-        }
-    }
-}

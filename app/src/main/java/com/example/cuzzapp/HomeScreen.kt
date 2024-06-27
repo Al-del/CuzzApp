@@ -6,6 +6,7 @@ import BottomNavigationBar
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -77,7 +78,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import coil.decode.withInterruptibleSource
 import video_l
 
 var videos = listOf<Map<String, String>>()
@@ -351,18 +351,21 @@ val context = LocalContext.current // Get the local context to use startActivity
                 }
                 Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
                 Button(
-                    onClick = { },
+                    onClick = {
+                        Log.d("Drawer", "Ranking button clicked")
+                        val intent = Intent(context, Image__to_book::class.java)
+                        startActivity(context, intent, null)
+                    },
                     shape = RoundedCornerShape(80.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
                     modifier = Modifier
                         .requiredWidth(width = 170.dp)
                         .requiredHeight(height = 40.dp)
                         .clickable {
-                            val intent = Intent(context, RankingScreen::class.java)
-                            startActivity(context, intent, null)
+
                         }
                 ) {
-                    Text("Ranking")
+                    Text("Image to bookd")
                 }
                 Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
                 Button(

@@ -124,7 +124,7 @@ fun LoadImageFromUrl(url: String) {
             listener(
                 onStart = { scope.launch { Toast.makeText(context, "Started loading $url", Toast.LENGTH_SHORT).show() } },
                 onSuccess = { _, _ -> scope.launch { Toast.makeText(context, "Successfully loaded $url", Toast.LENGTH_SHORT).show() } },
-                onError = { _, throwable -> scope.launch { Toast.makeText(context, "Failed to load $url: ${throwable.message}", Toast.LENGTH_SHORT).show() } },
+                onError = { _, throwable -> scope.launch { Toast.makeText(context, "Failed to load $url: ${throwable.drawable}", Toast.LENGTH_SHORT).show() } },
                 onCancel = { scope.launch { Toast.makeText(context, "Cancelled loading $url", Toast.LENGTH_SHORT).show() } }
             )
         }
