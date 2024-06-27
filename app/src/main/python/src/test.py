@@ -177,6 +177,6 @@ def model_predicts(images):
         #data_array = np.column_stack((data_array, words_array))
 
         return data_array, cropped_images
-image = imgproc.loadImage('./dataas/a.jpg')
+image = imgproc.loadImage('./dataas/Alex.jpg')
 print(image.shape)
 model_predicts(image)

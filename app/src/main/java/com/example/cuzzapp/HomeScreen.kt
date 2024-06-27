@@ -78,7 +78,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import coil.decode.withInterruptibleSource
 import video_l
 
 var videos = listOf<Map<String, String>>()
