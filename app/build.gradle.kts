@@ -71,6 +71,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.androidx.baselibrary)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -117,5 +121,9 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     //moshi
     implementation ("com.squareup.moshi:moshi-kotlin:1.15.1")
+
+
+
+
 }
 

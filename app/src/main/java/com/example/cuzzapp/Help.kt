@@ -57,7 +57,10 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-
+val LighterRed = Color(0xFFA9A9A9)
+val Pink = Color(0xFFFEFDED)
+val LightOrange = Color(0xFFC6EBC5)
+val LightYellow = Color(0xFFDC5F00)
 public var url_photo:String = ""
 public var username_for_all:String = ""
 public var points:Int = 0

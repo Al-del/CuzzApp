@@ -9,5 +9,6 @@
     <string name="title_activity_shop">Shop</string>
     <string name="title_activity_image_to_book">Image__to_book</string>
     <string name="fileprovider">com.example.cuzzapp.components.fileprovider</string>
+    <string name="title_activity_messj">messj</string>
 
 </resources>

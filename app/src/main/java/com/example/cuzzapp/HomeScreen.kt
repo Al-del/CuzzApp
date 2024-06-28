@@ -416,7 +416,23 @@ val context = LocalContext.current // Get the local context to use startActivity
                 ) {
                     Text("Shop")
                 }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
 
+                Button(
+                    onClick = {
+                        val intent = Intent(context, messj::class.java)
+                        startActivity(context, intent, null)
+
+                    },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+
+                ) {
+                    Text("Messages")
+                }
             }
         },
         content = {
