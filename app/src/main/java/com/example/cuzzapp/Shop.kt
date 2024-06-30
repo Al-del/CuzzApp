@@ -197,7 +197,7 @@ fun ShopItemCard(item: Shop.ShopItem) {
     fun dini(){
         val navController = rememberNavController() // Create a NavController
 
-        CuzzAppTheme {
+
             Scaffold(
                 bottomBar = { AppNavigator(navController) }
             ) {
@@ -226,7 +226,6 @@ fun ShopItemCard(item: Shop.ShopItem) {
                     ShopList(shopItems.value)
                 }
             }
-        }
 
 
     }

@@ -125,7 +125,6 @@ class Image__to_book : ComponentActivity() {
             }
 
         setContent {
-            CuzzAppTheme {
                 val context = LocalContext.current
                 Scaffold { paddingValues ->
                     Box (
@@ -184,7 +183,7 @@ class Image__to_book : ComponentActivity() {
                                 }
                             }
                         }
-                    }
+
                 }
             }
         }

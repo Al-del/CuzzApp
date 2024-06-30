@@ -265,10 +265,9 @@ class asis : ComponentActivity() {
                 .fillMaxSize()
                 .background(Color.Black)
         ) {
-            CuzzAppTheme {
 
                 ChatScreen()
-            }
+
         }
     }
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

@@ -74,7 +74,6 @@ class Profile : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CuzzAppTheme {
                 var searchQuery by remember { mutableStateOf("") }
                 val scaffoldState = rememberScaffoldState()
 
@@ -82,7 +81,7 @@ class Profile : ComponentActivity() {
 
              //       ProfileScreen()
 
-            }
+
         }
     }
 
