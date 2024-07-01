@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"/>
-    <application
 
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,6 +27,33 @@
         android:theme="@style/Theme.CuzzApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".porto"
+            android:exported="false"
+            android:label="@string/title_activity_porto"
+            android:theme="@style/Theme.CuzzApp" />
+        <activity
+            android:name=".adaugare"
+            android:exported="false"
+            android:label="@string/title_activity_adaugare"
+            android:theme="@style/Theme.CuzzApp" />
+
+        <activity
+            android:name=".Learning_pathways_profesor"
+            android:exported="false"
+            android:label="@string/title_activity_learning_pathways_profesor"
+            android:theme="@style/Theme.CuzzApp" />
+        <activity
+            android:name=".Learningpath_student"
+            android:exported="false"
+            android:label="@string/title_activity_learningpath_student"
+            android:theme="@style/Theme.CuzzApp" />
+        <activity
+            android:name=".messj"
+            android:exported="false"
+            android:label="@string/title_activity_messj"
+            android:theme="@style/Theme.CuzzApp" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="@string/fileprovider"
@@ -33,7 +61,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths"/>
+                android:resource="@xml/filepaths" />
         </provider>
 
         <activity

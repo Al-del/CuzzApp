@@ -30,9 +30,9 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -50,6 +50,7 @@ import coil.compose.rememberImagePainter
 import com.example.cuzzapp.Profile
 import com.example.cuzzapp.Register
 import com.example.cuzzapp.Shop
+import com.example.cuzzapp.achievementuriUSER
 import com.example.cuzzapp.asis
 import com.example.cuzzapp.ui.theme.*
 import com.google.firebase.database.FirebaseDatabase
@@ -57,14 +58,20 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-
+val LighterRed = Color(0xFFA9A9A9)
+val Pink = Color(0xFFFEFDED)
+val LightOrange = Color(0xFFC6EBC5)
+val LightYellow = Color(0xFFDC5F00)
 public var url_photo:String = ""
+var learningPath:List<String> = emptyList()
+
 public var username_for_all:String = ""
+public var state:String = ""
 public var points:Int = 0
 public var descriptiones:String = ""
-val API_KEY = "AIzaSyBRiRRItMTBZtx-Xvq_MBVM-t1Kp_KSSB0"
-val YOUTUBE_API_SERVICE_NAME = "youtube"
-val YOUTUBE_API_VERSION = "v3"
+public var achivement: HashMap<String, HashMap<String, achievementuriUSER>> =  HashMap()
+val API_KEY = "AIzaSyCxxlfADR4WvzW9eT8rig0LGuCqyPfwuq0"
+
 sealed class Screen(val route: String, val label: String, val icon: Int) {
     object Home : Screen("home", "Home", R.drawable.home)
     object Ranking : Screen("search", "Ranking", R.drawable.ranking)

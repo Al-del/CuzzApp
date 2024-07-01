@@ -40,7 +40,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -78,6 +78,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import state
 import video_l
 
 var videos = listOf<Map<String, String>>()
@@ -416,7 +417,63 @@ val context = LocalContext.current // Get the local context to use startActivity
                 ) {
                     Text("Shop")
                 }
+                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
 
+                Button(
+                    onClick = {
+                        val intent = Intent(context, messj::class.java)
+                        startActivity(context, intent, null)
+
+                    },
+                    shape = RoundedCornerShape(80.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                    modifier = Modifier
+                        .requiredWidth(width = 170.dp)
+                        .requiredHeight(height = 40.dp)
+
+                ) {
+                    Text("Messages")
+                }
+            }
+
+
+            Button(
+                onClick = {
+                    if(state == "Student"){
+                        val intent = Intent(context, Learningpath_student::class.java)
+                        startActivity(context, intent, null)
+
+                    }else{
+                        val intent = Intent(context, Learning_pathways_profesor::class.java)
+                        startActivity(context, intent, null)
+
+                    }
+
+                },
+                shape = RoundedCornerShape(80.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                modifier = Modifier
+                    .requiredWidth(width = 170.dp)
+                    .requiredHeight(height = 40.dp)
+                    .offset(y = -90.dp, x = 78.dp)
+            ) {
+                Text("Pathways")
+            }
+            Button(
+                onClick = {
+                    val intent = Intent(context, porto::class.java)
+                    startActivity(context, intent, null)
+
+                },
+                shape = RoundedCornerShape(80.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
+                modifier = Modifier
+                    .offset(x = 78.dp, y = -35.dp)
+                    .requiredWidth(width = 170.dp)
+                    .requiredHeight(height = 40.dp)
+
+            ) {
+               Text("Achievements")
             }
         },
         content = {

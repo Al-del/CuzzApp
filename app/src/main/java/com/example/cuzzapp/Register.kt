@@ -1,11 +1,13 @@
 package com.example.cuzzapp
 
+import achivement
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -44,7 +46,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -88,7 +90,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import descriptiones
+import learningPath
 import points
+import state
 import url_photo
 import username_true
 import java.io.ByteArrayOutputStream
@@ -165,9 +169,12 @@ fun LogIn(modifier: Modifier = Modifier) {
                         println("Points: ${user.Points}")
                         println("Stateteus: ${user.Points} ${user.email}")
                         username_true = user.name
+                        state = user.role
                         url_photo = user.photoUrl
                         points = user.Points
                         descriptiones = user.state
+                        learningPath = user.learningPath
+                        achivement = user.achievements
                         navigateToOtherActivity = true
                     }
                 }
@@ -178,7 +185,7 @@ fun LogIn(modifier: Modifier = Modifier) {
                 println("The read failed: " + databaseError.code)
             }
         })
-
+Log.d("TAG", "onClick: $state")
     },
     modifier = Modifier
         .fillMaxSize()
@@ -190,6 +197,7 @@ fun LogIn(modifier: Modifier = Modifier) {
 ) {
     Text("Log in", color = Color.White)
 }
+
         }
         Text(
             textAlign = TextAlign.Center,
