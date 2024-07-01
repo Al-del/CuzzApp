@@ -28,6 +28,27 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".porto"
+            android:exported="false"
+            android:label="@string/title_activity_porto"
+            android:theme="@style/Theme.CuzzApp" />
+        <activity
+            android:name=".adaugare"
+            android:exported="false"
+            android:label="@string/title_activity_adaugare"
+            android:theme="@style/Theme.CuzzApp" />
+
+        <activity
+            android:name=".Learning_pathways_profesor"
+            android:exported="false"
+            android:label="@string/title_activity_learning_pathways_profesor"
+            android:theme="@style/Theme.CuzzApp" />
+        <activity
+            android:name=".Learningpath_student"
+            android:exported="false"
+            android:label="@string/title_activity_learningpath_student"
+            android:theme="@style/Theme.CuzzApp" />
+        <activity
             android:name=".messj"
             android:exported="false"
             android:label="@string/title_activity_messj"

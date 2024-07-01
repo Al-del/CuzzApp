@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.*
+import androidx.compose.material.*
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -60,6 +60,7 @@ import com.example.cuzzapp.ui.theme.Pink
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import state
 import java.io.ByteArrayOutputStream
 
 class MainActivity : ComponentActivity() {
@@ -80,76 +81,6 @@ class MainActivity : ComponentActivity() {
             RegisterPreview()
         }
     }
-
-    @ExperimentalAnimationApi
-    @Composable
-    fun LoginPage() {
-        val visible = remember { mutableStateOf(true) }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(LighterRed),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "Welcome Back!",
-                    style = MaterialTheme.typography.displayMedium,
-                    color = Pink
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                OutlinedTextField(
-                    value = TextFieldValue(),
-                    onValueChange = {},
-                    label = { Text("Email", color = LightOrange) },
-                    modifier = Modifier.fillMaxWidth(0.8f)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                OutlinedTextField(
-                    value = TextFieldValue(),
-                    onValueChange = {},
-                    label = { Text("Password", color = LightOrange) },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth(0.8f)
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-                Button(
-                    onClick = { /* Handle login */ },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Pink,
-                        containerColor = LightYellow
-                    ),
-                    modifier = Modifier.fillMaxWidth(0.8f)
-                ) {
-                    Text(text = "Log in")
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-                AnimatedVisibility(
-                    visible = visible.value,
-                    enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(1000))
-                ) {
-                    Button(
-                        onClick = {
-                            //GO to form Register
-                            val intent = Intent(this@MainActivity, Register::class.java)
-                            startActivity(intent)
-
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = Pink,
-                            containerColor = LightYellow
-                        ),
-                        modifier = Modifier.fillMaxWidth(0.8f)
-                    ) {
-                        Text(text = "Don't have an account? Register now!")
-                    }
-                }
-            }
-        }
-    }
-
     @Composable
     fun Register(modifier: Modifier = Modifier) {
         var usernames by remember { mutableStateOf(TextFieldValue()) }
@@ -371,7 +302,7 @@ class MainActivity : ComponentActivity() {
                         .clip(RoundedCornerShape(10)), // Adjust the corner radius as needed
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Pink,
-                        containerColor = Color(0xff2C3E50))
+                        backgroundColor = Color(0xff2C3E50))
                 ) {
                     Text(text = "Take picture")
                 }

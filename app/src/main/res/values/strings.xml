@@ -10,5 +10,10 @@
     <string name="title_activity_image_to_book">Image__to_book</string>
     <string name="fileprovider">com.example.cuzzapp.components.fileprovider</string>
     <string name="title_activity_messj">messj</string>
+    <string name="title_activity_learningpath_student">Learningpath_student</string>
+    <string name="title_activity_learning_pathways_profesor">Learning_pathways_profesor</string>
+    <string name="title_activity_portofolio">portofolio</string>
+    <string name="title_activity_adaugare">adaugare</string>
+    <string name="title_activity_porto">porto</string>
 
 </resources>
