@@ -154,9 +154,8 @@ class adaugare : ComponentActivity() {
                                         val database = FirebaseDatabase.getInstance()
                                         val accountsRef = database.getReference("accounts")
                                         //add achivement to achivement list
-                                        val achievementMap = HashMap<String, achievementuriUSER>()
-                                        achievementMap[achievement_.materie] = achievement_
-                                        achivement.put(achievement_.numeConcurs, achievementMap)
+
+                                        //Add achivement_ to achivement list
 
                                         // Get a reference to Firebase Storage
                                         val storage = Firebase.storage
@@ -174,14 +173,30 @@ class adaugare : ComponentActivity() {
                                             storageRef.downloadUrl.addOnSuccessListener { uri ->
                                                 // Update the linkimagine field with the download URL
                                                 achievement_.linkimagine = uri.toString()
+                                                val database_ = FirebaseDatabase.getInstance()
+                                                val accountsRef_ = database.getReference("accounts")
 
+// Assuming username_true contains the username of the current user
+                                                val userAchievementsRef = database_.getReference("accounts/$username_true/achievements")
+
+// Create a unique key for the new achievement
+                                                val newAchievementRef = userAchievementsRef.push()
+
+// Set the value of the new achievement
+                                                newAchievementRef.setValue(achievement_).addOnCompleteListener { task ->
+                                                    if (task.isSuccessful) {
+                                                        Log.d("AddAchievement", "Achievement added successfully")
+                                                    } else {
+                                                        Log.e("AddAchievement", "Failed to add achievement", task.exception)
+                                                    }
                                                 // Now you can save the achievement to Firebase Database
-                                                accountsRef.child(username_true).child("achievements").push().setValue(achivement)
                                             }
                                         }.addOnFailureListener {
                                             // The image upload failed
                                             // Handle the error
                                         }
+
+}
                                     },
                                 ) {
                                     Text("Adauga")
