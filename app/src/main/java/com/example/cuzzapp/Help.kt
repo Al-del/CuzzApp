@@ -1,5 +1,6 @@
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -53,6 +54,7 @@ import com.example.cuzzapp.Shop
 import com.example.cuzzapp.achievementuriUSER
 import com.example.cuzzapp.asis
 import com.example.cuzzapp.ui.theme.*
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -69,7 +71,9 @@ public var username_for_all:String = ""
 public var state:String = ""
 public var points:Int = 0
 public var descriptiones:String = ""
-public var achivement: HashMap<String, HashMap<String, achievementuriUSER>> =  HashMap()
+public var achivement:   MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
+var achivement_other : MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
+
 val API_KEY = "AIzaSyCxxlfADR4WvzW9eT8rig0LGuCqyPfwuq0"
 
 sealed class Screen(val route: String, val label: String, val icon: Int) {
@@ -311,4 +315,29 @@ fun Drawer_final(scaffoldState: ScaffoldState, action: @Composable () -> Unit) {
         },
 
         )
+}
+
+fun get_achievements_from_db(
+    userSnapshot: DataSnapshot,
+    achivement: MutableList<achievementuriUSER?>
+): MutableList<achievementuriUSER?>{
+    try {
+        if (userSnapshot.hasChild("achievements")) {
+            val yourInnerArrayListSnapShot: DataSnapshot =
+                userSnapshot.child("achievements")
+            Log.d("TAG", "onDataChange: ${yourInnerArrayListSnapShot}")
+            for (innerTemp in yourInnerArrayListSnapShot.children) {
+                Log.d("TAG", "onDataChange: ${innerTemp.value}")
+                val one_elemen_achivement: achievementuriUSER? =
+                    innerTemp.getValue(achievementuriUSER::class.java)
+                achivement.add(one_elemen_achivement)
+            }
+
+        }
+    }
+    catch (e:Exception){
+        Log.d("TAG", "onDataChange: ${e}")
+
+    }
+    return achivement
 }

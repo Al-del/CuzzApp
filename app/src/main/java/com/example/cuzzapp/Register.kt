@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -35,18 +34,15 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.contentColorFor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ProvideTextStyle
-import androidx.compose.material3.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -57,8 +53,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
@@ -69,16 +63,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContextCompat.startActivity
 import com.example.cuzzapp.ui.theme.LightOrange
 import com.example.cuzzapp.ui.theme.LightYellow
 import com.example.cuzzapp.ui.theme.LighterRed
@@ -90,12 +80,14 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import descriptiones
+import get_achievements_from_db
 import learningPath
 import points
 import state
 import url_photo
 import username_true
 import java.io.ByteArrayOutputStream
+
 
 class Register : ComponentActivity() {
     private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
@@ -174,8 +166,9 @@ fun LogIn(modifier: Modifier = Modifier) {
                         points = user.Points
                         descriptiones = user.state
                         learningPath = user.learningPath
-                        achivement = user.achievements
+                        achivement = get_achievements_from_db(userSnapshot, achivement)
                         navigateToOtherActivity = true
+
                     }
                 }
             }
@@ -220,8 +213,8 @@ Log.d("TAG", "onClick: $state")
                 .requiredWidth(width = 300.dp)
                 .requiredHeight(height = 60.dp)
                 .clickable {
-            val intent = Intent(context, MainActivity::class.java)
-            context.startActivity(intent)
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.startActivity(intent)
                 }
         )
 
@@ -376,175 +369,3 @@ LaunchedEffect(navigateToOtherActivity) {
 private fun LogInPreview() {
     LogIn(Modifier)
 }
-
-
-
-
-
-
-
-
-
-@Composable
-fun Register_form(context: Context, takePictureLauncher: ActivityResultLauncher<Intent>, imageBitmap: MutableState<Bitmap?>) {
-    var usernames by remember { mutableStateOf(TextFieldValue()) }
-    var password_ by remember { mutableStateOf(TextFieldValue()) }
-    var email_ by remember { mutableStateOf(TextFieldValue()) }
-
-    val visible = remember { mutableStateOf(true) }
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(LighterRed), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "Welcome to CuzzApp!",
-                style = MaterialTheme.typography.displayMedium,
-                color = Pink
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = usernames, // Use the state as the value of the text field
-                onValueChange = { newText -> usernames = newText }, // Update the state when the text changes
-                label = { Text("Username", color = LightOrange) },
-                modifier = Modifier.fillMaxWidth(0.8f)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                value = password_, // Use the state as the value of the text field
-                onValueChange = { newText -> password_ = newText }, // Update the state when the text changes
-                label = { Text("Password", color = LightOrange) },
-                modifier = Modifier.fillMaxWidth(0.8f)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                value = email_, // Use the state as the value of the text field
-                onValueChange = { newText -> email_ = newText }, // Update the state when the text changes
-                label = { Text("Username", color = LightOrange) },
-                modifier = Modifier.fillMaxWidth(0.8f)
-            )
-// Display the captured image
-            imageBitmap.value?.let { bitmap ->
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "Captured image",
-                    modifier = Modifier
-                        .size(200.dp) // Set the size of the image
-                        .clip(CircleShape) // Clip the image to a circle
-                )
-            }
-            Button(
-                onClick = {
-                    // Open the camera
-                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    takePictureLauncher.launch(takePictureIntent)
-                },
-                colors = ButtonDefaults.buttonColors(contentColor = Pink, backgroundColor = LightYellow),
-                modifier = Modifier.fillMaxWidth(0.8f)
-            ) {
-                Text(text = "Take a picture")
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-            Button(
-    onClick = {
-        // Create a User object
-
-        val user = User().apply {
-            name = usernames.text // Replace with actual username
-            email = email_.text // Replace with actual email
-            password = password_.text // Replace with actual password
-            Points = 0
-            state = "" // Replace with actual state
-        }
-
-        // Get a reference to the Firebase database
-        val database = FirebaseDatabase.getInstance()
-
-        // Get a reference to the "accounts" node
-        val accountsRef = database.getReference("accounts")
-
-        // Convert the Bitmap to a ByteArray
-        val baos = ByteArrayOutputStream()
-        imageBitmap.value?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-
-        // Get a reference to Firebase Storage
-        val storage = Firebase.storage
-
-        // Create a storage reference
-        val storageRef = storage.reference
-
-        // Create a reference to the file you want to upload
-        val imageRef = storageRef.child("images/${user.name}.jpg")
-
-        // Upload the file to Firebase Storage
-        val uploadTask = imageRef.putBytes(data)
-
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-        }.addOnSuccessListener { taskSnapshot ->
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            // Get the download URL of the uploaded file
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                // Add the download URL to the User object
-                user.photoUrl = uri.toString()
-
-                // Write the User object to the "accounts" node
-                accountsRef.child(user.name).setValue(user)
-            }
-        }
-    },
-    colors = ButtonDefaults.buttonColors(contentColor = Pink, backgroundColor = LightYellow),
-    modifier = Modifier.fillMaxWidth(0.8f)
-) {
-    Text(text = "Register")
-}
-
-            Spacer(modifier = Modifier.height(24.dp))
-            AnimatedVisibility(
-                visible = visible.value,
-                enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(1000))
-            ) {
-                Button(
-                    onClick = {
-                        //GO back to Login
-
-                    },
-                    colors = ButtonDefaults.buttonColors(contentColor = Pink, backgroundColor = LightYellow),
-                    modifier = Modifier.fillMaxWidth(0.8f)
-                ) {
-                    Text(text = "Already have an account? Log in now!")
-                }
-            }
-        }
-    }
-}
-
-
-/*// Handle login
-        val database = FirebaseDatabase.getInstance()
-        val accountsRef = database.getReference("accounts")
-
-// Replace these with the actual username and password you are looking for
-        val usernameToFind = "username"
-        val passwordToFind = "password"
-
-        accountsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (userSnapshot in dataSnapshot.children) {
-                    val user = userSnapshot.getValue(User::class.java)
-                    if (user?.name == usernameToFind && user.password == passwordToFind) {
-                        // User found
-                        println("User found: ${user.name}")
-                        break
-                    }
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle possible errors.
-                println("The read failed: " + databaseError.code)
-            }
-        })
-        */

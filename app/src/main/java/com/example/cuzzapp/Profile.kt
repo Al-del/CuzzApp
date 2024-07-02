@@ -1,8 +1,10 @@
 package com.example.cuzzapp
 
 import Drawer_final
+import achivement_other
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -49,10 +51,12 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
@@ -63,6 +67,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import descriptiones
+import get_achievements_from_db
 import kotlinx.coroutines.tasks.await
 import points
 import url_photo
@@ -106,6 +111,7 @@ suspend fun fetchShopItems(username: String): ShopItemsResult {
                 photoUrl = account.photoUrl
                 description = account.state
                 points = account.Points
+               achivement_other = get_achievements_from_db(child, achivement_other)
                 break
             }
         }
@@ -121,7 +127,7 @@ fun ProfileScreen() {
     val descriptionState = remember { mutableStateOf(TextFieldValue(descriptiones_)) }
     val navController = rememberNavController() // Create a NavController
     var searchQuery by remember { mutableStateOf("") }
-
+    val context = LocalContext.current
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(Color(0xFFED213A), Color(0xFF93291E)),
         startY = 0f,
@@ -145,7 +151,11 @@ val painter = rememberImagePainter(photoUrl)
         modifier =Modifier.background( Color(0xFF262323)), // Set the background color
         bottomBar = {AppNavigator(navController) }
     ) {
-        Box(modifier = Modifier.fillMaxSize().background(Color(0xFF262323))) {
+
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF262323))) {
+
 
                 LoadImageFromUrl(url = url_photo, points = points)
                 Rectangle2(searchQuery, { newQuery -> searchQuery = newQuery })
@@ -161,7 +171,13 @@ val painter = rememberImagePainter(photoUrl)
                     ,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
+                    Button(onClick = {
+// Assuming `achivement_other` is your HashMap
+val intent = Intent(context, Other_Portofolios::class.java)
+startActivity(context, intent, null)
+                    }) {
+                        Text(text = "See Portofolio")
+                    }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -201,7 +217,8 @@ val painter = rememberImagePainter(photoUrl)
 
         Row(
             verticalAlignment = Alignment.Bottom,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .offset(y = (-80).dp) // Move the row up by 16.dp
         ) {
             OutlinedTextField(
@@ -231,7 +248,10 @@ Box(
             // Get a reference to the "accounts" node
             val accountsRef = database.getReference("accounts")
 
-            accountsRef.child(username_for_all).child("state").setValue(descriptiones_)
+            accountsRef
+                .child(username_for_all)
+                .child("state")
+                .setValue(descriptiones_)
             //Clear the text field
             descriptionState.value = TextFieldValue("")
         },

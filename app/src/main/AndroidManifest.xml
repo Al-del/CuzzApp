@@ -28,6 +28,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Other_Portofolios"
+            android:exported="false"
+            android:label="@string/title_activity_other_portofolios"
+            android:theme="@style/Theme.CuzzApp" />
+        <activity
             android:name=".porto"
             android:exported="false"
             android:label="@string/title_activity_porto"
@@ -37,7 +42,6 @@
             android:exported="false"
             android:label="@string/title_activity_adaugare"
             android:theme="@style/Theme.CuzzApp" />
-
         <activity
             android:name=".Learning_pathways_profesor"
             android:exported="false"
