@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -76,23 +77,27 @@ class Learningpath_student : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
 
-            val database = Firebase.database
-            val myRef = database.getReference("LearningPathStages")
-            val pathwayTitle = remember { mutableStateOf(emptyList<String>()) }
+                val database = Firebase.database
+                val myRef = database.getReference("LearningPathStages")
+                val pathwayTitle = remember { mutableStateOf(emptyList<String>()) }
 
-            // Launch a new coroutine
-            lifecycleScope.launch {
-                // Fetch data from Firebase in the IO dispatcher
-                pathwayTitle.value = withContext(Dispatchers.IO) {
-                    fetchPathwayTitle(myRef)
+                // Launch a new coroutine
+                lifecycleScope.launch {
+                    // Fetch data from Firebase in the IO dispatcher
+                    pathwayTitle.value = withContext(Dispatchers.IO) {
+                        fetchPathwayTitle(myRef)
+                    }
+                    //Exclude from the pathwaysTitle the elements from learningPath
+                    pathwayTitle.value = pathwayTitle.value.filter { !learningPath.contains(it) }
                 }
-                //Exclude from the pathwaysTitle the elements from learningPath
-                pathwayTitle.value = pathwayTitle.value.filter { !learningPath.contains(it) }
+
+                // Update UI after fetching data
+                LearningPathUI(pathwayTitle)
             }
 
-            // Update UI after fetching data
-            LearningPathUI(pathwayTitle)
         }
     }
 

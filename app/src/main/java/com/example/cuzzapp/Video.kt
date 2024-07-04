@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -57,9 +58,11 @@ class Video : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController() // Create a NavController
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
 
-            CuzzAppTheme {
+                val navController = rememberNavController() // Create a NavController
+
                 Scaffold(
                     bottomBar = { BottomNavigationBar() }
                 ) {
@@ -75,7 +78,9 @@ class Video : ComponentActivity() {
                     }
                 }
             }
-        }
+
+            }
+
     }
 }
 

@@ -69,8 +69,19 @@ class RankingScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-        val scaffoldState = rememberScaffoldState()
-        MyDrawer_2(scaffoldState)
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
+                // Your content
+                Scaffold(
+                    bottomBar = { BottomNavigationBar() }
+                ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        DisplayUsers()
+                        TopScreenContent()
+                    }
+                }
+            }
+
         }
     }
 
@@ -305,15 +316,7 @@ startActivity(intent)
             }
         },
         content = {
-            // Your content
-            Scaffold(
-                bottomBar = { BottomNavigationBar() }
-            ) {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    DisplayUsers()
-                    TopScreenContent()
-                }
-            }
+
         },
         bottomBar = { AppNavigator(navController) } // Pass the NavController to AppNavigator
 

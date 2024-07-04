@@ -67,8 +67,9 @@ class Shop : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val scaffoldState = rememberScaffoldState()
-            Drawer_final(scaffoldState, { dini() })
-        }
+            Drawer(scaffoldState = scaffoldState) {
+                dini()            }
+  }
     }
 
     data class ShopItem(

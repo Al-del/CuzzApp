@@ -76,8 +76,10 @@ class asis : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val scaf_state = rememberScaffoldState()
-            Drawer_final(scaf_state, {final()})
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
+                final() // Adjusted to call without homeScreen parameter
+            }
         }
     }
 
@@ -93,6 +95,7 @@ class asis : ComponentActivity() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .offset(y = -60.dp)
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -191,23 +194,6 @@ class asis : ComponentActivity() {
             retrofit.create(OpenAIApi::class.java)
         }
     }
-
-
-    @Composable
-    fun ChatGPTComposable(question: String) {
-        var responseText by remember { mutableStateOf("Awaiting response...") }
-
-        LaunchedEffect(question) {
-            withContext(Dispatchers.IO) {
-                getChatGPTResponse(question) { response ->
-                    responseText = response
-                }
-            }
-        }
-
-        Text(responseText)
-    }
-
     fun getChatGPTResponse(question: String, callback: (String) -> Unit) {
         val message = Message(role = "user", content = question)
         val request = ChatGPTRequest(model = "gpt-3.5-turbo", messages = listOf(message))
@@ -235,29 +221,6 @@ class asis : ComponentActivity() {
             }
         })
     }
-
-    @SuppressLint(
-        "UnusedMaterialScaffoldPaddingParameter",
-        "UnusedMaterial3ScaffoldPaddingParameter"
-    )
-    @Composable
-    fun TopScreenContent() {
-        var searchQuery by remember { mutableStateOf("") }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .offset(y = 20.dp),
-            contentAlignment = Alignment.BottomCenter,
-
-            ) {
-            Box(modifier = Modifier.offset(x = -65.dp, y = -805.dp)) {
-                Rectangle2(searchQuery, { newQuery -> searchQuery = newQuery })
-            }
-            LoadImageFromUrl(url = url_photo, points = points)
-
-        }
-    }
     @Composable
     fun final(){
         Box(
@@ -269,116 +232,5 @@ class asis : ComponentActivity() {
                 ChatScreen()
 
         }
-    }
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-    @Composable
-    fun MyDrawer_3(scaffoldState: ScaffoldState) {
-        val coroutineScope = rememberCoroutineScope()
-        val navController = rememberNavController() // Create a NavController
-        val context = LocalContext.current // Get the local context to use startActivity
-        androidx.compose.material.Scaffold(
-            scaffoldState = scaffoldState,
-            drawerContent = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize() // Fill the parent
-                        .background(Color(0xFFD9D9D9)), // Set background color
-                    verticalArrangement = Arrangement.Center, // Center vertically
-                    horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
-                ) {
-                    Box(
-                    ) {
-                        val painter = rememberImagePainter(data = url_photo)
-                        Image(
-                            painter = painter,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clickable {
-
-                                }
-                                .size(200.dp) // Set the size of the image
-                                .clip(CircleShape) // Clip the image to a circle
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-
-                    androidx.compose.material.Button(
-                        onClick = {
-                            val intent = Intent(context, Shop::class.java)
-                            context.startActivity(intent)
-
-                        },
-                        shape = RoundedCornerShape(80.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                        modifier = Modifier
-                            .requiredWidth(width = 170.dp)
-                            .requiredHeight(height = 40.dp)
-                            .clickable {
-                                val intent = Intent(context, asis::class.java)
-                                context.startActivity(intent)
-                            }
-                    ) {
-                        Text("Shop")
-                    }
-                    Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                    androidx.compose.material.Button(
-                        onClick = { },
-                        shape = RoundedCornerShape(80.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                        modifier = Modifier
-                            .requiredWidth(width = 170.dp)
-                            .requiredHeight(height = 40.dp)
-                            .clickable {
-                                val intent = Intent(context, RankingScreen::class.java)
-                                context.startActivity(intent)
-                            }
-                    ) {
-                        Text("Ranking")
-                    }
-                    Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                    androidx.compose.material.Button(
-                        onClick = {
-
-                            val inent = Intent(context, HomeScreen::class.java)
-                            context.startActivity(inent)
-                        },
-                        shape = RoundedCornerShape(80.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                        modifier = Modifier
-                            .requiredWidth(width = 170.dp)
-                            .requiredHeight(height = 40.dp)
-                            .clickable {
-                                val intent = Intent(context, HomeScreen::class.java)
-                                context.startActivity(intent)
-                            }
-                    ) {
-                        Text("Home")
-                    }
-                    Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                    androidx.compose.material.Button(
-                        onClick = { },
-                        shape = RoundedCornerShape(80.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                        modifier = Modifier
-                            .requiredWidth(width = 170.dp)
-                            .requiredHeight(height = 40.dp)
-                            .clickable {
-                                val intent = Intent(context, Profile::class.java)
-                                context.startActivity(intent)
-                            }
-                    ) {
-                        Text("Profile")
-                    }
-
-                }
-            },
-            content = {
-
-
-
-
-},
-
-            )
     }
 }

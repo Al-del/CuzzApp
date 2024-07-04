@@ -22,6 +22,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -55,110 +56,115 @@ class porto : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val context = LocalContext.current // Get the local context to use startActivity
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
+                val context = LocalContext.current // Get the local context to use startActivity
 
-            Scaffold(
+                Scaffold(
 
-                modifier = Modifier.fillMaxSize(),
-                floatingActionButton = {
-                    FloatingActionButton(onClick = {
-                        val intent = Intent(context, adaugare::class.java)
-                        ContextCompat.startActivity(context, intent, null)
-                    }) {
-                        Icon(Icons.Filled.Add, contentDescription = "Add")
-                    }
-                },
-                floatingActionButtonPosition = FabPosition.End, // Position the FAB at the end (right side for LTR, left side for RTL)
-
-            ) { innerPadding ->
-                Column(modifier = Modifier.fillMaxSize().background(Color.White).padding(innerPadding))
-                {
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth().background(Color.Blue)
-                    )
-                    {
-
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Image(
-                                painter = rememberImagePainter(url_photo),
-                                contentDescription = "Profile photo",
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .size(100.dp)
-                                    .clip(CircleShape)
-                            )
-                            androidx.compose.material.Text(text = username_true, color = Color.Black)
+                    modifier = Modifier.fillMaxSize(),
+                    floatingActionButton = {
+                        FloatingActionButton(onClick = {
+                            val intent = Intent(context, adaugare::class.java)
+                            ContextCompat.startActivity(context, intent, null)
+                        }) {
+                            Icon(Icons.Filled.Add, contentDescription = "Add")
                         }
+                    },
+                    floatingActionButtonPosition = FabPosition.End, // Position the FAB at the end (right side for LTR, left side for RTL)
 
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Column(modifier = Modifier.fillMaxSize().background(Color.White),
-                        horizontalAlignment = Alignment.CenterHorizontally,)
+                ) { innerPadding ->
+                    Column(modifier = Modifier.fillMaxSize().background(Color.White).padding(innerPadding))
                     {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Spacer(modifier = Modifier.width(7.dp))
 
-                            Box(Modifier.width(175.dp).background(Color.Black).height((100.dp)))
-                            {
-                                Column(modifier = Modifier.fillMaxSize().padding(16.dp))
-                                {
-                                    androidx.compose.material.Text("Username: $username_true")
-                                    androidx.compose.material.Text("Description: $descriptiones")
-                                    androidx.compose.material.Text("Points: $points")
-                                }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth().background(Color.Blue)
+                        )
+                        {
 
-                            }
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Box(Modifier.width(175.dp).background(Color.Black).height((100.dp)))
-                            {
-                                Column(modifier = Modifier.fillMaxSize().padding(16.dp))
-                                {
-                                    androidx.compose.material.Text("Username: $username_true")
-                                    androidx.compose.material.Text("Description: $descriptiones")
-                                    androidx.compose.material.Text("Points: $points")
-                                }
-
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Image(
+                                    painter = rememberImagePainter(url_photo),
+                                    contentDescription = "Profile photo",
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .size(100.dp)
+                                        .clip(CircleShape)
+                                )
+                                androidx.compose.material.Text(text = username_true, color = Color.Black)
                             }
 
                         }
                         Spacer(modifier = Modifier.height(16.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Spacer(modifier = Modifier.width(7.dp))
-                            Box(Modifier.width(175.dp).background(Color.Black).height((100.dp)))
-                            {
-                                Column(modifier = Modifier.fillMaxSize().padding(16.dp))
+                        Column(modifier = Modifier.fillMaxSize().background(Color.White),
+                            horizontalAlignment = Alignment.CenterHorizontally,)
+                        {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Spacer(modifier = Modifier.width(7.dp))
+
+                                Box(Modifier.width(175.dp).background(Color.Black).height((100.dp)))
                                 {
-                                    androidx.compose.material.Text("Username: $username_true")
-                                    androidx.compose.material.Text("Description: $descriptiones")
-                                    androidx.compose.material.Text("Points: $points")
+                                    Column(modifier = Modifier.fillMaxSize().padding(16.dp))
+                                    {
+                                        androidx.compose.material.Text("Username: $username_true")
+                                        androidx.compose.material.Text("Description: $descriptiones")
+                                        androidx.compose.material.Text("Points: $points")
+                                    }
+
+                                }
+                                Spacer(modifier = Modifier.width(16.dp))
+                                Box(Modifier.width(175.dp).background(Color.Black).height((100.dp)))
+                                {
+                                    Column(modifier = Modifier.fillMaxSize().padding(16.dp))
+                                    {
+                                        androidx.compose.material.Text("Username: $username_true")
+                                        androidx.compose.material.Text("Description: $descriptiones")
+                                        androidx.compose.material.Text("Points: $points")
+                                    }
+
                                 }
 
                             }
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Box(Modifier.width(175.dp).background(Color.Black).height((100.dp)))
-                            {
-                                Column(modifier = Modifier.fillMaxSize().padding(16.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Spacer(modifier = Modifier.width(7.dp))
+                                Box(Modifier.width(175.dp).background(Color.Black).height((100.dp)))
                                 {
-                                    androidx.compose.material.Text("Username: $username_true")
-                                    androidx.compose.material.Text("Description: $descriptiones")
-                                    androidx.compose.material.Text("Points: $points")
+                                    Column(modifier = Modifier.fillMaxSize().padding(16.dp))
+                                    {
+                                        androidx.compose.material.Text("Username: $username_true")
+                                        androidx.compose.material.Text("Description: $descriptiones")
+                                        androidx.compose.material.Text("Points: $points")
+                                    }
+
+                                }
+                                Spacer(modifier = Modifier.width(16.dp))
+                                Box(Modifier.width(175.dp).background(Color.Black).height((100.dp)))
+                                {
+                                    Column(modifier = Modifier.fillMaxSize().padding(16.dp))
+                                    {
+                                        androidx.compose.material.Text("Username: $username_true")
+                                        androidx.compose.material.Text("Description: $descriptiones")
+                                        androidx.compose.material.Text("Points: $points")
+                                    }
+
                                 }
 
                             }
-
                         }
+
+
+
                     }
-
-
-
                 }
+
             }
+
         }
     }
 }

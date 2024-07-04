@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,7 +62,10 @@ class messj : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            MessagingScreen(username = username_true, messagingService = messagingService)
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
+                MessagingScreen(username = username_true, messagingService = messagingService)
+            }
 
         }
     }

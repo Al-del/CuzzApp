@@ -16,5 +16,6 @@
     <string name="title_activity_adaugare">adaugare</string>
     <string name="title_activity_porto">porto</string>
     <string name="title_activity_other_portofolios">Other_Portofolios</string>
+    <string name="title_activity_quizz_teacher">Quizz_teacher</string>
 
 </resources>
