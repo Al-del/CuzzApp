@@ -66,7 +66,7 @@ val LightOrange = Color(0xFFC6EBC5)
 val LightYellow = Color(0xFFDC5F00)
 public var url_photo:String = ""
 var learningPath:List<String> = emptyList()
-
+var viewedProfile:String = ""
 public var username_for_all:String = ""
 public var state:String = ""
 public var points:Int = 0

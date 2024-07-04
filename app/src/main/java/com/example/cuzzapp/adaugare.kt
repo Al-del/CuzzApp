@@ -42,6 +42,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -85,141 +86,141 @@ class adaugare : ComponentActivity() {
             }
         }
         setContent {
-            val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
 
-            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize(Alignment.Center)
-                        .background(Color.Gray) // optional, to visualize the box
-                        .padding(innerPadding)
-                ) {
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
+
+                val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
+
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(
                         modifier = Modifier
-                            .background(Color.White) // optional, to visualize the box
+                            .fillMaxSize()
+                            .wrapContentSize(Alignment.Center)
+                            .background(Color.Gray) // optional, to visualize the box
+                            .padding(innerPadding)
                     ) {
-                        Column(
+                        Box(
                             modifier = Modifier
-                                .padding(16.dp)
-                                .fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) { var textFieldValue1 by remember { mutableStateOf(TextFieldValue("")) }
-
-                            TextField(
-                                value = textFieldValue1,
-                                onValueChange = { textFieldValue1 = it },
-                                label = { Text("Disciplina") },
-                                modifier = Modifier.width(350.dp)
-                            )
-                            var textFieldValue2 by remember { mutableStateOf(TextFieldValue("")) }
-
-                            TextField(
-                                value = textFieldValue2,
-                                onValueChange = { textFieldValue2 = it },
-                                label = { Text("Numele Concursului") },
-                                modifier = Modifier.width(350.dp)
-                            )
-
-                            var textFieldValue3 by remember { mutableStateOf(TextFieldValue("")) }
-                            TextField(
-                                value = textFieldValue3,
-                                onValueChange = { textFieldValue3 = it },
-                                label = { Text("Premiul obtinut") },
-                                modifier = Modifier.width(350.dp)
-                            )
-
-                            var textFieldValue4 by remember { mutableStateOf(TextFieldValue("")) }
-                            TextField(
-                                value = textFieldValue4,
-                                onValueChange = { textFieldValue4 = it },
-                                label = { Text("Mai multe informatii") },
-                                modifier = Modifier.height(300.dp).width(350.dp)
-                            )
-                            Row(modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center)
-                            {
-
-
-                                Button(
-                                    onClick = {
-                                        val achievement_ = achievementuriUSER().apply {
-                                            materie = textFieldValue1.text
-                                            numeConcurs = textFieldValue2.text
-                                            Premiu = textFieldValue3.text
-                                            informatii = textFieldValue4.text
-                                            linkimagine = selectedImageUri.value.toString()
-                                        }
-                                        val database = FirebaseDatabase.getInstance()
-                                        val accountsRef = database.getReference("accounts")
-                                        //add achivement to achivement list
-
-                                        //Add achivement_ to achivement list
-
-                                        // Get a reference to Firebase Storage
-                                        val storage = Firebase.storage
-
-                                        // Create a reference to the location where you want to upload the image
-                                        val storageRef = storage.reference.child("images/${achievement_.numeConcurs}.jpg")
-
-                                        // Upload the image to Firebase Storage
-                                        val uploadTask = storageRef.putFile(selectedImageUri.value!!)
-
-                                        // Handle success and failure
-                                        uploadTask.addOnSuccessListener {
-                                            // The image was successfully uploaded
-                                            // Now you can get the download URL
-                                            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                                                // Update the linkimagine field with the download URL
-                                                achievement_.linkimagine = uri.toString()
-                                                val database_ = FirebaseDatabase.getInstance()
-                                                val accountsRef_ = database.getReference("accounts")
-
-// Assuming username_true contains the username of the current user
-                                                val userAchievementsRef = database_.getReference("accounts/$username_true/achievements")
-
-// Create a unique key for the new achievement
-                                                val newAchievementRef = userAchievementsRef.push()
-
-// Set the value of the new achievement
-                                                newAchievementRef.setValue(achievement_).addOnCompleteListener { task ->
-                                                    if (task.isSuccessful) {
-                                                        Log.d("AddAchievement", "Achievement added successfully")
-                                                    } else {
-                                                        Log.e("AddAchievement", "Failed to add achievement", task.exception)
-                                                    }
-                                                // Now you can save the achievement to Firebase Database
-                                            }
-                                        }.addOnFailureListener {
-                                            // The image upload failed
-                                            // Handle the error
-                                        }
-
-}
-                                    },
-                                ) {
-                                    Text("Adauga")
-                                }
-
-                                UploadImageButton(selectedImageUri)
-                            }
-                            Image(
-                                painter = rememberImagePainter(selectedImageUri.value),
-                                contentDescription = "Uploaded image",
+                                .background(Color.White) // optional, to visualize the box
+                        ) {
+                            Column(
                                 modifier = Modifier
-                                    .size(200.dp)
-                                    .border(1.dp, Color.Black)
-                                    .clickable {
-                                        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                                        selectImageLauncher.launch(intent)
+                                    .padding(16.dp)
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.spacedBy(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) { var textFieldValue1 by remember { mutableStateOf(TextFieldValue("")) }
+
+                                TextField(
+                                    value = textFieldValue1,
+                                    onValueChange = { textFieldValue1 = it },
+                                    label = { Text("Disciplina") },
+                                    modifier = Modifier.width(350.dp)
+                                )
+                                var textFieldValue2 by remember { mutableStateOf(TextFieldValue("")) }
+
+                                TextField(
+                                    value = textFieldValue2,
+                                    onValueChange = { textFieldValue2 = it },
+                                    label = { Text("Numele Concursului") },
+                                    modifier = Modifier.width(350.dp)
+                                )
+
+                                var textFieldValue3 by remember { mutableStateOf(TextFieldValue("")) }
+                                TextField(
+                                    value = textFieldValue3,
+                                    onValueChange = { textFieldValue3 = it },
+                                    label = { Text("Premiul obtinut") },
+                                    modifier = Modifier.width(350.dp)
+                                )
+
+                                var textFieldValue4 by remember { mutableStateOf(TextFieldValue("")) }
+                                TextField(
+                                    value = textFieldValue4,
+                                    onValueChange = { textFieldValue4 = it },
+                                    label = { Text("Mai multe informatii") },
+                                    modifier = Modifier.height(300.dp).width(350.dp)
+                                )
+                                Row(modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center)
+                                {
+
+
+                                    Button(
+                                        onClick = {
+                                            val achievement_ = achievementuriUSER().apply {
+                                                materie = textFieldValue1.text
+                                                numeConcurs = textFieldValue2.text
+                                                Premiu = textFieldValue3.text
+                                                informatii = textFieldValue4.text
+                                                linkimagine = selectedImageUri.value.toString()
+                                            }
+                                            val database = FirebaseDatabase.getInstance()
+                                            val accountsRef = database.getReference("accounts")
+                                            //add achivement to achivement list
+
+                                            //Add achivement_ to achivement list
+
+                                            // Get a reference to Firebase Storage
+                                            val storage = Firebase.storage
+
+                                            // Create a reference to the location where you want to upload the image
+                                            val storageRef = storage.reference.child("images/${achievement_.numeConcurs}.jpg")
+
+                                            // Upload the image to Firebase Storage
+                                            val uploadTask = storageRef.putFile(selectedImageUri.value!!)
+
+                                            // Handle success and failure
+                                            uploadTask.addOnSuccessListener {
+                                                // The image was successfully uploaded
+                                                // Now you can get the download URL
+                                                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                                                    // Update the linkimagine field with the download URL
+                                                    achievement_.linkimagine = uri.toString()
+                                                    val database_ = FirebaseDatabase.getInstance()
+                                                    val userAchievementsRef = database_.getReference("accounts/$username_true/achievements")
+                                                    val newAchievementRef = userAchievementsRef.push()
+                                                    Log.d("AddAchievement", "Adding achievement to Firebase Database $userAchievementsRef")
+                                                    newAchievementRef.setValue(achievement_).addOnCompleteListener { task ->
+                                                        if (task.isSuccessful) {
+                                                            Log.d("AddAchievement", "Achievement added successfully")
+                                                        } else {
+                                                            Log.e("AddAchievement", "Failed to add achievement", task.exception)
+                                                        }
+                                                        // Now you can save the achievement to Firebase Database
+                                                    }
+                                                }.addOnFailureListener {
+                                                    // The image upload failed
+                                                    // Handle the error
+                                                }
+
+                                            }
+                                        },
+                                    ) {
+                                        Text("Adauga")
                                     }
-                            )
+
+                                    UploadImageButton(selectedImageUri)
+                                }
+                                Image(
+                                    painter = rememberImagePainter(selectedImageUri.value),
+                                    contentDescription = "Uploaded image",
+                                    modifier = Modifier
+                                        .size(200.dp)
+                                        .border(1.dp, Color.Black)
+                                        .clickable {
+                                            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                                            selectImageLauncher.launch(intent)
+                                        }
+                                )
+                            }
                         }
                     }
-                }
 
+                }
             }
+
         }
     }
 }

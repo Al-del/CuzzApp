@@ -81,8 +81,9 @@ class Profile : ComponentActivity() {
         setContent {
                 var searchQuery by remember { mutableStateOf("") }
                 val scaffoldState = rememberScaffoldState()
-
-                Drawer_final(scaffoldState, { ProfileScreen() })
+            Drawer(scaffoldState = scaffoldState) {
+                ProfileScreen()
+            }
 
              //       ProfileScreen()
 

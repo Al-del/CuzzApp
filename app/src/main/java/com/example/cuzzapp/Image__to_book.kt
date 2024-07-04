@@ -36,6 +36,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -125,6 +126,8 @@ class Image__to_book : ComponentActivity() {
             }
 
         setContent {
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
                 val context = LocalContext.current
                 Scaffold { paddingValues ->
                     Box (
@@ -168,7 +171,7 @@ class Image__to_book : ComponentActivity() {
                                         .align(Alignment.CenterHorizontally),
                                     onClick = {
                                         CoroutineScope(Dispatchers.IO).launch {
-                                             books = searchBooks(mesajState.value ?: "")
+                                            books = searchBooks(mesajState.value ?: "")
                                             // Update the UI to display the list of books
                                             // Replace with the actual code to update the UI
                                             Log.d("img", "onCreate: $books")
@@ -183,9 +186,12 @@ class Image__to_book : ComponentActivity() {
                                 }
                             }
                         }
-                    
+
+                    }
                 }
+
             }
+
         }
     }
 suspend fun searchBooks(query: String): List<Book> {
@@ -194,7 +200,7 @@ suspend fun searchBooks(query: String): List<Book> {
     // Replace with your server's URL
     val url = HttpUrl.Builder()
         .scheme("http")
-        .host("192.168.0.107")
+        .host("192.168.1.102")
         .port(5000)
         .addPathSegment("search")
         .addQueryParameter("q", query)

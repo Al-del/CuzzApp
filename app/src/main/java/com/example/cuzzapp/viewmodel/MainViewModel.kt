@@ -56,7 +56,7 @@ suspend fun upload(uri: Uri): String? = suspendCoroutine { continuation ->
         .build()
 
     val request = Request.Builder()
-        .url("http://192.168.0.107:5000/upload")
+        .url("http://192.168.1.102:5000/upload")
         .post(requestBody)
         .build()
 

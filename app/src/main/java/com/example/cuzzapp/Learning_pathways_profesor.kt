@@ -34,6 +34,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -78,9 +79,15 @@ class Learning_pathways_profesor : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Box(modifier =Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                LearningPath()
+
+            val scaffoldState = rememberScaffoldState()
+            Drawer(scaffoldState = scaffoldState) {
+
+                Box(modifier =Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    LearningPath()
+                }
             }
+
 
         }
     }
