@@ -48,6 +48,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
@@ -73,9 +74,12 @@ class Quizz_student : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val quizViewModel = QuizViewModel()
-            // Call the QuizzesList composable and pass the ViewModel
-            QuizzesList(viewModel = quizViewModel)
+            Drawer(rememberScaffoldState()) {
+
+                val quizViewModel = QuizViewModel()
+                // Call the QuizzesList composable and pass the ViewModel
+                QuizzesList(viewModel = quizViewModel)
+            }
         }
     }
 }
