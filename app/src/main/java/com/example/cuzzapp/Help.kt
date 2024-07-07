@@ -74,65 +74,15 @@ public var descriptiones:String = ""
 public var achivement:   MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
 var achivement_other : MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
 
-val API_KEY = "AIzaSyCxxlfADR4WvzW9eT8rig0LGuCqyPfwuq0"
+val API_KEY = "AIzaSyDPYFmTXkfI0wgD6SHhnYZQoVwjaDYoa4o"
 
 sealed class Screen(val route: String, val label: String, val icon: Int) {
     object Home : Screen("home", "Home", R.drawable.home)
     object Ranking : Screen("search", "Ranking", R.drawable.ranking)
     object Profile : Screen("profile", "Profile", R.drawable.profile)
-}
-@Composable
-fun AppNavigator() {
-    val navController = rememberNavController()
-    NavHost(navController, startDestination = Screen.Home.route) {
-        composable(Screen.Home.route) { HomeScreen() }
-        composable(Screen.Ranking.route) { RankingScreen() }
-        composable(Screen.Profile.route) { Profile() }
-    }
-    BottomNavigationBar()
-}
+    object Quizz : Screen("profile", "Quizz", R.drawable.ranking)
 
-@Composable
-fun BottomNavigationBar() {
-    val context = LocalContext.current // Get the local context to use startActivity
-    val navController = rememberNavController() // Remember a NavController
-    BottomNavigation(
-        backgroundColor = LighterRed, // Set the background color of the BottomNavigation
-        contentColor = Pink // Set the default content color of the BottomNavigation
-    ) {
-        val items = listOf(Screen.Home, Screen.Ranking, Screen.Profile)
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-
-        items.forEachIndexed { index, screen ->
-            BottomNavigationItem(
-                icon = { Icon(painterResource(screen.icon), contentDescription = null) },
-                label = { Text(screen.label) },
-                selected = currentRoute == screen.route, // Add this line
-                onClick = {
-                    when(index) {
-                        0 -> {
-                            val intent = Intent(context, HomeScreen::class.java)
-                            context.startActivity(intent)
-                        }
-                        1 -> {
-                            val intent = Intent(context, RankingScreen::class.java)
-                            context.startActivity(intent)
-                        }
-                        2 -> {
-                            username_for_all = username_true
-                            val intent = Intent(context, Profile::class.java)
-                            context.startActivity(intent)
-                        }
-                    }
-                },
-                selectedContentColor = LightOrange, // Set the color of the selected item
-                unselectedContentColor = LightYellow // Set the color of the unselected item
-            )
-        }
-    }
 }
-
 class video_one{
     var title:String = ""
     var description:String = ""

@@ -76,6 +76,8 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.material3.android)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -123,6 +125,8 @@ dependencies {
     //moshi
     implementation ("com.squareup.moshi:moshi-kotlin:1.15.1")
 
+    implementation ("com.itextpdf:itext7-core:7.1.9")
+    implementation("com.itextpdf:itextpdf:5.5.13.1")
 
 
 

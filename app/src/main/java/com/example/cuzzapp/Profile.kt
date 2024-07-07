@@ -112,6 +112,7 @@ suspend fun fetchShopItems(username: String): ShopItemsResult {
                 photoUrl = account.photoUrl
                 description = account.state
                 points = account.Points
+                achivement_other = ArrayList<achievementuriUSER?>()
                achivement_other = get_achievements_from_db(child, achivement_other)
                 break
             }

@@ -17,5 +17,7 @@
     <string name="title_activity_porto">porto</string>
     <string name="title_activity_other_portofolios">Other_Portofolios</string>
     <string name="title_activity_quizz_teacher">Quizz_teacher</string>
+    <string name="title_activity_quizz_student">Quizz_student</string>
+    <string name="title_activity_add_question">Add_Question</string>
 
 </resources>

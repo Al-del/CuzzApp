@@ -178,6 +178,10 @@ class adaugare : ComponentActivity() {
                                                 storageRef.downloadUrl.addOnSuccessListener { uri ->
                                                     // Update the linkimagine field with the download URL
                                                     achievement_.linkimagine = uri.toString()
+                                                    //Add achievement_ to achievement list
+                                                    achivement.add(achievement_)
+                                                    // Add achievement_ to Firebase Database
+
                                                     val database_ = FirebaseDatabase.getInstance()
                                                     val userAchievementsRef = database_.getReference("accounts/$username_true/achievements")
                                                     val newAchievementRef = userAchievementsRef.push()

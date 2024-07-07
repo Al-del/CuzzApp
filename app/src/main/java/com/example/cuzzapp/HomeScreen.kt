@@ -1,8 +1,6 @@
 package com.example.cuzzapp
 
 import API_KEY
-import AppNavigator
-import BottomNavigationBar
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -79,6 +77,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import state
+import username_for_all
+import username_true
 import video_l
 
 var videos = listOf<Map<String, String>>()
@@ -197,36 +197,6 @@ suspend fun getEducationalVideos(query: String, maxResults: Int = 5): List<Map<S
     }
     videos
 }
-fun printVideos(videos: List<Map<String, String>>) {
-    for (video in videos) {
-        println("Title: ${video["title"]}")
-        println("Description: ${video["description"]}")
-        println("URL: ${video["url"]}")
-        println("-----")
-    }
-}
-
-fun searchVideosByText(query: String, maxResults: Int = 5): List<Map<String, String>> {
-    val client = OkHttpClient()
-    val url = "https://www.googleapis.com/youtube/v3/search?q=$query&part=id,snippet&maxResults=$maxResults&type=video&key=$API_KEY"
-    val request = Request.Builder().url(url).build()
-    val response = client.newCall(request).execute()
-    val jsonString = response.body?.string()
-    val jsonObject = JSONObject(jsonString)
-    val items = jsonObject.getJSONArray("items")
-    val videos = mutableListOf<Map<String, String>>()
-    for (i in 0 until items.length()) {
-        val item = items.getJSONObject(i)
-        val video = mapOf(
-            "title" to item.getJSONObject("snippet").getString("title"),
-            "description" to item.getJSONObject("snippet").getString("description"),
-            "url" to "https://www.youtube.com/watch?v=${item.getJSONObject("id").getString("videoId")}",
-            "thumbnail" to item.getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("default").getString("url")
-        )
-        videos.add(video)
-    }
-    return videos
-}
 @Composable
 fun DisplayVideos(homeScreen: HomeScreen, searchQuery: String) {
     var videos by remember { mutableStateOf(emptyList<Map<String, String>>()) }
@@ -301,12 +271,3 @@ fun DisplayVideos(homeScreen: HomeScreen, searchQuery: String) {
     }
 }
 
-@Composable
-fun AppNavigator(navController: NavHostController) { // Add NavController as a parameter
-    NavHost(navController, startDestination = Screen.Home.route) {
-        composable(Screen.Home.route) { HomeScreen() }
-        composable(Screen.Ranking.route) { RankingScreen() }
-        composable(Screen.Profile.route) { Profile() }
-    }
-    BottomNavigationBar()
-}

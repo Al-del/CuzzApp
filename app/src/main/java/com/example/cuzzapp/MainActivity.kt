@@ -1,7 +1,6 @@
 package com.example.cuzzapp
 
-import AppNavigator
-import BottomNavigationBar
+
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap

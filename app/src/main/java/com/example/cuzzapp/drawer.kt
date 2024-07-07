@@ -18,26 +18,40 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
+import com.example.cuzzapp.ui.theme.LightOrange
+import com.example.cuzzapp.ui.theme.LightYellow
+import com.example.cuzzapp.ui.theme.LighterRed
+import com.example.cuzzapp.ui.theme.Pink
 import state
 import url_photo
 import username_for_all
+import username_true
 import viewedProfile
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -219,6 +233,7 @@ fun Drawer(
             ) {
                 Text("Achievements")
             }
+
         },
         content = {
             content() // Use the generic composable function parameter
@@ -226,4 +241,66 @@ fun Drawer(
         bottomBar = { AppNavigator(navController) } // Pass the NavController to AppNavigator
 
     )
+}
+@Composable
+fun AppNavigator(navController: NavHostController) { // Add NavController as a parameter
+    NavHost(navController, startDestination = Screen.Home.route) {
+        composable(Screen.Home.route) { HomeScreen() }
+        composable(Screen.Ranking.route) { RankingScreen() }
+        composable(Screen.Profile.route) { Profile() }
+        composable(Screen.Quizz.route) { if(state == "Student"){ Quizz_student() }else{ Quizz_teacher()} }
+    }
+    BottomNavigationBar()
+}
+
+@Composable
+fun BottomNavigationBar() {
+    val context = LocalContext.current // Get the local context to use startActivity
+    val navController = rememberNavController() // Remember a NavController
+    BottomNavigation(
+        backgroundColor = LighterRed, // Set the background color of the BottomNavigation
+        contentColor = Pink // Set the default content color of the BottomNavigation
+    ) {
+        val items = listOf(Screen.Home, Screen.Ranking, Screen.Profile, Screen.Quizz)
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
+        items.forEachIndexed { index, screen ->
+            BottomNavigationItem(
+                icon = { Icon(painterResource(screen.icon), contentDescription = null) },
+                label = { Text(screen.label) },
+                selected = currentRoute == screen.route, // Add this line
+                onClick = {
+                    when(index) {
+                        0 -> {
+                            val intent = Intent(context, HomeScreen::class.java)
+                            context.startActivity(intent)
+                        }
+                        1 -> {
+                            val intent = Intent(context, RankingScreen::class.java)
+                            context.startActivity(intent)
+                        }
+                        2 -> {
+                            username_for_all = username_true
+                            val intent = Intent(context, Profile::class.java)
+                            context.startActivity(intent)
+                        }
+                        3 -> {
+                            if(state == "Student"){
+                                val intent = Intent(context, Quizz_student::class.java)
+                                startActivity(context, intent, null)
+
+                            }else{
+                                val intent = Intent(context, Quizz_teacher::class.java)
+                                startActivity(context, intent, null)
+
+                            }
+                        }
+                    }
+                },
+                selectedContentColor = LightOrange, // Set the color of the selected item
+                unselectedContentColor = LightYellow // Set the color of the unselected item
+            )
+        }
+    }
 }
