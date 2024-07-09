@@ -72,7 +72,7 @@ class RankingScreen : ComponentActivity() {
             Drawer(scaffoldState = scaffoldState) {
                 // Your content
                 Scaffold(
-                    bottomBar = { BottomNavigationBar() }
+                    bottomBar = { StatusHomeModeDarkPreview() }
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         DisplayUsers()

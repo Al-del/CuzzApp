@@ -3,17 +3,23 @@ package com.example.cuzzapp
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -26,16 +32,27 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
@@ -43,6 +60,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import backcolor
 import coil.compose.rememberImagePainter
 import com.example.cuzzapp.ui.theme.LightOrange
 import com.example.cuzzapp.ui.theme.LightYellow
@@ -236,71 +254,180 @@ fun Drawer(
 
         },
         content = {
-            content() // Use the generic composable function parameter
+            content()
         },
-        bottomBar = { AppNavigator(navController) } // Pass the NavController to AppNavigator
+bottomBar = {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth() // Fill the width of the screen
+            .height(55.dp) // Set the height of the Box
+            .zIndex(1f), // Ensure the FAB is drawn over the Box
+
+        contentAlignment = Alignment.BottomCenter // Center the content within the Box
+    ) {
+        FloatingActionButton(
+            onClick = { },
+            containerColor = Color(0xff613eea),
+            modifier = Modifier
+                .offset(y = -10.dp)
+                .zIndex(1f) // Ensure the FAB is drawn over the Box
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.store),
+                contentDescription = "shop",
+                modifier = Modifier // Fill the FAB size
+                    .clickable{
+                        val intent = Intent(context, Shop::class.java)
+                        startActivity(context, intent, null)
+                    }
+            )
+        }
+    }
+    StatusHomeModeDarkPreview()
+},
+        topBar = { }
 
     )
 }
 @Composable
-fun AppNavigator(navController: NavHostController) { // Add NavController as a parameter
+fun AppNavigator(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) { HomeScreen() }
         composable(Screen.Ranking.route) { RankingScreen() }
         composable(Screen.Profile.route) { Profile() }
         composable(Screen.Quizz.route) { if(state == "Student"){ Quizz_student() }else{ Quizz_teacher()} }
     }
-    BottomNavigationBar()
 }
 
 @Composable
-fun BottomNavigationBar() {
-    val context = LocalContext.current // Get the local context to use startActivity
-    val navController = rememberNavController() // Remember a NavController
-    BottomNavigation(
-        backgroundColor = LighterRed, // Set the background color of the BottomNavigation
-        contentColor = Pink // Set the default content color of the BottomNavigation
+fun StatusHomeModeDark(modifier: Modifier = Modifier) {
+val contex = LocalContext.current
+    Box(
+        modifier = modifier
+
     ) {
-        val items = listOf(Screen.Home, Screen.Ranking, Screen.Profile, Screen.Quizz)
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
 
-        items.forEachIndexed { index, screen ->
-            BottomNavigationItem(
-                icon = { Icon(painterResource(screen.icon), contentDescription = null) },
-                label = { Text(screen.label) },
-                selected = currentRoute == screen.route, // Add this line
-                onClick = {
-                    when(index) {
-                        0 -> {
-                            val intent = Intent(context, HomeScreen::class.java)
-                            context.startActivity(intent)
-                        }
-                        1 -> {
-                            val intent = Intent(context, RankingScreen::class.java)
-                            context.startActivity(intent)
-                        }
-                        2 -> {
-                            username_for_all = username_true
-                            val intent = Intent(context, Profile::class.java)
-                            context.startActivity(intent)
-                        }
-                        3 -> {
-                            if(state == "Student"){
-                                val intent = Intent(context, Quizz_student::class.java)
-                                startActivity(context, intent, null)
+    // Floating Action Button centered and overlaid over the other content
 
-                            }else{
-                                val intent = Intent(context, Quizz_teacher::class.java)
-                                startActivity(context, intent, null)
+        Box(
+            modifier = modifier
+                .align(alignment = Alignment.TopStart)
+                .offset(x = 0.dp,
+                    y = 32.dp)
+                .fillMaxWidth()
+                .requiredHeight(height = 75.dp)
+                .clip(shape = RoundedCornerShape(topStart = 32.dp, topEnd = 22.dp))
 
-                            }
-                        }
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier
+                    .requiredWidth(width = 428.dp)
+                    .requiredHeight(height = 75.dp)
+                    .padding(horizontal = 25.dp)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = modifier
+                            .requiredWidth(width = 70.dp)
+                            .requiredHeight(height = 75.dp)
+                            .padding(horizontal = 15.dp,
+                                vertical = 12.5.dp)
+
+                    ) {
+                        Frame866()
                     }
-                },
-                selectedContentColor = LightOrange, // Set the color of the selected item
-                unselectedContentColor = LightYellow // Set the color of the unselected item
-            )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = modifier
+                            .requiredWidth(width = 70.dp)
+                            .requiredHeight(height = 75.dp)
+                            .padding(horizontal = 15.dp,
+                                vertical = 12.5.dp)
+                    ) {
+                        Icon(
+                            modifier = Modifier.clickable{
+
+
+                            },
+                            painter = painterResource(id = R.drawable.achievement),
+                            contentDescription = "search")
+
+
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = modifier
+                            .requiredWidth(width = 70.dp)
+                            .requiredHeight(height = 75.dp)
+                            .padding(horizontal = 15.dp,
+                                vertical = 12.5.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.path),
+                            contentDescription = "Path")
+
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = modifier
+                            .requiredWidth(width = 70.dp)
+                            .requiredHeight(height = 75.dp)
+                            .padding(horizontal = 15.dp,
+                                vertical = 12.5.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.profile),
+                            contentDescription = "user")
+
+                    }
+                }
+            }
+
+
         }
+    }
+}
+
+@Composable
+public  fun StatusHomeModeDarkPreview() {
+    Box(modifier = Modifier.clipToBounds() // This will prevent the content from being clipped
+        .background(color = Color(0xff5755FE)).clip(RoundedCornerShape(30.dp)),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+    StatusHomeModeDark(Modifier.clipToBounds() // This will prevent the content from being clipped
+        .align(Alignment.BottomCenter).offset(y = (-5).dp))
+
+}
+}
+@Composable
+fun Frame866(modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(topStart = 39.dp, topEnd = 39.dp, bottomStart = 39.dp))
+            .background(color = Color(0xff613eea))
+            .border(border = BorderStroke(1.dp, Color(0xff0b4af5)),
+                shape = RoundedCornerShape(topStart = 39.dp, topEnd = 39.dp, bottomStart = 39.dp))
+            .padding(all = 10.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.home),
+            contentDescription = "wallet",
+            modifier = Modifier
+                .requiredSize(size = 19.dp))
     }
 }

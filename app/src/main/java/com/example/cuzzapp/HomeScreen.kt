@@ -76,6 +76,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import backcolor
 import state
 import username_for_all
 import username_true
@@ -101,7 +102,7 @@ fun HOmescreen(homeScreen: HomeScreen) {
     println("Current searchQuery: $searchQuery") // Add this line
 
     Box(modifier = Modifier.fillMaxSize()
-        .background(Color(0xFF262323)) // Set background color to 262323
+        .background(backcolor) // Set background color to 262323
     ) {
         LoadImageFromUrl(url = url_photo, points = points)
         Rectangle2(searchQuery, { newQuery -> searchQuery = newQuery })

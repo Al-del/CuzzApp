@@ -1,6 +1,7 @@
 package com.example.cuzzapp
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -31,13 +32,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -77,362 +85,593 @@ class MainActivity : ComponentActivity() {
                 }
             }
         setContent {
-            RegisterPreview()
+            //  RegisterPreview()
+          //  LoginScreen1Preview()
+            RegisterPrev()
+
         }
     }
+    @SuppressLint("SuspiciousIndentation")
     @Composable
-    fun Register(modifier: Modifier = Modifier) {
-        var usernames by remember { mutableStateOf(TextFieldValue()) }
-        var password_ by remember { mutableStateOf(TextFieldValue()) }
-        var confirmPassword by remember { mutableStateOf(TextFieldValue()) }
-        var selectedRole by remember { mutableStateOf("") }
-
-        val gradientBrush = Brush.verticalGradient(
-            colors = listOf(Color(0xFFED213A), Color(0xFF93291E)),
-            startY = 0f,
-            endY = 500f
-        )
+    fun Register_Screen(modifier: Modifier = Modifier) {
+        var email by remember { mutableStateOf("") }
+        var username by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
         Box(
+            contentAlignment = Alignment.TopEnd,
             modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxSize()
+                .clip(shape = RoundedCornerShape(26.dp))
+                .background(color = Color(0xff151316))
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(color = Color(0xff1c1c1e))
-            ) {
-                Component1(
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(
-                            x = 35.dp,
-                            y = 438.dp
-                        ),
-
-                )
-                Text(
-                    textAlign = TextAlign.Center,
-                    text = buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                color = Color.White,
-                                fontSize = 24.sp
-                            )
-                        ) { append("Ai deja cont?\n") }
-                        withStyle(
-                            style = SpanStyle(
-                                color = Color(0xff3840ff),
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Black,
-                                fontStyle = FontStyle.Italic
-                            )
-                        ) { append("Logheaza-te aici!") }
-                    },
-                    modifier = Modifier
-                        .align(alignment = Alignment.Center)
-                        .offset(
-                            x = 0.dp,
-                            y = 165.dp
-                        )
-                        .requiredWidth(width = 300.dp)
-                        .requiredHeight(height = 60.dp)
-                        .clickable {
-                            val intent = Intent(this@MainActivity, Register::class.java)
-                            startActivity(intent)
-                        }
-                )
-                Divider(
-                    color = Color.White,
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(
-                            x = 40.dp,
-                            y = 244.dp
-                        )
-                        .requiredWidth(width = 290.dp)
-                )
-                Divider(
-                    color = Color.White,
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(
-                            x = 40.dp,
-                            y = 322.dp
-                        )
-                        .requiredWidth(width = 290.dp)
-                )
-
-
-                TextField(
-                    value = usernames,
-                    onValueChange = { usernames = it },
-                    label = { Text("username", color = LightOrange) },
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopCenter)
-                        .offset(y = 180.dp)
-                        .fillMaxWidth(0.8f),
-                    colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                        textColor = Color.White,
-                        backgroundColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent, //hide the indicator
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                )
-                TextField(
-                    value = password_,
-                    onValueChange = { password_ = it },
-                    label = { Text("Parola", color = LightOrange) },
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopCenter)
-                        .offset(
-                            y = 250.dp
-                        )// Adjust the offset to position the TextField above the first divider
-                        .fillMaxWidth(0.8f),
-                    colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                        textColor = Color.White,
-                        backgroundColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent, //hide the indicator
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-
-                )
-                Divider(
-                    color = Color.White,
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(
-                            x = 40.dp,
-                            y = 390.dp
-                        )
-                        .requiredWidth(width = 290.dp)
-                )
-                TextField(
-                    value = confirmPassword,
-                    onValueChange = { confirmPassword = it },
-                    label = { Text("Confirmare Parola", color = LightOrange) },
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopCenter)
-                        .offset(
-                            y = 320.dp
-                        )// Adjust the offset to position the TextField above the first divider
-                        .fillMaxWidth(0.8f),
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = Color.White,
-                        backgroundColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent, //hide the indicator
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                )
-
-
-                Image(
-                    painter = painterResource(id = R.drawable.email),
-                    contentDescription = "mail",
-                    colorFilter = ColorFilter.tint(Color.White),
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(
-                            x = 300.dp,
-                            y = 215.dp
-                        )
-                        .requiredSize(size = 24.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.lock),
-                    contentDescription = "lock",
-                    colorFilter = ColorFilter.tint(Color.White),
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(
-                            x = 300.dp,
-                            y = 290.dp
-                        )
-                        .requiredSize(size = 24.dp)
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.lock),
-                    contentDescription = "lock",
-                    colorFilter = ColorFilter.tint(Color.White),
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(
-                            x = 300.dp,
-                            y = 354.dp
-                        )
-                        .requiredSize(size = 24.dp)
-                )
-
-                Column (modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .offset(y = 390.dp)
-                    .fillMaxWidth())
-                {
-                    Text("Select Role",  color = LightOrange)
-                    Row {
-                        RadioButton(
-                            selected = selectedRole == "Student",
-                            onClick = { selectedRole = "Student"
-                           }
-                        )
-                        Text("Student",  color = LightOrange)
-                    }
-                    Row {
-                        RadioButton(
-                            selected = selectedRole == "Teacher",
-                            onClick = { selectedRole = "Teacher" }
-                        )
-                        Text("Teacher",  color = LightOrange)
-                    }
-                }
-
-
-
-                Button(
-                    onClick = {
-                        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        takePictureLauncher.launch(takePictureIntent)
-                    },
-                    modifier = Modifier
-                        .align(Alignment.Center) // Center the button
-                        .offset(y = 300.dp) // Move the button down
-                        .fillMaxWidth(0.5f)
-                        .clip(RoundedCornerShape(10)), // Adjust the corner radius as needed
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Pink,
-                        backgroundColor = Color(0xff2C3E50))
-                ) {
-                    Text(text = "Take picture")
-                }
-             imageBitmap.value?.let { bitmap ->
-    Image(
-        bitmap = bitmap.asImageBitmap(),
-        contentDescription = "Captured image",
-        modifier = Modifier
-            .offset(y = 30.dp,
-                x = 10.dp) // Move the image down
-            .size(50.dp) // Set the size of the image
-            .clip(CircleShape) // Clip the image to a circle
-            .align(Alignment.TopStart) // Align the image to the top left of the screen
-    )
-}
-            }
-        }
-        Box(
-            modifier = modifier
-                //.align(alignment = Alignment.TopStart)
-                .offset(
-                    x = 35.dp,
-                    y = 438.dp
-                )
-                .requiredWidth(width = 290.dp)
-                .requiredHeight(height = 50.dp)
-
-        ) {
-            Box(
-                modifier = Modifier
-                     .align(Alignment.Center) // Center the box
-                    .offset(y = 50.dp) // Move the box down
-                    .fillMaxWidth(0.5f)
-                    .clip(RoundedCornerShape(10)) // Adjust the corner radius as needed
-                    .requiredWidth(width = 290.dp)
-                    .requiredHeight(height = 50.dp)
-                    .fillMaxSize()
-                    .clip(shape = RoundedCornerShape(80.dp))
-                    .background(color = Color(0xff2c3e50))
-
-            )
-            Text(
-                text = "REGISTER",
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    fontSize = 19.sp,
-                    shadow = Shadow(
-                        color = Color.Black.copy(alpha = 0.25f),
-                        offset = Offset(0f, 4f),
-                        blurRadius = 4f
-                    )
-                ),
-
-                modifier = Modifier
-                    .align(Alignment.Center) // Center the button
-                    .offset(y = 50.dp) // Move the button down
-                    .fillMaxWidth(0.5f)
-                    .clip(RoundedCornerShape(10)) // Adjust the corner radius as needed
-                    .clickable {
-
-                        val user = User().apply {
-                            name = usernames.text // Replace with actual username
-                            password = password_.text // Replace with actual password
-                            Points = 0
-                            state = "" // Replace with actual state
-                            role = selectedRole
-                        }
-
-                        // Get a reference to the Firebase database
-                        val database = FirebaseDatabase.getInstance()
-
-                        // Get a reference to the "accounts" node
-                        val accountsRef = database.getReference("accounts")
-
-                        // Convert the Bitmap to a ByteArray
-                        val baos = ByteArrayOutputStream()
-                        imageBitmap.value?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-                        val data = baos.toByteArray()
-
-                        // Get a reference to Firebase Storage
-                        val storage = Firebase.storage
-
-                        // Create a storage reference
-                        val storageRef = storage.reference
-
-                        // Create a reference to the file you want to upload
-                        val imageRef = storageRef.child("images/${user.name}.jpg")
-
-                        // Upload the file to Firebase Storage
-                        val uploadTask = imageRef.putBytes(data)
-
-                        // Register observers to listen for when the download is done or if it fails
-                        uploadTask.addOnFailureListener {
-                            // Handle unsuccessful uploads
-                        }.addOnSuccessListener { taskSnapshot ->
-                            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-                            // Get the download URL of the uploaded file
-                            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                                // Add the download URL to the User object
-                                user.photoUrl = uri.toString()
-
-                                // Write the User object to the "accounts" node
-                                accountsRef.child(user.name).setValue(user)
-                            }
-                        }
-                    }
-            )
             Image(
-                painter = painterResource(id = R.drawable.cuzzapp),
-                contentDescription = "Icon",
-
+                painter = painterResource(id = R.drawable.saly16),
+                contentDescription = "Saly-16",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .blur(
+                        radius = 9.dp,
+                        edgeTreatment = BlurredEdgeTreatment.Unbounded
+                    ))
+            Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(
-                        x = 70.dp,
-                        y = -340.dp
+                        x = (-215).dp,
+                        y = 126.dp
                     )
-                    .requiredSize(size = 170.dp)
-                    .clip(shape = RoundedCornerShape(100.dp)))
+                    .requiredWidth(width = 904.dp)
+                    .requiredHeight(height = 1037.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(shape = CircleShape)
+                        .background(
+                            brush = Brush.radialGradient(
+                                0f to Color(0xffb379df),
+                                1f to Color(0xff360060),
+                                center = Offset(198.5f, 198.5f),
+                                radius = 198.5f
+                            )
+                        ))
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(shape = CircleShape)
+                        .background(
+                            brush = Brush.radialGradient(
+                                0f to Color(0xffb379df),
+                                1f to Color(0xff360060),
+                                center = Offset(198.5f, 198.5f),
+                                radius = 198.5f
+                            )
+                        ))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(y = 150.dp)
+                        .clip(shape = RoundedCornerShape(159.dp))
+                        .background(
+                            brush = Brush.radialGradient(
+                                0f to Color(0xffb379df),
+                                0.77f to Color(0xffcc5854).copy(alpha = 0.08f),
+                                1f to Color(0xffb379df),
+                                center = Offset(68.48f, 168.96f),
+                                radius = 567.79f
+                            )
+                        )
+                        )
+            }
+            Box(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 51.dp,
+                        y = 281.dp
+                    )
+                    .requiredWidth(width = 330.dp)
+                    .requiredHeight(height = 73.dp)
+            ) {
+                Text(
+                    text = "Get Started",
+                    color = Color(0xffefefef),
+                    style = TextStyle(
+                        fontSize = 40.328765869140625.sp),
+                    )
+
+            }
+            Box(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 58.dp,
+                        y = 689.dp
+                    )
+
+                    .requiredWidth(width = 314.dp)
+                    .requiredHeight(height = 50.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .requiredWidth(width = 314.dp)
+                        .requiredHeight(height = 50.dp)
+                        .offset(y = -50.dp)
+                        .clip(shape = RoundedCornerShape(15.dp))
+                        .clickable {
+
+                            val user = User().apply {
+                                name = username // Replace with actual username
+                                Points = 0
+                                state = "" // Replace with actual state
+                                role = "Student"
+
+                            }
+                            user.email = email
+                            user.password = password
+                            // Get a reference to the Firebase database
+                            val database = FirebaseDatabase.getInstance()
+
+                            // Get a reference to the "accounts" node
+                            val accountsRef = database.getReference("accounts")
+
+                            // Convert the Bitmap to a ByteArray
+                            val baos = ByteArrayOutputStream()
+                            imageBitmap.value?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                            val data = baos.toByteArray()
+
+                            // Get a reference to Firebase Storage
+                            val storage = Firebase.storage
+
+                            // Create a storage reference
+                            val storageRef = storage.reference
+
+                            // Create a reference to the file you want to upload
+                            val imageRef = storageRef.child("images/${user.name}.jpg")
+
+                            // Upload the file to Firebase Storage
+                            val uploadTask = imageRef.putBytes(data)
+
+                            // Register observers to listen for when the download is done or if it fails
+                            uploadTask.addOnFailureListener {
+                                // Handle unsuccessful uploads
+                            }.addOnSuccessListener { taskSnapshot ->
+                                // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                                // Get the download URL of the uploaded file
+                                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                                    // Add the download URL to the User object
+                                    user.photoUrl = uri.toString()
+
+                                    // Write the User object to the "accounts" node
+                                    accountsRef.child(user.name).setValue(user)
+                                }
+                            }
+                        }
+                        .background(
+                            brush = Brush.linearGradient(
+                                0f to Color(0xff9c3fe4),
+                                1f to Color(0xffc65647),
+                                start = Offset(0f, 15.68f),
+                                end = Offset(320f, 23.31f)
+                            )
+                        )
+
+                ) {
+                    Text(
+                        text = "Sign up",
+                        color = Color.White,
+                        style = TextStyle(
+                            fontSize = 17.918184280395508.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier
+                            .align(alignment = Alignment.TopStart)
+                            .offset(
+                                x = 130.dp,
+                                y = 11.dp
+                            )
+                    )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 59.dp,
+                        y = 513.dp
+                    )
+                    .requiredWidth(width = 314.dp)
+                    .requiredHeight(height = 55.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .requiredWidth(width = 314.dp)
+                        .requiredHeight(height = 55.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .requiredWidth(width = 314.dp)
+                            .requiredHeight(height = 55.dp)
+                            .offset(y = -50.dp)
+                            .clip(shape = RoundedCornerShape(8.dp))
+
+                            .background(
+                                brush = Brush.radialGradient(
+                                    0f to Color.White,
+                                    0.77f to Color.White.copy(alpha = 0.22f),
+                                    1f to Color.White,
+                                    center = Offset(48.1f, 11.57f),
+                                    radius = 398.85f
+                                )
+                            ))
+                    TextField(
+                        value = username,
+                        onValueChange = { username = it },
+                        textStyle = TextStyle(
+                            color = Color(0xffa4a4a4),
+                            fontSize = 14.329999923706055.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier
+                            .align(alignment = Alignment.TopStart)
+                            .offset(x = 38.dp, y = -50.dp),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent
+                        ),
+                        label = { Text("Username") }
+                    )
+                }
+                Image(
+                    painter = painterResource(id = R.drawable.key),
+                    contentDescription = "Vector",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(x = 100.dp, y = -50.dp))
+
+            }
+            Text(
+                text = "Email Adress",
+                color = Color(0xffa4a4a4),
+                style = TextStyle(
+                    fontSize = 14.329999923706055.sp,
+                    fontWeight = FontWeight.Medium),
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 58.dp,
+                        y = 336.dp
+                    ))
+            Text(
+                text = "Your Name",
+                color = Color(0xffa4a4a4),
+                style = TextStyle(
+                    fontSize = 14.329999923706055.sp,
+                    fontWeight = FontWeight.Medium),
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 58.dp,
+                        y = 435.dp
+                    ))
+
+            Text(
+                text = "Password",
+                color = Color(0xffa4a4a4),
+                style = TextStyle(
+                    fontSize = 14.329999923706055.sp,
+                    fontWeight = FontWeight.Medium),
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 58.dp,
+                        y = 520.dp
+                    ))
+            Box(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 59.dp,
+                        y = 607.dp
+                    )
+                    .requiredWidth(width = 314.dp)
+                    .requiredHeight(height = 55.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .requiredWidth(width = 314.dp)
+                        .requiredHeight(height = 55.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .requiredWidth(width = 314.dp)
+                            .requiredHeight(height = 55.dp)
+                            .offset(y = -60.dp)
+                            .background(
+                                brush = Brush.radialGradient(
+                                    0f to Color.White,
+                                    0.77f to Color.White.copy(alpha = 0.22f),
+                                    1f to Color.White,
+                                    center = Offset(48.1f, 11.57f),
+                                    radius = 398.85f
+                                )
+                            ))
+                    TextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        textStyle = TextStyle(
+                            color = Color(0xffa4a4a4),
+                            fontSize = 14.329999923706055.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier
+                            .align(alignment = Alignment.TopStart)
+                            .offset(x = 38.dp, y = -57.dp),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent
+                        ),
+                        label = { Text(text ="Password")}
+                    )
+                }
+                Image(
+                    painter = painterResource(id = R.drawable.key),
+                    contentDescription = "Vector",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(x = 100.dp, y = -60.dp))
+
+            }
+            Box(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = (-14).dp,
+                        y = (-37).dp
+                    )
+                    .requiredWidth(width = 477.dp)
+                    .requiredHeight(height = 418.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.frontshapes),
+                    contentDescription = "front shapes",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = (-0.000013662312994711101).dp,
+                            y = 283.00000273045316.dp
+                        )
+                        .requiredWidth(width = 65.dp)
+                        .requiredHeight(height = 54.dp)
+                        .blur(
+                            radius = 22.dp,
+                            edgeTreatment = BlurredEdgeTreatment.Unbounded
+                        )
+                        .rotate(degrees = 66.77f))
+                Image(
+                    painter = painterResource(id = R.drawable.frontshapes),
+                    contentDescription = "front shapes",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 10.000067256999046.dp,
+                            y = 18.000020851152385.dp
+                        )
+                        .requiredWidth(width = 104.dp)
+                        .requiredHeight(height = 85.dp)
+                        .blur(
+                            radius = 20.dp,
+                            edgeTreatment = BlurredEdgeTreatment.Unbounded
+                        )
+                        .rotate(degrees = 33.41f))
+                Image(
+                    painter = painterResource(id = R.drawable.frontshapes),
+                    contentDescription = "front shapes",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 351.9999802561506.dp,
+                            y = 319.9999873249726.dp
+                        )
+                        .requiredWidth(width = 102.dp)
+                        .requiredHeight(height = 69.dp)
+                        .blur(
+                            radius = 4.dp,
+                            edgeTreatment = BlurredEdgeTreatment.Unbounded
+                        )
+                        .rotate(degrees = 18.69f))
+                Image(
+                    painter = painterResource(id = R.drawable.frontshapes),
+                    contentDescription = "front shapes",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 358.9999802561506.dp,
+                            y = (-0.00001267502739210613).dp
+                        )
+                        .requiredWidth(width = 102.dp)
+                        .requiredHeight(height = 69.dp)
+                        .blur(
+                            radius = 4.dp,
+                            edgeTreatment = BlurredEdgeTreatment.Unbounded
+                        )
+                        .rotate(degrees = 18.69f))
+            }
+            Box(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 58.dp,
+                        y = 419.dp
+                    )
+                    .requiredWidth(width = 314.dp)
+                    .requiredHeight(height = 55.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .requiredWidth(width = 314.dp)
+                        .requiredHeight(height = 55.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .requiredWidth(width = 314.dp)
+                            .requiredHeight(height = 55.dp)
+                            .offset(y = -50.dp)
+                            .clip(shape = RoundedCornerShape(8.dp))
+
+                            .background(
+                                brush = Brush.radialGradient(
+                                    0f to Color.White,
+                                    0.77f to Color.White.copy(alpha = 0.22f),
+                                    1f to Color.White,
+                                    center = Offset(48.1f, 11.57f),
+                                    radius = 398.85f
+                                )
+                            ))
+                }
+
+TextField(
+    value = email,
+    onValueChange = { email = it },
+    textStyle = TextStyle(
+        color = Color(0xffa4a4a4),
+        fontSize = 14.329999923706055.sp,
+        fontWeight = FontWeight.Medium
+    ),
+    modifier = Modifier
+        .align(alignment = Alignment.TopStart)
+        .offset(x = 30.dp, y = -50.dp),
+    colors = TextFieldDefaults.textFieldColors(
+        backgroundColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        focusedIndicatorColor = Color.Transparent
+    ),
+    label = { Text("Email address") }
+)
+                Image(
+                    painter = painterResource(id = R.drawable.profilus),
+                    contentDescription = "Vector",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(y = -45.dp, x = 100.dp))
+            }
+            Box(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopEnd)
+                    .offset(
+                        y = 689.dp
+                    )
+                    .requiredWidth(width = 338.dp)
+                    .requiredHeight(height = 238.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.om_phone),
+                    contentDescription = "Avatar",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize())
+                Box(
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 85.dp,
+                            y = 15.000002313716038.dp
+                        )
+                        .requiredWidth(width = 40.dp)
+                        .requiredHeight(height = 40.dp)
+                        .clip(shape = CircleShape)
+                        .blur(
+                            radius = 4.dp,
+                            edgeTreatment = BlurredEdgeTreatment.Unbounded
+                        )
+                        .rotate(degrees = 0.4f)
+                        .background(color = Color(0xffe1dfdf)))
+                Image(
+                    painter = painterResource(id = R.drawable.image1),
+                    contentDescription = "image 1",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 89.dp,
+                            y = 20.dp
+                        )
+                        .requiredWidth(width = 24.dp)
+                        .requiredHeight(height = 30.dp))
+            }
+            Text(
+                text = "Have an account?",
+                color = Color(0xffa4a4a4),
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium),
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 40.dp,
+                        y = 754.dp
+                    )
+                    .requiredWidth(width = 303.dp)
+                    .requiredHeight(height = 23.dp))
+            Text(
+                text = "Login",
+                color = Color.White,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium),
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 72.dp,
+                        y = 804.dp
+                    )
+                    .clickable {
+                        val intent = Intent(context, Register::class.java)
+                        startActivity(intent)
+                    }
+                    .requiredWidth(width = 163.dp)
+                    .requiredHeight(height = 36.dp))
+            Image(
+                painter = painterResource(id = R.drawable.om_book),
+                contentDescription = "Illustration",
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.TopEnd,
+                modifier = Modifier
+                  )
+            Button(
+                onClick = {
+                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    takePictureLauncher.launch(takePictureIntent)
+                },
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .offset(y = 195.dp, x = 50.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+            ) {
+                Text(
+                    text = "Take profile picture",
+                    color = Color(0xffa4a4a4),
+                    style = TextStyle(
+                        fontSize = 11.329999923706055.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
         }
-    }
-
-    @Composable
-    fun Component1(modifier: Modifier = Modifier) {
 
     }
 
-    @Preview(widthDp = 360, heightDp = 800)
     @Composable
-    private fun RegisterPreview() {
-        Register(Modifier)
+    private fun RegisterPrev() {
+        Register_Screen(Modifier)
     }
 }

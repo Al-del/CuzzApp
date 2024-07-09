@@ -63,7 +63,7 @@ class Video : ComponentActivity() {
                 val navController = rememberNavController() // Create a NavController
 
                 Scaffold(
-                    bottomBar = { BottomNavigationBar() }
+                    bottomBar = { StatusHomeModeDarkPreview() }
                 ) {
                     Box(modifier = Modifier
                         .fillMaxSize()
