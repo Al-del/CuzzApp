@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
             modifier = modifier
                 .fillMaxSize()
                 .clip(shape = RoundedCornerShape(26.dp))
-                .background(color = Color(0xff151316))
+                .background(color = Color(0xffb51316))
         ) {
             Image(
                 painter = painterResource(id = R.drawable.saly16),
@@ -327,7 +327,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 Image(
-                    painter = painterResource(id = R.drawable.key),
+                    painter = painterResource(id = R.drawable.profilus),
                     contentDescription = "Vector",
                     modifier = Modifier
                         .fillMaxSize()
@@ -558,7 +558,7 @@ TextField(
     label = { Text("Email address") }
 )
                 Image(
-                    painter = painterResource(id = R.drawable.profilus),
+                    painter = painterResource(id = R.drawable.email),
                     contentDescription = "Vector",
                     modifier = Modifier
                         .fillMaxSize()

@@ -60,19 +60,20 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-val backcolor = Color(0xFF8B93FF)
+val backcolor = Color(0xFF9FA8EB)
 
 public var url_photo:String = ""
 var learningPath:List<String> = emptyList()
 var viewedProfile:String = ""
 public var username_for_all:String = ""
 public var state:String = ""
+public var mail:String = ""
 public var points:Int = 0
 public var descriptiones:String = ""
 public var achivement:   MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
 var achivement_other : MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
 
-val API_KEY = "AIzaSyAL4p8iVYo-5orPNRnfoINbfZmrdrAWD4M"
+val API_KEY = "AIzaSyAQu0ubo-dNvUZdfM1c6r6sFkwvj-xaR5k"
 
 sealed class Screen(val route: String, val label: String, val icon: Int) {
     object Home : Screen("home", "Home", R.drawable.home)

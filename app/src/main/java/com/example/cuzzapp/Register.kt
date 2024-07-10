@@ -92,6 +92,7 @@ import com.google.firebase.storage.ktx.storage
 import descriptiones
 import get_achievements_from_db
 import learningPath
+import mail
 import points
 import state
 import url_photo
@@ -550,6 +551,7 @@ class Register : ComponentActivity() {
                                             points = user.Points
                                             descriptiones = user.state
                                             learningPath = user.learningPath
+                                            mail = user.email
                                             achivement =
                                                 get_achievements_from_db(userSnapshot, achivement)
                                             navigateToOtherActivity = true

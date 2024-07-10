@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -68,15 +69,24 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Divider
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.room.util.copy
 import backcolor
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import state
 import username_for_all
 import username_true
@@ -102,12 +112,16 @@ fun HOmescreen(homeScreen: HomeScreen) {
     println("Current searchQuery: $searchQuery") // Add this line
 
     Box(modifier = Modifier.fillMaxSize()
-        .background(backcolor) // Set background color to 262323
+        .background(
+    color = Color(0xffE0E0E0)
+)
     ) {
         LoadImageFromUrl(url = url_photo, points = points)
         Rectangle2(searchQuery, { newQuery -> searchQuery = newQuery })
-        DisplayVideos(homeScreen,searchQuery)
 
+    }
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+        ResizableDisplayVideosBox(homeScreen, searchQuery)
     }
 }
 @Composable
@@ -206,12 +220,6 @@ fun DisplayVideos(homeScreen: HomeScreen, searchQuery: String) {
         videos = getEducationalVideos(searchQuery, 5)
     }
 
-    val gradientBrush = Brush.verticalGradient(
-        colors = listOf(Color(0xFFCF0A0A), Color(0xFF262323)),
-        startY = 0f,
-        endY = 500f
-    )
-
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier
@@ -221,54 +229,105 @@ fun DisplayVideos(homeScreen: HomeScreen, searchQuery: String) {
         ) {
             items(videos.size) { index ->
                 val video = videos[index]
+                val painter = rememberImagePainter(data = video["thumbnail"])
+                Log.d("Video",  video["thumbnail"].toString())
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+
+                        .padding(8.dp)
+
+                        .clip(RoundedCornerShape(12.dp)), // Set rounded corners for the Card
                     elevation = 8.dp,
-                    backgroundColor = Color.Transparent, // Set background color to Transparent
-                    contentColor = Color.White // Set content color to White
+                    backgroundColor = Color.Transparent
                 ) {
+
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(brush = gradientBrush) // Set background to gradient
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val painter = rememberImagePainter(data = video["thumbnail"])
-                            Image(
-                                painter = painter,
-                                contentDescription = "Video Thumbnail",
-                                modifier = Modifier
-                                    .clickable {
-                                        video_l.title = video["title"].toString()
-                                        video_l.description = video["description"].toString()
-                                        video_l.url = video["url"].toString()
-                                        video_l.thumbnail = video["thumbnail"].toString()
-                                        video_l.id = video["id"].toString()
-                                        println(videos[index])
-                                        val intent = Intent(homeScreen, Video::class.java)
-                                        startActivity(homeScreen, intent, null)
-                                    }
-                                    .size(120.dp)
-                                    .clip(RoundedCornerShape(8.dp))
 
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = video["title"].toString(),
-                                style = MaterialTheme.typography.h6,
-                                modifier = Modifier.padding(8.dp),
-                                color = Color.White
-                            )
-                        }
+                            .clickable {
+                                video_l.title = video["title"].toString()
+                                video_l.description = video["description"].toString()
+                                video_l.url = video["url"].toString()
+                                video_l.thumbnail = video["thumbnail"].toString()
+                                video_l.id = video["id"].toString()
+                                println(videos[index])
+                                val intent = Intent(homeScreen, Video::class.java)
+                                startActivity(homeScreen, intent, null)
+                            }
+                    ) {
+AsyncImage(
+    model = ImageRequest.Builder(LocalContext.current)
+        .data(video["thumbnail"]?.replace("/default.jpg", "/hqdefault.jpg")) // Replace with a higher quality thumbnail URL if applicable
+        .crossfade(true)
+        .build(),
+    contentDescription = "Video Thumbnail",
+    modifier = Modifier.fillMaxSize(),
+    contentScale = ContentScale.Crop // Ensures the image covers the Card
+)
+                        Text(
+                            text = video["title"].toString(),
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .padding(8.dp),
+                            color = Color.White
+                        )
                     }
                 }
             }
         }
     }
 }
+@Composable
+fun ResizableDisplayVideosBox(homeScreen: HomeScreen, searchQuery: String) {
+    var boxSize by remember { mutableStateOf(IntSize(300, 600)) } // Initial size
 
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = Modifier
+            .size(height = boxSize.height.dp, width = getScreenWidthDp().dp)
+            .clip(RoundedCornerShape(12.dp))
+
+            .background(
+    brush = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF8B93FF),
+            Color(0xFFEDD1FA),
+            Color(0xFF4120A9)
+        ),
+        start = Offset(0f, 0f), // Top left corner
+        end = Offset.Infinite // Bottom right corner, simulating a 135-degree angle
+    )
+)
+            .pointerInput(Unit) {
+                detectDragGestures { _, dragAmount ->
+                    val heightChange = dragAmount.y
+                    // Update only the height based on vertical drag
+                    boxSize = IntSize(
+                        width = boxSize.width, // Keep the width constant
+                        height = (boxSize.height - heightChange).coerceAtLeast(100f).toInt() // Update height
+                    )
+                }
+            }
+    ) {
+        DisplayVideos(homeScreen, searchQuery)
+    }
+}
+
+@Composable
+fun getScreenWidthDp(): Int {
+    val configuration = LocalConfiguration.current
+    val screenWidthPx = configuration.screenWidthDp // Screen width in dp
+    return screenWidthPx
+}
+
+@Composable
+fun getScreenWidthPx(): Int {
+    val configuration = LocalConfiguration.current
+    val screenWidthPx = configuration.screenWidthDp // Screen width in dp
+    val density = LocalDensity.current
+    val screenWidth = with(density) { screenWidthPx.dp.toPx().toInt() } // Convert dp to px
+    return screenWidth
+}

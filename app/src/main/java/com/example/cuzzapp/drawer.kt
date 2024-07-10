@@ -33,8 +33,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material3.Divider
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -44,13 +46,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
@@ -66,6 +72,8 @@ import com.example.cuzzapp.ui.theme.LightOrange
 import com.example.cuzzapp.ui.theme.LightYellow
 import com.example.cuzzapp.ui.theme.LighterRed
 import com.example.cuzzapp.ui.theme.Pink
+import mail
+import points
 import state
 import url_photo
 import username_for_all
@@ -84,174 +92,7 @@ fun Drawer(
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize() // Fill the parent
-                    .background(Color(0xFFD9D9D9)), // Set background color
-                verticalArrangement = Arrangement.Center, // Center vertically
-                horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
-            ) {
-                Box(
-                ) {
-                    val painter = rememberImagePainter(data = url_photo)
-                    Image(
-                        painter = painter,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-
-                            }
-                            .size(200.dp) // Set the size of the image
-                            .clip(CircleShape) // Clip the image to a circle
-                    )
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-
-                Button(
-                    onClick = {
-                        val intent = Intent(context, asis::class.java)
-                        startActivity(context, intent, null)
-
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                        .clickable {
-                            val intent = Intent(context, asis::class.java)
-                            startActivity(context, intent, null)
-                        }
-                ) {
-                    Text("Asistenta")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                Button(
-                    onClick = {
-                        Log.d("Drawer", "Ranking button clicked")
-                        val intent = Intent(context, Image__to_book::class.java)
-                        startActivity(context, intent, null)
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                        .clickable {
-
-                        }
-                ) {
-                    Text("Image to bookd")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                Button(
-                    onClick = {
-                        val intent = Intent(context, HomeScreen::class.java)
-                        startActivity(context, intent, null)
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                ) {
-                    Text("Home")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                Button(
-                    onClick = {
-                        val intent = Intent(context, Profile::class.java)
-                        startActivity(context, intent, null)
-
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                ) {
-                    Text("Profile")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-
-                Button(
-                    onClick = {
-                        val intent = Intent(context, Shop::class.java)
-                        startActivity(context, intent, null)
-
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                        .clickable {
-                            val intent = Intent(context, asis::class.java)
-                            startActivity(context, intent, null)
-                        }
-                ) {
-                    Text("Shop")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-
-                Button(
-                    onClick = {
-                        val intent = Intent(context, messj::class.java)
-                        startActivity(context, intent, null)
-
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-
-                ) {
-                    Text("Messages")
-                }
-            }
-
-
-            Button(
-                onClick = {
-                    if(state == "Student"){
-                        val intent = Intent(context, Learningpath_student::class.java)
-                        startActivity(context, intent, null)
-
-                    }else{
-                        val intent = Intent(context, Learning_pathways_profesor::class.java)
-                        startActivity(context, intent, null)
-
-                    }
-
-                },
-                shape = RoundedCornerShape(80.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                modifier = Modifier
-                    .requiredWidth(width = 170.dp)
-                    .requiredHeight(height = 40.dp)
-                    .offset(y = -90.dp, x = 78.dp)
-            ) {
-                Text("Pathways")
-            }
-            Button(
-                onClick = {
-                    val intent = Intent(context, Other_Portofolios::class.java)
-                    ContextCompat.startActivity(context, intent, null)
-                    viewedProfile=username_for_all
-
-                },
-                shape = RoundedCornerShape(80.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                modifier = Modifier
-                    .offset(x = 78.dp, y = -35.dp)
-                    .requiredWidth(width = 170.dp)
-                    .requiredHeight(height = 40.dp)
-
-            ) {
-                Text("Achievements")
-            }
-
+            Frame34627Preview()
         },
         content = {
             content()
@@ -312,8 +153,10 @@ val contex = LocalContext.current
         Box(
             modifier = modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 0.dp,
-                    y = 32.dp)
+                .offset(
+                    x = 0.dp,
+                    y = 32.dp
+                )
                 .fillMaxWidth()
                 .requiredHeight(height = 75.dp)
                 .clip(shape = RoundedCornerShape(topStart = 32.dp, topEnd = 22.dp))
@@ -336,8 +179,10 @@ val contex = LocalContext.current
                         modifier = modifier
                             .requiredWidth(width = 70.dp)
                             .requiredHeight(height = 75.dp)
-                            .padding(horizontal = 15.dp,
-                                vertical = 12.5.dp)
+                            .padding(
+                                horizontal = 15.dp,
+                                vertical = 12.5.dp
+                            )
 
                     ) {
                         Frame866()
@@ -348,8 +193,10 @@ val contex = LocalContext.current
                         modifier = modifier
                             .requiredWidth(width = 70.dp)
                             .requiredHeight(height = 75.dp)
-                            .padding(horizontal = 15.dp,
-                                vertical = 12.5.dp)
+                            .padding(
+                                horizontal = 15.dp,
+                                vertical = 12.5.dp
+                            )
                     ) {
                         Icon(
                             modifier = Modifier.clickable{
@@ -371,8 +218,10 @@ val contex = LocalContext.current
                         modifier = modifier
                             .requiredWidth(width = 70.dp)
                             .requiredHeight(height = 75.dp)
-                            .padding(horizontal = 15.dp,
-                                vertical = 12.5.dp)
+                            .padding(
+                                horizontal = 15.dp,
+                                vertical = 12.5.dp
+                            )
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.path),
@@ -385,8 +234,10 @@ val contex = LocalContext.current
                         modifier = modifier
                             .requiredWidth(width = 70.dp)
                             .requiredHeight(height = 75.dp)
-                            .padding(horizontal = 15.dp,
-                                vertical = 12.5.dp)
+                            .padding(
+                                horizontal = 15.dp,
+                                vertical = 12.5.dp
+                            )
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.profile),
@@ -403,12 +254,17 @@ val contex = LocalContext.current
 
 @Composable
 public  fun StatusHomeModeDarkPreview() {
-    Box(modifier = Modifier.clipToBounds() // This will prevent the content from being clipped
-        .background(color = Color(0xff5755FE)).clip(RoundedCornerShape(30.dp)),
+    Box(modifier = Modifier
+        .clipToBounds() // This will prevent the content from being clipped
+        .background(color = backcolor)
+        .clip(RoundedCornerShape(30.dp)),
         contentAlignment = Alignment.BottomCenter
     ) {
-    StatusHomeModeDark(Modifier.clipToBounds() // This will prevent the content from being clipped
-        .align(Alignment.BottomCenter).offset(y = (-5).dp))
+    StatusHomeModeDark(
+        Modifier
+            .clipToBounds() // This will prevent the content from being clipped
+            .align(Alignment.BottomCenter)
+            .offset(y = (-5).dp))
 
 }
 }
@@ -419,9 +275,18 @@ fun Frame866(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .clip(shape = RoundedCornerShape(topStart = 39.dp, topEnd = 39.dp, bottomStart = 39.dp))
-            .background(color = Color(0xff613eea))
-            .border(border = BorderStroke(1.dp, Color(0xff0b4af5)),
-                shape = RoundedCornerShape(topStart = 39.dp, topEnd = 39.dp, bottomStart = 39.dp))
+            .background(
+                Brush.radialGradient(
+                    0f to Color(0xffb379df),
+                    1f to Color(0xff360060),
+                    center = Offset(198.5f, 198.5f),
+                    radius = 198.5f
+                )
+            )
+            .border(
+                border = BorderStroke(1.dp, Color(0xff0b4af5)),
+                shape = RoundedCornerShape(topStart = 39.dp, topEnd = 39.dp, bottomStart = 39.dp)
+            )
             .padding(all = 10.dp)
     ) {
         Icon(
@@ -430,4 +295,417 @@ fun Frame866(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .requiredSize(size = 19.dp))
     }
+}
+@Composable
+fun Frame34627(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    Column(
+        verticalArrangement = Arrangement.spacedBy(147.dp, Alignment.Top),
+        modifier = modifier
+            .background(
+                Brush.radialGradient(
+                    0f to Color(0xffb379df),
+                    1f to Color(0xff360060),
+                    center = Offset(198.5f, 198.5f),
+                    radius = 198.5f
+                )
+            )
+            .fillMaxSize()
+            .padding(all = 24.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.Top),
+            modifier = Modifier
+                .fillMaxWidth()
+                .requiredHeight(height = 525.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(48.dp, Alignment.Start),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .requiredSize(size = 48.dp)
+                            .clip(shape = RoundedCornerShape(48.dp))
+                            .background(color = Color(0xffffd88d))
+                    ) {
+                        val painter = rememberImagePainter(data = url_photo)
+
+                        Image(
+                            painter =painter,
+                            contentDescription = "81",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(shape = RoundedCornerShape(256.9054260253906.dp)))
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text =  username_true,
+                            color = Color(0xfffcfcfc),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                fontSize = 15.sp),
+                            modifier = Modifier
+                                .fillMaxWidth())
+                        Text(
+                            text = mail,
+                            color = Color(0xffd1d3d4),
+                            lineHeight = 1.em,
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium),
+                            modifier = Modifier
+                                .fillMaxWidth())
+                    }
+                }
+            }
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(alignment = Alignment.CenterHorizontally)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(all = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .weight(weight = 1f)
+                    ) {
+
+                        Text(
+                            text = "Home",
+                            color = Color(0xff6759ff),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                letterSpacing = 0.3.em,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color.Yellow, Color.Magenta, Color.Cyan),
+                                ),
+                                fontSize = 20.sp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    val intent = Intent(context, HomeScreen::class.java)
+                                    startActivity(context, intent, null)
+                                })
+                        }
+
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(all = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .weight(weight = 1f)
+                    ) {
+
+                        Text(
+                            text = "Rewards",
+                            color = Color(0xfff5f4f5),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                letterSpacing = 0.3.em,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color.Red, Color.Magenta, Color.Yellow),
+                                ),
+                                fontSize = 20.sp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    val intent = Intent(context, Shop::class.java)
+                                    startActivity(context, intent, null)
+                                })
+                    }
+
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(all = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+
+                        Text(
+                            text = "Messages",
+                            color = Color(0xfff5f5f5),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                letterSpacing = 0.3.em,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color.Cyan, Color.Magenta, Color.Yellow),
+                                ),
+                                fontSize = 20.sp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    val intent = Intent(context, messj::class.java)
+                                    startActivity(context, intent, null)
+                                })
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(all = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+
+                        Text(
+                            text = "Pathways",
+                            color = Color(0xfff5f5f5),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                letterSpacing = 0.3.em,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color.Yellow, Color.Magenta, Color.Red),
+                                ),
+                                fontSize = 20.sp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    if (state == "Student") {
+                                        val intent =
+                                            Intent(context, Learningpath_student::class.java)
+                                        startActivity(context, intent, null)
+
+                                    } else {
+                                        val intent =
+                                            Intent(context, Learning_pathways_profesor::class.java)
+                                        startActivity(context, intent, null)
+
+                                    }
+                                })
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(all = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .weight(weight = 1f)
+                    ) {
+
+                        Text(
+                            text = "Image to book",
+                            color = Color(0xfff5f5f5),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                letterSpacing = 0.3.em,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color.Magenta, Color.Cyan, Color.Yellow),
+                                ),
+                                fontSize = 20.sp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    val intent = Intent(context, Image__to_book::class.java)
+                                    startActivity(context, intent, null)
+                                })
+                    }
+
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(all = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+
+                        Text(
+                            text = "Profile",
+                            color = Color(0xfff5f5f5),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                letterSpacing = 0.3.em,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color.Red, Color.Magenta, Color.Yellow),
+                                ),
+                                fontSize = 20.sp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    val intent = Intent(context, Profile::class.java)
+                                    startActivity(context, intent, null)
+                                })
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(all = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+
+                        Text(
+                            text = "Quizz",
+                            color = Color(0xfff5f5f5),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                letterSpacing = 0.3.em,
+                                        brush = Brush.linearGradient(
+                                    colors = listOf(Color.Cyan, Color.Magenta, Color.Yellow),
+                                ),
+                                fontSize = 20.sp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    if(state == "Student"){
+                                        val intent = Intent(context, Quizz_student::class.java)
+                                        startActivity(context, intent, null)
+
+                                    }else{
+                                        val intent = Intent(context, Quizz_teacher::class.java)
+                                        startActivity(context, intent, null)
+
+                                    }
+                                })
+                    }
+                }
+            }
+        }
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .requiredHeight(height = 2.dp)
+                        .clip(shape = RoundedCornerShape(2.dp))
+                        .background(color = Color(0xffd1d3d4).copy(alpha = 0.2f)))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.light),
+                            contentDescription = "UI icon/help/light")
+                        Text(
+                            text = "Account information",
+                            color = Color(0xfff5f5f5),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                fontSize = 15.sp),
+                            modifier = Modifier
+                                .fillMaxWidth())
+                    }
+                }
+            }
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(40.dp))
+                    .background(color = Color.White.copy(alpha = 0.15f))
+                    .padding(all = 4.dp)
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .weight(weight = 0.5f)
+                        .clip(shape = RoundedCornerShape(32.dp))
+                        .padding(
+                            start = 8.dp,
+                            end = 16.dp,
+                            top = 4.dp,
+                            bottom = 4.dp
+                        )
+                ) {
+
+                    Text(
+                        text = "Total points ${points}",
+                        color = Color.White,
+                        lineHeight = 1.6.em,
+                        style = TextStyle(
+                            fontSize = 15.sp))
+                }
+            }
+        }
+    }
+}
+
+@Preview(widthDp = 310, heightDp = 812)
+@Composable
+private fun Frame34627Preview() {
+    Frame34627(Modifier)
 }
