@@ -395,7 +395,7 @@ fun Frame866(modifier: Modifier = Modifier) {
     }
 }
 @Composable
-fun Frame34627(modifier: Modifier = Modifier) {
+fun drawer_content(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.spacedBy(147.dp, Alignment.Top),
@@ -816,7 +816,7 @@ fun Frame34627(modifier: Modifier = Modifier) {
 @Preview(widthDp = 310, heightDp = 812)
 @Composable
 private fun Frame34627Preview() {
-    Frame34627(Modifier)
+    drawer_content(Modifier)
 }
 @Composable
 fun Sample(modifier: Modifier = Modifier) {
