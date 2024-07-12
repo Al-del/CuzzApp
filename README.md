@@ -1,4 +1,5 @@
 ## CuzzApp
+![GitHub license]([https://img.shields.io/github/license/wowvain-dev/lima-electron](https://img.shields.io/badge/licence-MIT-green)
 
 ### Tabel de conținut:
 1. [Informații generale](#informații-generale)
