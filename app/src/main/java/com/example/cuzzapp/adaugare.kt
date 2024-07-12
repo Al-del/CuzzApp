@@ -69,6 +69,7 @@ import com.jerry.jetpack_take_select_photo_image_2.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import seach_querr
 import username_for_all
 import username_true
 import java.io.File
@@ -86,11 +87,11 @@ class adaugare : ComponentActivity() {
             }
         }
         setContent {
-
+            var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
-            Drawer(scaffoldState = scaffoldState) {
 
-                val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(

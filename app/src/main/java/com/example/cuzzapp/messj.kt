@@ -43,6 +43,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.async
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
+import seach_querr
 import username_true
 import java.util.concurrent.CompletableFuture
 
@@ -62,9 +63,11 @@ class messj : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+            var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
-            Drawer(scaffoldState = scaffoldState) {
-                MessagingScreen(username = username_true, messagingService = messagingService)
+
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            MessagingScreen(username = username_true, messagingService = messagingService)
             }
 
         }

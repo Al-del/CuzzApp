@@ -1,6 +1,5 @@
 package com.example.cuzzapp
 
-import Drawer_final
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -68,6 +67,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.Callback
 import retrofit2.Response
+import seach_querr
 import url_photo
 
 class asis : ComponentActivity() {
@@ -76,9 +76,11 @@ class asis : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
-            Drawer(scaffoldState = scaffoldState) {
-                final() // Adjusted to call without homeScreen parameter
+
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            final() // Adjusted to call without homeScreen parameter
             }
         }
     }

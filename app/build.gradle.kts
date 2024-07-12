@@ -129,7 +129,5 @@ dependencies {
     implementation ("com.itextpdf:itext7-core:7.1.9")
     implementation("com.itextpdf:itextpdf:5.5.13.1")
 
-
-
 }
 

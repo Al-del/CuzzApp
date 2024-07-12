@@ -1,6 +1,5 @@
 package com.example.cuzzapp
 
-import Drawer_final
 import achivement_other
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
@@ -80,12 +79,11 @@ class Profile : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
                 var searchQuery by remember { mutableStateOf("") }
-                val scaffoldState = rememberScaffoldState()
-            Drawer(scaffoldState = scaffoldState) {
-                ProfileScreen()
-            }
+            val scaffoldState = rememberScaffoldState()
 
-             //       ProfileScreen()
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            ProfileScreen()
+            }
 
 
         }
@@ -139,15 +137,10 @@ fun ProfileScreen() {
         mutableStateOf(descriptiones_)
     }
 
-    LaunchedEffect(key1 = username_for_all) {
-        val (fetchedPhotoUrl, fetchedDescription, points) = fetchShopItems(username_for_all)
-        photoUrl = fetchedPhotoUrl
-        description = fetchedDescription
-        pointss = points
-    }
+
     println("URL PHOTO___: $photo_URL")
     println("URL PHOTO_: $photoUrl")
-val painter = rememberImagePainter(photoUrl)
+val painter = rememberImagePainter(url_photo)
 
     Scaffold(
         modifier =Modifier.background( Color(0xFF262323)), // Set the background color
@@ -157,12 +150,6 @@ val painter = rememberImagePainter(photoUrl)
         Box(modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF262323))) {
-
-
-                LoadImageFromUrl(url = url_photo, points = points)
-                Rectangle2(searchQuery, { newQuery -> searchQuery = newQuery })
-
-
                 Column(
                 modifier = Modifier
                     .requiredHeight(525.dp)

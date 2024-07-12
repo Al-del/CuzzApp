@@ -74,9 +74,12 @@ class Quizz_student : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Drawer(rememberScaffoldState()) {
+            var searchQuery by remember { mutableStateOf("") }
+            val scaffoldState = rememberScaffoldState()
 
-                val quizViewModel = QuizViewModel()
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+
+            val quizViewModel = QuizViewModel()
                 // Call the QuizzesList composable and pass the ViewModel
                 QuizzesList(viewModel = quizViewModel)
             }

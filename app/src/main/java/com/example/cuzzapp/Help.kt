@@ -1,5 +1,6 @@
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +36,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -65,6 +68,7 @@ val backcolor = Color(0xFF9FA8EB)
 public var url_photo:String = ""
 var learningPath:List<String> = emptyList()
 var viewedProfile:String = ""
+var seach_querr:String = "Calculus"
 public var username_for_all:String = ""
 public var state:String = ""
 public var mail:String = ""
@@ -73,7 +77,7 @@ public var descriptiones:String = ""
 public var achivement:   MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
 var achivement_other : MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
 
-val API_KEY = "AIzaSyAQu0ubo-dNvUZdfM1c6r6sFkwvj-xaR5k"
+val API_KEY = "AIzaSyDtBdFT630ndufK-b4rGExvvWwcsby15eA"
 
 sealed class Screen(val route: String, val label: String, val icon: Int) {
     object Home : Screen("home", "Home", R.drawable.home)
@@ -95,177 +99,53 @@ public var username_true:String = ""
 @Composable
 fun YouTubePlayer_ok(
     youtubeVideoId: String,
-    lifecycleOwner: LifecycleOwner
-){
-    val context = LocalContext.current // Get the local context to show the toast
-    AndroidView(
-        modifier = Modifier
-            .offset(x = 0.dp, y = 50.dp)
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clip(RoundedCornerShape(16.dp)),
-        factory = { context->
-            YouTubePlayerView(context = context).apply {
-                lifecycleOwner.lifecycle.addObserver(this)
+    lifecycleOwner: LifecycleOwner,
+    modifier: Modifier = Modifier // Add this line to accept a Modifier parameter
+) {
+    val context = LocalContext.current
+    Column(modifier = modifier) { // Apply the modifier to the Column
+        AndroidView(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.38f)
+                .padding(8.dp)
+                .clip(RoundedCornerShape(16.dp)),
+            factory = { context ->
+                    YouTubePlayerView(context = context).apply {
+                        lifecycleOwner.lifecycle.addObserver(this)
 
-                addYouTubePlayerListener(object: AbstractYouTubePlayerListener(){
-                    override fun onReady(youTubePlayer: YouTubePlayer) {
-                        youTubePlayer.loadVideo(youtubeVideoId, 0f)
+                        addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                            override fun onReady(youTubePlayer: YouTubePlayer) {
+                                youTubePlayer.loadVideo(youtubeVideoId, 0f)
+                            }
+
+                            override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                                super.onStateChange(youTubePlayer, state)
+                                if (state == PlayerConstants.PlayerState.ENDED) {
+                                    Toast.makeText(context, "Video is over", Toast.LENGTH_SHORT).show()
+
+                                    // Get a reference to the Firebase database
+                                    val database = FirebaseDatabase.getInstance()
+
+                                    // Get a reference to the "accounts" node
+                                    val accountsRef = database.getReference("accounts")
+
+                                    // Update the points to 100
+                                    points += 100
+                                    accountsRef.child(username_true).child("points").setValue(points)
+                                }
+                            }
+                        })
                     }
+                }
+            )
 
-                    override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
-                        super.onStateChange(youTubePlayer, state)
-                        if (state == PlayerConstants.PlayerState.ENDED) {
-                            Toast.makeText(context, "Video is over", Toast.LENGTH_SHORT).show()
-
-                            // Get a reference to the Firebase database
-                            val database = FirebaseDatabase.getInstance()
-
-                            // Get a reference to the "accounts" node
-                            val accountsRef = database.getReference("accounts")
-
-                            // Update the points to 100
-                            points+= 100
-                            accountsRef.child(username_true).child("points").setValue(points)
-                        }
-                    }
-                })
-            }
         }
-    )
-}
+    }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter",
     "UnusedMaterial3ScaffoldPaddingParameter"
 )
-@Composable
-fun Drawer_final(scaffoldState: ScaffoldState, action: @Composable () -> Unit) {
-    val coroutineScope = rememberCoroutineScope()
-    val navController = rememberNavController() // Create a NavController
-    val context = LocalContext.current // Get the local context to use startActivity
-    androidx.compose.material.Scaffold(
-        scaffoldState = scaffoldState,
-        drawerContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize() // Fill the parent
-                    .background(Color(0xFFD9D9D9)), // Set background color
-                verticalArrangement = Arrangement.Center, // Center vertically
-                horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
-            ) {
-                Box(
-                ) {
-                    val painter = rememberImagePainter(data = url_photo)
-                    Image(
-                        painter = painter,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-
-                            }
-                            .size(200.dp) // Set the size of the image
-                            .clip(CircleShape) // Clip the image to a circle
-                    )
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                androidx.compose.material.Button(
-                    onClick = {
-                        val intent = Intent(context, asis::class.java)
-                        context.startActivity(intent)
-
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                        .clickable {
-                            val intent = Intent(context, asis::class.java)
-                            context.startActivity(intent)
-                        }
-                ) {
-                    Text("Asistenta")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-
-                androidx.compose.material.Button(
-                    onClick = {
-                        val intent = Intent(context, Shop::class.java)
-                        context.startActivity(intent)
-
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                        .clickable {
-                            val intent = Intent(context, asis::class.java)
-                            context.startActivity(intent)
-                        }
-                ) {
-                    Text("Shop")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                androidx.compose.material.Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                        .clickable {
-                            val intent = Intent(context, RankingScreen::class.java)
-                            context.startActivity(intent)
-                        }
-                ) {
-                    Text("Ranking")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                androidx.compose.material.Button(
-                    onClick = {
-
-                        val inent = Intent(context, HomeScreen::class.java)
-                        context.startActivity(inent)
-                    },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                        .clickable {
-                            val intent = Intent(context, HomeScreen::class.java)
-                            context.startActivity(intent)
-                        }
-                ) {
-                    Text("Home")
-                }
-                Spacer(modifier = Modifier.height(24.dp)) // Add bigger space
-                androidx.compose.material.Button(
-                    onClick = { },
-                    shape = RoundedCornerShape(80.dp),
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = Color(0xff5d5d5d)),
-                    modifier = Modifier
-                        .requiredWidth(width = 170.dp)
-                        .requiredHeight(height = 40.dp)
-                        .clickable {
-                            val intent = Intent(context, Profile::class.java)
-                            context.startActivity(intent)
-                        }
-                ) {
-                    Text("Profile")
-                }
-
-            }
-        },
-        content = {
-
-            action()
-        },
-
-        )
-}
-
 fun get_achievements_from_db(
     userSnapshot: DataSnapshot,
     achivement: MutableList<achievementuriUSER?>

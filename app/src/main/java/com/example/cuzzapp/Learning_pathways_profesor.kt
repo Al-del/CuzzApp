@@ -80,10 +80,11 @@ class Learning_pathways_profesor : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
+            var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
-            Drawer(scaffoldState = scaffoldState) {
 
-                Box(modifier =Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            Box(modifier =Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     LearningPath()
                 }
             }

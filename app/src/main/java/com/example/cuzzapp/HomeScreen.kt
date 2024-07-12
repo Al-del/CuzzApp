@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,6 +73,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -87,6 +89,7 @@ import androidx.room.util.copy
 import backcolor
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import seach_querr
 import state
 import username_for_all
 import username_true
@@ -99,29 +102,76 @@ class HomeScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
        setContent {
-    Drawer(rememberScaffoldState()) {
         HOmescreen(this) // Pass your specific composable content here
-    }
+
 }
     }
 }
 @Composable
 fun HOmescreen(homeScreen: HomeScreen) {
-    var searchQuery by remember { mutableStateOf("calculus") }
+    var searchQuery by remember { mutableStateOf(seach_querr) }
+    var showGuidelines by remember { mutableStateOf(true) } // Initialize showGuidelines state
+    val scaffoldState = rememberScaffoldState()
+    Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
 
-    println("Current searchQuery: $searchQuery") // Add this line
-
-    Box(modifier = Modifier.fillMaxSize()
-        .background(
-    color = Color(0xffE0E0E0)
-)
-    ) {
-        LoadImageFromUrl(url = url_photo, points = points)
-        Rectangle2(searchQuery, { newQuery -> searchQuery = newQuery })
-
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .background(
+                    color = Color(0xffb379df)
+                )
+        ) {
+            // Conditionally display the GuidelinesOverlay based on showGuidelines state
+            if (showGuidelines) {
+                Box(
+                    modifier = Modifier.fillMaxSize().offset(),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    GuidelinesOverlay()
+                }
+            }
+        }
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            ResizableDisplayVideosBox(
+                homeScreen,
+                searchQuery,
+                showGuidelines
+            ) // Pass showGuidelines to ResizableDisplayVideosBox
+        }
     }
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-        ResizableDisplayVideosBox(homeScreen, searchQuery)
+}
+
+@Composable
+fun ResizableDisplayVideosBox(homeScreen: HomeScreen, searchQuery: String, showGuidelines: Boolean) {
+    var boxSize by remember { mutableStateOf(IntSize(300, 520)) } // Initial size
+
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = Modifier
+            .size(height = boxSize.height.dp, width = getScreenWidthDp().dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFF8B93FF),
+                        Color(0xFFEDD1FA),
+                        Color(0xFF4120A9)
+                    ),
+                    start = Offset(0f, 0f),
+                    end = Offset.Infinite
+                )
+            )
+            .pointerInput(Unit) {
+                detectDragGestures { _, dragAmount ->
+                    val heightChange = dragAmount.y
+                    boxSize = IntSize(
+                        width = boxSize.width,
+                        height = (boxSize.height - heightChange).coerceAtLeast(100f).toInt()
+                    )
+                    // Update showGuidelines state here if needed
+                }
+            }
+    ) {
+        DisplayVideos(homeScreen, searchQuery)
     }
 }
 @Composable
@@ -188,7 +238,7 @@ fun Rectangle2(searchQuery: String, onQueryChange: (String) -> Unit, modifier: M
 
 
 
-suspend fun getEducationalVideos(query: String, maxResults: Int = 5): List<Map<String, String>> = withContext(Dispatchers.IO) {
+suspend fun getEducationalVideos(query: String, maxResults: Int = 15): List<Map<String, String>> = withContext(Dispatchers.IO) {
     val client = OkHttpClient()
     val url = "https://www.googleapis.com/youtube/v3/search?q=$query&part=id,snippet&maxResults=$maxResults&type=video&videoCategoryId=27&key=$API_KEY"
     val request = Request.Builder().url(url).build()
@@ -217,7 +267,7 @@ fun DisplayVideos(homeScreen: HomeScreen, searchQuery: String) {
     var videos by remember { mutableStateOf(emptyList<Map<String, String>>()) }
 
     LaunchedEffect(searchQuery) {
-        videos = getEducationalVideos(searchQuery, 5)
+        videos = getEducationalVideos(searchQuery, 15)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -280,41 +330,7 @@ AsyncImage(
         }
     }
 }
-@Composable
-fun ResizableDisplayVideosBox(homeScreen: HomeScreen, searchQuery: String) {
-    var boxSize by remember { mutableStateOf(IntSize(300, 600)) } // Initial size
 
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier
-            .size(height = boxSize.height.dp, width = getScreenWidthDp().dp)
-            .clip(RoundedCornerShape(12.dp))
-
-            .background(
-    brush = Brush.linearGradient(
-        colors = listOf(
-            Color(0xFF8B93FF),
-            Color(0xFFEDD1FA),
-            Color(0xFF4120A9)
-        ),
-        start = Offset(0f, 0f), // Top left corner
-        end = Offset.Infinite // Bottom right corner, simulating a 135-degree angle
-    )
-)
-            .pointerInput(Unit) {
-                detectDragGestures { _, dragAmount ->
-                    val heightChange = dragAmount.y
-                    // Update only the height based on vertical drag
-                    boxSize = IntSize(
-                        width = boxSize.width, // Keep the width constant
-                        height = (boxSize.height - heightChange).coerceAtLeast(100f).toInt() // Update height
-                    )
-                }
-            }
-    ) {
-        DisplayVideos(homeScreen, searchQuery)
-    }
-}
 
 @Composable
 fun getScreenWidthDp(): Int {
@@ -324,10 +340,49 @@ fun getScreenWidthDp(): Int {
 }
 
 @Composable
-fun getScreenWidthPx(): Int {
-    val configuration = LocalConfiguration.current
-    val screenWidthPx = configuration.screenWidthDp // Screen width in dp
-    val density = LocalDensity.current
-    val screenWidth = with(density) { screenWidthPx.dp.toPx().toInt() } // Convert dp to px
-    return screenWidth
+fun GuidelinesOverlay() {
+    // Box with rounded corners and semi-transparent background
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color(0xAA000000)) // Semi-transparent black
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Guidelines",
+                color = Color.White,
+                style = MaterialTheme.typography.h6
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Pentru accesarea tuturor optiunilor trebuie sa dai slide. Aicea poti observa videoclipurile educationale.",
+                color = Color.White,
+                style = MaterialTheme.typography.body2
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            // Custom canvas for drawing the circle
+            Canvas(modifier = Modifier.size(50.dp)) {
+                val strokeWidth = 8f
+                val radius = size.minDimension / 2 - strokeWidth / 2
+                drawArc(
+                    color = Color.Gray,
+                    startAngle = -90f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    style = Stroke(width = strokeWidth)
+                )
+                drawArc(
+                    color = Color.Green,
+                    startAngle = -90f,
+                    sweepAngle = 360f * 0.86f, // 86% filled
+                    useCenter = false,
+                    style = Stroke(width = strokeWidth)
+                )
+            }
+        }
+    }
 }
+

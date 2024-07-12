@@ -39,9 +39,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -89,6 +91,7 @@ import java.io.ByteArrayOutputStream
 import okhttp3.RequestBody.Companion.toRequestBody
 
 import okhttp3.*
+import seach_querr
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -127,8 +130,10 @@ class Image__to_book : ComponentActivity() {
 
         setContent {
             val scaffoldState = rememberScaffoldState()
-            Drawer(scaffoldState = scaffoldState) {
-                val context = LocalContext.current
+            var searchQuery by remember { mutableStateOf(seach_querr) }
+
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            val context = LocalContext.current
                 Scaffold { paddingValues ->
                     Box (
                         modifier = Modifier
@@ -199,9 +204,8 @@ suspend fun searchBooks(query: String): List<Book> {
 
     // Replace with your server's URL
     val url = HttpUrl.Builder()
-        .scheme("http")
-        .host("192.168.1.102")
-        .port(5000)
+        .scheme("https")
+        .host("collie-enjoyed-marmoset.ngrok-free.app")
         .addPathSegment("search")
         .addQueryParameter("q", query)
         .build()

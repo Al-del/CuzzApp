@@ -46,6 +46,7 @@ import com.google.firebase.database.FirebaseDatabase
 import descriptiones
 import kotlinx.coroutines.tasks.await
 import points
+import seach_querr
 import url_photo
 import username_true
 
@@ -56,9 +57,11 @@ class porto : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+            var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
-            Drawer(scaffoldState = scaffoldState) {
-                val context = LocalContext.current // Get the local context to use startActivity
+
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            val context = LocalContext.current // Get the local context to use startActivity
 
                 Scaffold(
 

@@ -77,10 +77,12 @@ class Learningpath_student : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
-            Drawer(scaffoldState = scaffoldState) {
 
-                val database = Firebase.database
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+
+            val database = Firebase.database
                 val myRef = database.getReference("LearningPathStages")
                 val pathwayTitle = remember { mutableStateOf(emptyList<String>()) }
 

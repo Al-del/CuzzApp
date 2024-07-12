@@ -32,6 +32,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -41,7 +45,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +56,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -67,6 +75,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import backcolor
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.cuzzapp.ui.theme.LightOrange
 import com.example.cuzzapp.ui.theme.LightYellow
@@ -74,6 +83,7 @@ import com.example.cuzzapp.ui.theme.LighterRed
 import com.example.cuzzapp.ui.theme.Pink
 import mail
 import points
+import seach_querr
 import state
 import url_photo
 import username_for_all
@@ -84,7 +94,9 @@ import viewedProfile
 @Composable
 fun Drawer(
     scaffoldState: ScaffoldState,
-    content: @Composable () -> Unit // Changed parameter here
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    content: @Composable () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val navController = rememberNavController() // Create a NavController
@@ -126,7 +138,79 @@ bottomBar = {
     }
     StatusHomeModeDarkPreview()
 },
-        topBar = { }
+        topBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .background(color = Color(0xffd3acde))
+                    .padding(horizontal = 10.dp)
+                    //add rounded corners
+            ) {
+                Box(modifier = Modifier.offset(y = 15.dp)) {
+                    AsyncImage(
+                        model = url_photo,
+                        contentDescription = "plangus",
+                        modifier = Modifier
+                            .size(55.dp)
+                            .offset(y = 10.dp)
+                            .align(Alignment.CenterStart)
+                            .clip(CircleShape), // Apply offset if needed
+                        contentScale = ContentScale.Crop // Ensures the image fills the circle, cropping if necessary
+                    )
+                }
+
+
+                TextField(
+    value = searchQuery,
+    onValueChange = { newValue ->
+        onSearchQueryChange(newValue) // Correct way to update the state
+    },
+    modifier = Modifier
+        .requiredHeight(50.dp)
+        .requiredWidth(250.dp)
+        .offset(x = 10.dp)
+        .align(Alignment.Center)
+        .background(Color.White, shape = RoundedCornerShape(8.dp)),
+    leadingIcon = {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "Search",
+            tint = Color.Gray
+        )
+    },
+    colors = TextFieldDefaults.textFieldColors(
+        backgroundColor = Color.White,
+        cursorColor = Color.Black,
+        leadingIconColor = Color.Gray,
+        textColor = Color.Black,
+        focusedIndicatorColor = Color.Transparent, // Hide the indicator
+        unfocusedIndicatorColor = Color.Transparent
+    ),
+    placeholder = {
+        Text(text = "Search ...", color = Color.Gray)
+    },
+    singleLine = true
+)
+                FloatingActionButton(
+                    onClick = {
+seach_querr = searchQuery
+                        val intent = Intent(context, HomeScreen::class.java)
+                        startActivity(context, intent, null)
+                    },
+                    containerColor = Color(0xFFE9FF97),
+                    modifier = Modifier.size(56.dp) // Standard Material Design FAB size
+                        .align(Alignment.CenterEnd) // Align the FAB to the end (right side for LTR, left side for RTL)
+                        .offset(x = 10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Search",
+                        tint = Color.Black
+                    )
+                }
+            }
+        }
 
     )
 }
@@ -142,7 +226,7 @@ fun AppNavigator(navController: NavHostController) {
 
 @Composable
 fun StatusHomeModeDark(modifier: Modifier = Modifier) {
-val contex = LocalContext.current
+val context = LocalContext.current
     Box(
         modifier = modifier
 
@@ -200,6 +284,9 @@ val contex = LocalContext.current
                     ) {
                         Icon(
                             modifier = Modifier.clickable{
+                                val intent = Intent(context, Other_Portofolios::class.java)
+                                ContextCompat.startActivity(context, intent, null)
+                                viewedProfile=username_for_all
 
 
                             },
@@ -225,7 +312,18 @@ val contex = LocalContext.current
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.path),
-                            contentDescription = "Path")
+                            contentDescription = "Path",
+                        modifier= Modifier.clickable{
+                            if (state == "Student") {
+                                val intent = Intent(context, Learningpath_student::class.java)
+                                startActivity(context, intent, null)
+
+                            } else {
+                                val intent = Intent(context, Learning_pathways_profesor::class.java)
+                                startActivity(context, intent, null)
+
+                            }
+                        })
 
                     }
                     Column(
@@ -241,7 +339,11 @@ val contex = LocalContext.current
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.profile),
-                            contentDescription = "user")
+                            contentDescription = "user",
+                            modifier = Modifier.clickable {
+                                val intent = Intent(context, Profile::class.java)
+                                startActivity(context, intent, null)
+                            })
 
                     }
                 }
@@ -270,30 +372,26 @@ public  fun StatusHomeModeDarkPreview() {
 }
 @Composable
 fun Frame866(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .clip(shape = RoundedCornerShape(topStart = 39.dp, topEnd = 39.dp, bottomStart = 39.dp))
-            .background(
-                Brush.radialGradient(
-                    0f to Color(0xffb379df),
-                    1f to Color(0xff360060),
-                    center = Offset(198.5f, 198.5f),
-                    radius = 198.5f
-                )
-            )
-            .border(
-                border = BorderStroke(1.dp, Color(0xff0b4af5)),
-                shape = RoundedCornerShape(topStart = 39.dp, topEnd = 39.dp, bottomStart = 39.dp)
-            )
+
+
             .padding(all = 10.dp)
     ) {
         Icon(
             painter = painterResource(id = R.drawable.home),
             contentDescription = "wallet",
             modifier = Modifier
-                .requiredSize(size = 19.dp))
+                .requiredSize(size = 45.dp)
+                .offset(y = -10.dp)
+                .clickable {
+                    val intent = Intent(context, HomeScreen::class.java)
+                    startActivity(context, intent, null)
+
+                })
     }
 }
 @Composable
@@ -331,42 +429,52 @@ fun Frame34627(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .requiredSize(size = 48.dp)
-                            .clip(shape = RoundedCornerShape(48.dp))
-                            .background(color = Color(0xffffd88d))
-                    ) {
-                        val painter = rememberImagePainter(data = url_photo)
+                    Box(modifier = Modifier.offset(y = 30.dp)) {
+                        Box(
+                            modifier = Modifier
+                                .requiredSize(size = 48.dp)
+                                .clip(shape = RoundedCornerShape(48.dp))
+                                .background(color = Color(0xffffd88d))
+                        ) {
+                            val painter = rememberImagePainter(data = url_photo)
 
-                        Image(
-                            painter =painter,
-                            contentDescription = "81",
+                            Image(
+                                painter = painter,
+                                contentDescription = "81",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(shape = RoundedCornerShape(256.9054260253906.dp))
+                            )
+                        }
+
+                        Column(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .clip(shape = RoundedCornerShape(256.9054260253906.dp)))
-                    }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text =  username_true,
-                            color = Color(0xfffcfcfc),
-                            lineHeight = 1.6.em,
-                            style = TextStyle(
-                                fontSize = 15.sp),
-                            modifier = Modifier
-                                .fillMaxWidth())
-                        Text(
-                            text = mail,
-                            color = Color(0xffd1d3d4),
-                            lineHeight = 1.em,
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Medium),
-                            modifier = Modifier
-                                .fillMaxWidth())
+                                .fillMaxWidth()
+                                .offset(x = 70.dp)
+                        ) {
+
+                            Text(
+                                text = username_true,
+                                color = Color(0xfffcfcfc),
+                                lineHeight = 1.6.em,
+                                style = TextStyle(
+                                    fontSize = 15.sp
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                            Text(
+                                text = mail,
+                                color = Color(0xffd1d3d4),
+                                lineHeight = 1.em,
+                                style = TextStyle(
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }
@@ -374,6 +482,7 @@ fun Frame34627(modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .offset(y = 50.dp)
                     .align(alignment = Alignment.CenterHorizontally)
             ) {
                 Row(
@@ -614,11 +723,11 @@ fun Frame34627(modifier: Modifier = Modifier) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    if(state == "Student"){
+                                    if (state == "Student") {
                                         val intent = Intent(context, Quizz_student::class.java)
                                         startActivity(context, intent, null)
 
-                                    }else{
+                                    } else {
                                         val intent = Intent(context, Quizz_teacher::class.java)
                                         startActivity(context, intent, null)
 
@@ -708,4 +817,151 @@ fun Frame34627(modifier: Modifier = Modifier) {
 @Composable
 private fun Frame34627Preview() {
     Frame34627(Modifier)
+}
+@Composable
+fun Sample(modifier: Modifier = Modifier) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.Start),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .requiredWidth(width = 450.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .requiredHeight(height = 60.dp)
+                .weight(weight = 1f)
+                .clip(shape = RoundedCornerShape(10.dp))
+                .background(
+                    brush = Brush.linearGradient(
+                        0f to Color.White,
+                        1f to Color(0xff42dfcf),
+                        start = Offset(188f, 0f),
+                        end = Offset(305.74f, 60f)
+                    )
+                )
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .requiredWidth(width = 376.dp)
+                    .requiredHeight(height = 60.dp)
+                    .padding(horizontal = 8.dp)
+            ) {
+                RoundedDefaultBackgroundFalseIconSearchColorDefault()
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Search ... ",
+                        color = Color(0xffabb7c2),
+                        style = TextStyle(
+                            fontSize = 18.sp))
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .offset(
+                        x = 279.dp,
+                        y = 1.5.dp
+                    )
+                    .requiredWidth(width = 116.dp)
+                    .requiredHeight(height = 62.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 34.dp,
+                            y = 4.dp
+                        )
+                        .requiredSize(size = 42.dp)
+                        .clip(shape = CircleShape)
+                        .background(color = Color(0xfffbe014))
+                        .border(
+                            border = BorderStroke(2.dp, Color.White),
+                            shape = CircleShape
+                        ))
+
+                Image(
+                    painter = painterResource(id = R.drawable.lock),
+                    contentDescription = "Vector 11",
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 15.dp,
+                            y = 12.5.dp
+                        )
+                        .requiredWidth(width = 10.dp)
+                        .requiredHeight(height = 16.dp)
+                        .border(border = BorderStroke(2.dp, Color.White)))
+            }
+        }
+        RoundedCircleBackgroundFitIconMicColorWhite()
+    }
+}
+
+@Composable
+fun RoundedDefaultBackgroundFalseIconSearchColorDefault(modifier: Modifier = Modifier) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .padding(all = 10.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.search),
+            contentDescription = "search",
+            modifier = Modifier
+                .requiredSize(size = 24.dp))
+    }
+}
+
+@Composable
+fun RoundedCircleBackgroundFitIconMicColorWhite(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .requiredSize(size = 60.dp)
+            .clip(shape = RoundedCornerShape(5.dp))
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(all = 18.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.src),
+                contentDescription = "mic",
+                modifier = Modifier
+                    .requiredSize(size = 24.dp))
+        }
+        Box(
+            modifier = Modifier
+                .align(alignment = Alignment.Center)
+                .offset(
+                    x = 0.dp,
+                    y = 0.dp
+                )
+                .requiredSize(size = 60.dp)
+                .clip(shape = RoundedCornerShape(32.dp))
+                .background(
+                    brush = Brush.linearGradient(
+                        0f to Color(0xff1cd8d2),
+                        1f to Color(0xff93edc7),
+                        start = Offset(30.3f, 0f),
+                        end = Offset(30.3f, 60f)
+                    )
+                ))
+    }
+}
+
+@Preview(widthDp = 450, heightDp = 60)
+@Composable
+private fun SamplePreview() {
+    Sample(Modifier)
 }

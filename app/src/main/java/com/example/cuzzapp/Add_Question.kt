@@ -45,8 +45,11 @@ class Add_Question : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Drawer(rememberScaffoldState()) {
-                AddQuestionScreen()
+            var searchQuery by remember { mutableStateOf("") }
+            val scaffoldState = rememberScaffoldState()
+
+            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            AddQuestionScreen()
             }
         }
     }
