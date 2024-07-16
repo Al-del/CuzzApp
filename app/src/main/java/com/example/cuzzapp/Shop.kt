@@ -22,12 +22,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
@@ -35,6 +39,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,11 +52,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.example.cuzzapp.ui.theme.CuzzAppTheme
@@ -66,11 +83,20 @@ class Shop : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val gradientBrush = Brush.linearGradient(
+                colors = listOf(
+                    Color(0xFF345E2A),
+                    Color(0xFF403182)
+                ),
+                start = Offset(0f, 0f),
+                end = Offset.Infinite
+            )
             var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
 
             Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
-            dini()            }
+            dini(Modifier.background(brush = gradientBrush))
+            }
   }
     }
 
@@ -80,9 +106,9 @@ class Shop : ComponentActivity() {
         val price: Int
     )
 
-    fun fetchShopItems(callback: (List<ShopItem>) -> Unit) {
+    fun fetchShopItems(callback: (List<Shop_item>) -> Unit) {
         val db = FirebaseDatabase.getInstance().getReference("Shop")
-        val shopItems = mutableListOf<ShopItem>()
+        val shopItems = mutableListOf<Shop_item>()
 
         db.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -90,7 +116,8 @@ class Shop : ComponentActivity() {
                     val name = snapshot.child("Name").getValue(String::class.java) ?: ""
                     val photo = snapshot.child("Photo").getValue(String::class.java) ?: ""
                     val price = snapshot.child("Price").getValue(Int::class.java) ?: 0
-                    val item = ShopItem(name, photo, price)
+                    val description = snapshot.child("description").getValue(String::class.java) ?: ""
+                    val item = Shop_item(name, photo, price, description)
                     shopItems.add(item)
                     println(item) // Print each item
 
@@ -117,23 +144,6 @@ class Shop : ComponentActivity() {
 
 
     var loadImage by mutableStateOf(false)
-@Composable
-fun LoadImageFromUrl(url: String) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val painter = rememberImagePainter(
-        data = url,
-        builder = {
-            listener(
-                onStart = { scope.launch { Toast.makeText(context, "Started loading $url", Toast.LENGTH_SHORT).show() } },
-                onSuccess = { _, _ -> scope.launch { Toast.makeText(context, "Successfully loaded $url", Toast.LENGTH_SHORT).show() } },
-                onError = { _, throwable -> scope.launch { Toast.makeText(context, "Failed to load $url: ${throwable.drawable}", Toast.LENGTH_SHORT).show() } },
-                onCancel = { scope.launch { Toast.makeText(context, "Cancelled loading $url", Toast.LENGTH_SHORT).show() } }
-            )
-        }
-    )
-    Image(painter = painter, contentDescription = null)
-}
     // Reference to the Firebase database
     val db = FirebaseDatabase.getInstance().getReference("UserPoints")
 
@@ -197,14 +207,13 @@ fun ShopItemCard(item: Shop.ShopItem) {
 }
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
-    fun dini(){
+    fun dini(modifier: Modifier){
         val navController = rememberNavController() // Create a NavController
 
 
             Scaffold(
                 bottomBar = { AppNavigator(navController) }
             ) {
-                var searchQuery by remember { mutableStateOf("calculus") }
 
 
                 Box(
@@ -212,26 +221,175 @@ fun ShopItemCard(item: Shop.ShopItem) {
                         .fillMaxSize()
                         .background(Color(0xFF262323)) // Set background color to 262323
                 ) {
-                    LoadImageFromUrl(url = url_photo, points = points)
-                    Rectangle2(searchQuery, { newQuery -> searchQuery = newQuery })
-                    if (loadImage) {
-                        LoadImageFromUrl(url = url_photo, points = points)
-                        loadImage = false
-                    }
-                    val shopItems = remember { mutableStateOf(listOf<ShopItem>()) }
 
-                    // Fetch the shop items and update the state
-                    fetchShopItems { items ->
-                        shopItems.value = items
-                    }
+                    val shopItems = remember { mutableStateOf(listOf<Shop_item>()) }
+                  LaunchedEffect(key1 = true) { // key1 = true ensures this block runs once
+    fetchShopItems { items ->
+        shopItems.value = items
+    }
+}
 
-                    // Observe the state in your Composable UI
-                    ShopList(shopItems.value)
+// Now, pass shopItems.value to the shop Composable function
+shop(modifier = modifier, shopitem = shopItems.value.toMutableList())
                 }
             }
 
 
     }
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun shop(modifier: Modifier, shopitem: MutableList<Shop_item>){
+    val context = LocalContext.current
 
+    //Iterate through all od the shop items list and print each name
+    Log.d("Shop","VIATA")
+    for (item in shopitem) {
+
+        Log.d("Shop","VIATA ${item.name}")
+    }
+    Scaffold(
+
+        modifier = modifier.fillMaxSize()
+        ,
+        )
+
+    {
+        LazyColumn(modifier = modifier.fillMaxSize()) {
+            itemsIndexed(shopitem) { index, achievement ->
+                // Now you have access to both the index and the achievement
+                ShopItem(achievement, index)
+                Spacer(modifier = modifier.padding(8.dp))
+            }
+        }
+    }
 }
+    @Composable
+    fun ShopItem(item: Shop_item?, indx: Int) {
+        val painter = rememberImagePainter(data = item?.image_link)
 
+        // Display your achievement here
+        if (item != null) {
+            Box(
+                modifier = Modifier
+                    .requiredWidth(width = getScreenWidthDp().dp)
+                    .requiredHeight(height = 184.dp)
+                    .clip(shape = RoundedCornerShape(20.dp))
+                    .background(color = Color.White)
+                   ,
+            ) {
+                androidx.compose.material3.Text(
+                    textAlign = TextAlign.End,
+                    lineHeight = 1.sp,
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Black,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        ) {}
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Black,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        ) { append(item.price.toString()) }
+                    },
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 16.dp,
+                            y = 94.dp
+                        )
+                )
+                androidx.compose.material3.Text(
+                    text = item.name,
+                    color = Color.Black,
+                    textAlign = TextAlign.End,
+                    lineHeight = 0.8.em,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 16.dp,
+                            y = 68.dp
+                        )
+                )
+                Image(
+                    painter = painter,
+                    contentDescription = "image 219",
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 185.dp,
+                            y = 20.dp
+                        )
+                        .requiredWidth(width = 167.dp)
+                        .requiredHeight(height = 140.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 16.dp,
+                            y = 16.dp
+                        )
+                        .requiredSize(size = 40.dp)
+                        .clip(shape = RoundedCornerShape(50.dp))
+                        .background(color = Color(0xffb0f41f))
+                ) {
+                    androidx.compose.material3.Text(
+                        text = indx.toString(),
+                        color = Color.Black,
+                        textAlign = TextAlign.End,
+                        lineHeight = 1.em,
+                        style = TextStyle(
+                            fontSize = 16.sp
+                        ),
+                        modifier = Modifier
+                            .align(alignment = Alignment.TopStart)
+                            .offset(
+                                x = 17.dp,
+                                y = 12.dp
+                            )
+                            .requiredWidth(width = 6.dp)
+                    )
+                }
+                androidx.compose.material3.Text(
+                    lineHeight = 1.sp,
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Black,
+                                fontSize = 12.sp
+                            )
+                        ) {}
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Black,
+                                fontSize = 12.sp
+                            )
+                        ) { append(item.description) }
+                    },
+                    modifier = Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(
+                            x = 16.dp,
+                            y = 120.dp
+                        )
+                        .requiredWidth(width = 174.dp)
+                )
+            }
+        }
+    }
+}
+class Shop_item(
+    var name: String = "",
+    var image_link: String = "",
+    var price: Int = 0,
+    var description: String = ""
+)

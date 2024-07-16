@@ -79,6 +79,7 @@ import viewedProfile
 
 class Other_Portofolios : ComponentActivity() {
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -98,7 +99,7 @@ class Other_Portofolios : ComponentActivity() {
         val scaffoldState = rememberScaffoldState()
 
         Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
-            Box(modifier = Modifier.fillMaxSize().background(brush = gradientBrush)) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 DisplayAchievements(achivement, intent, modifier =  Modifier.background(brush = gradientBrush))
             }
         }
@@ -128,10 +129,10 @@ fun DisplayAchievements(achievements: MutableList<achievementuriUSER?>, intent: 
         )
 
         {
-            LazyColumn(modifier = modifier.fillMaxSize().offset(y = 20.dp)) {
+            LazyColumn(modifier = modifier.fillMaxSize()) {
                 itemsIndexed(achievements) { index, achievement ->
                     // Now you have access to both the index and the achievement
-                    AchievementItem(achievement, index)
+                    AchievementItem(achievement, index+1)
                     Spacer(modifier = modifier.padding(8.dp))
                 }
             }
@@ -169,19 +170,28 @@ fun AchievementItem(achievement: achievementuriUSER?, indx: Int) {
                 textAlign = TextAlign.End,
                 lineHeight = 1.sp,
                 text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(
-                        color = Color.Black,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium)
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.Black,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        )
                     ) {}
-                    withStyle(style = SpanStyle(
-                        color = Color.Black,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium)) {append(achievement.materie)}},
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.Black,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    ) { append(achievement.materie) }
+                },
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 16.dp,
-                        y = 94.dp))
+                    .offset(
+                        x = 16.dp,
+                        y = 94.dp
+                    )
+            )
             Text(
                 text = achievement.numeConcurs,
                 color = Color.Black,
@@ -189,25 +199,34 @@ fun AchievementItem(achievement: achievementuriUSER?, indx: Int) {
                 lineHeight = 0.8.em,
                 style = TextStyle(
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold),
+                    fontWeight = FontWeight.Bold
+                ),
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 16.dp,
-                        y = 68.dp))
+                    .offset(
+                        x = 16.dp,
+                        y = 68.dp
+                    )
+            )
             Image(
                 painter = painter,
                 contentDescription = "image 219",
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 185.dp,
-                        y = 20.dp)
+                    .offset(
+                        x = 185.dp,
+                        y = 20.dp
+                    )
                     .requiredWidth(width = 167.dp)
-                    .requiredHeight(height = 140.dp))
+                    .requiredHeight(height = 140.dp)
+            )
             Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 16.dp,
-                        y = 16.dp)
+                    .offset(
+                        x = 16.dp,
+                        y = 16.dp
+                    )
                     .requiredSize(size = 40.dp)
                     .clip(shape = RoundedCornerShape(50.dp))
                     .background(color = Color(0xffb0f41f))
@@ -218,30 +237,43 @@ fun AchievementItem(achievement: achievementuriUSER?, indx: Int) {
                     textAlign = TextAlign.End,
                     lineHeight = 1.em,
                     style = TextStyle(
-                        fontSize = 16.sp),
+                        fontSize = 16.sp
+                    ),
                     modifier = Modifier
                         .align(alignment = Alignment.TopStart)
-                        .offset(x = 17.dp,
-                            y = 12.dp)
-                        .requiredWidth(width = 6.dp))
+                        .offset(
+                            x = 17.dp,
+                            y = 12.dp
+                        )
+                        .requiredWidth(width = 6.dp)
+                )
             }
             Text(
                 lineHeight = 1.sp,
                 text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(
-                        color = Color.Black,
-                        fontSize = 12.sp)) {}
-                    withStyle(style = SpanStyle(
-                        color = Color.Black,
-                        fontSize = 12.sp)) {append(achievement.informatii)}},
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.Black,
+                            fontSize = 12.sp
+                        )
+                    ) {}
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.Black,
+                            fontSize = 12.sp
+                        )
+                    ) { append(achievement.informatii) }
+                },
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 16.dp,
-                        y = 120.dp)
-                    .requiredWidth(width = 174.dp))
+                    .offset(
+                        x = 16.dp,
+                        y = 120.dp
+                    )
+                    .requiredWidth(width = 174.dp)
+            )
         }
     }
-}// Replace this with actual fields of achievementuriUSER
-//   }
+}
 
 
