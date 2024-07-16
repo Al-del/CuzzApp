@@ -1,4 +1,4 @@
-<img width="150px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/cuzzapp.PNG" />
+<img width="150px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/iconitza.png" />
 
 ## CuzzApp
 ![GitHub license](https://img.shields.io/badge/licence-MIT-green)
@@ -67,7 +67,7 @@ Din punct de vedere tehnologic, proiectul oferă o soluție logică și clară p
     <img width="300px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/register.jpg" />
     <img width="300px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/drawer.jpg" />
     <img width="300px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/achievementuri.jpeg" />
-  <img width="300px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/WhatsApp Image 2024-07-16 at 12.56.29.jpeg" />
+  <img width="300px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/WhatsApp%20Image%202024-07-16%20at%2012.56.29.jpeg" />
 </div>
 
 ## 🫂 Echipa Nostra
