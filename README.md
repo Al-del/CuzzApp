@@ -1,3 +1,5 @@
+<img width="150px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/cuzzapp.PNG" />
+
 ## CuzzApp
 ![GitHub license](https://img.shields.io/badge/licence-MIT-green)
 ![Github issues](https://img.shields.io/badge/issues-0%20open-yellow)
@@ -59,9 +61,12 @@ Din punct de vedere tehnologic, proiectul oferă o soluție logică și clară p
 - **Etc.**
   ## 📂 Aplicaţia
 ### Screenshots
-![image](https://user-images.githubusercontent.com/79089703/228577785-2ea9997d-449d-42a1-b175-b846c77d5da1.png)
-![image](https://user-images.githubusercontent.com/79089703/228577823-fc8aa2ba-ba1d-43a3-8f6a-4c4059ba1584.png)
-![image](https://user-images.githubusercontent.com/79089703/228577871-717052ac-1a05-49ec-bda6-c24e1ca842fc.png)
+
+<div style="display: flex; justify-content: center;">
+    <img width="300px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/register.jpg" />
+    <img width="300px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/drawer.jpg" />
+    <img width="300px" src="https://github.com/Al-del/CuzzApp/blob/master/app/src/main/res/drawable/achievementuri.jpeg" />
+</div>
 
 ## 🫂 Echipa Nostra
 
