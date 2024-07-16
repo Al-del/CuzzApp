@@ -34,8 +34,9 @@ Aplicația este construită utilizând următorul stack tehnologic:
 - Java
 - Firebase
 - Gradle pentru construirea aplicației
+- Pytorch
 
-[![My Skills](https://skillicons.dev/icons?i=kotlin,python,java,firebase,gradle)](https://skillpythonicons.dev)  
+[![My Skills](https://skillicons.dev/icons?i=kotlin,python,java,firebase,gradle,pytorch)](https://skillpythonicons.dev)  
 
 Fiecare element din stack este integrat eficient datorită specificului fiecărui limbaj.
 
