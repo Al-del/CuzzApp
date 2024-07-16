@@ -36,7 +36,7 @@ Aplicația este construită utilizând următorul stack tehnologic:
 - Gradle pentru construirea aplicației
 - Pytorch
 
-[![My Skills](https://skillicons.dev/icons?i=kotlin,python,java,firebase,gradle,pytorch)](https://skillpythonicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=kotlin,python,java,firebase,gradle,pytorch)](https://skillpythonicons.dev)  
 
 Fiecare element din stack este integrat eficient datorită specificului fiecărui limbaj.
 
@@ -74,8 +74,8 @@ Din punct de vedere tehnologic, proiectul oferă o soluție logică și clară p
 
 - Profesor Coordonator: Doamna Profesoară Rădulescu Ramona
 - Membrii:
-    - David Gheorghică Istrate
-    - Lupu Cezar
+  - David Gheorghică Istrate
+  - Lupu Cezar
 ## ❔ Contact
 
 - 📧E-Mail: cuzzapp2024@gmail.com
