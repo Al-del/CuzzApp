@@ -96,6 +96,7 @@ fun Drawer(
     scaffoldState: ScaffoldState,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
+    backgroundColor : Brush,
     content: @Composable () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -143,7 +144,7 @@ bottomBar = {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
-                    .background(color = Color(0xffd3acde))
+                    .background(brush = backgroundColor) // Use the passed backgroundColor
                     .padding(horizontal = 10.dp)
                     //add rounded corners
             ) {
@@ -285,6 +286,7 @@ val context = LocalContext.current
                         Icon(
                             modifier = Modifier.clickable{
                                 val intent = Intent(context, Other_Portofolios::class.java)
+                                intent.putExtra("userr",username_true)
                                 ContextCompat.startActivity(context, intent, null)
                                 viewedProfile=username_for_all
 
@@ -341,7 +343,10 @@ val context = LocalContext.current
                             painter = painterResource(id = R.drawable.profile),
                             contentDescription = "user",
                             modifier = Modifier.clickable {
+
                                 val intent = Intent(context, Profile::class.java)
+                                intent.putExtra("userr_to",username_true)
+                                intent.putExtra("img_link",url_photo)
                                 startActivity(context, intent, null)
                             })
 
@@ -479,7 +484,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                 }
             }
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+                verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Top),
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = 50.dp)
@@ -535,7 +540,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                     ) {
 
                         Text(
-                            text = "Rewards",
+                            text = "Ranking",
                             color = Color(0xfff5f4f5),
                             lineHeight = 1.6.em,
                             style = TextStyle(
@@ -547,7 +552,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    val intent = Intent(context, Shop::class.java)
+                                    val intent = Intent(context, RankingScreen::class.java)
                                     startActivity(context, intent, null)
                                 })
                     }
@@ -678,7 +683,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                     ) {
 
                         Text(
-                            text = "Profile",
+                            text = "Recepie",
                             color = Color(0xfff5f5f5),
                             lineHeight = 1.6.em,
                             style = TextStyle(
@@ -690,8 +695,9 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    val intent = Intent(context, Profile::class.java)
+                                    val intent = Intent(context, Show_recepies::class.java)
                                     startActivity(context, intent, null)
+
                                 })
                     }
                 }
@@ -716,7 +722,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             lineHeight = 1.6.em,
                             style = TextStyle(
                                 letterSpacing = 0.3.em,
-                                        brush = Brush.linearGradient(
+                                brush = Brush.linearGradient(
                                     colors = listOf(Color.Cyan, Color.Magenta, Color.Yellow),
                                 ),
                                 fontSize = 20.sp),
@@ -735,6 +741,43 @@ fun drawer_content(modifier: Modifier = Modifier) {
                                 })
                     }
                 }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(all = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+
+                        Text(
+                            text = "Health",
+                            color = Color(0xfff5f5f5),
+                            lineHeight = 1.6.em,
+                            style = TextStyle(
+                                letterSpacing = 0.3.em,
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color.Cyan, Color.Magenta, Color.Yellow),
+                                ),
+                                fontSize = 20.sp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                        val intent = Intent(context, Main::class.java)
+                                        startActivity(context, intent, null)
+
+
+                                })
+                    }
+
+                }
+
             }
         }
         Column(

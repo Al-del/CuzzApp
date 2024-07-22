@@ -73,6 +73,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -112,7 +113,7 @@ fun HOmescreen(homeScreen: HomeScreen) {
     var searchQuery by remember { mutableStateOf(seach_querr) }
     var showGuidelines by remember { mutableStateOf(true) } // Initialize showGuidelines state
     val scaffoldState = rememberScaffoldState()
-    Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+    Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xffb379df)), onSearchQueryChange = { searchQuery = it }) {
 
         Box(
             modifier = Modifier.fillMaxSize()

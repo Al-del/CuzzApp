@@ -46,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        mlModelBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -75,11 +76,15 @@ dependencies {
     implementation(libs.androidx.baselibrary)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.room.common)
-    implementation(libs.androidx.material3.android)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.tensorflow.lite.support)
+    implementation(libs.tensorflow.lite.metadata)
+    implementation(libs.tensorflow.lite.gpu)
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -128,6 +133,9 @@ dependencies {
 
     implementation ("com.itextpdf:itext7-core:7.1.9")
     implementation("com.itextpdf:itextpdf:5.5.13.1")
+    implementation("androidx.camera:camera-camera2:1.0.1")
+    implementation("androidx.camera:camera-lifecycle:1.0.1")
+    implementation("androidx.camera:camera-view:1.0.0-alpha27")
 
 }
 

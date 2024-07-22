@@ -54,6 +54,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.LineHeightStyle
@@ -90,7 +91,7 @@ class adaugare : ComponentActivity() {
             var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color.Gray),onSearchQueryChange = { searchQuery = it }) {
             val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

@@ -164,6 +164,7 @@ fun MyImageArea(
 
 
             Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
                     upload.invoke(it)
                 }

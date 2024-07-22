@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
@@ -132,7 +133,7 @@ class Image__to_book : ComponentActivity() {
             val scaffoldState = rememberScaffoldState()
             var searchQuery by remember { mutableStateOf(seach_querr) }
 
-            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color.White),onSearchQueryChange = { searchQuery = it }) {
             val context = LocalContext.current
                 Scaffold { paddingValues ->
                     Box (
@@ -168,11 +169,12 @@ class Image__to_book : ComponentActivity() {
                                 TextField(
                                     value = mesajState.value ?: "",
                                     onValueChange = {mesajState.value = it},
-                                    label = { Text("Response") }
+                                    label = { Text("Response") },
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
                                 )
                                 // Button click handler
                                 Button(
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
                                         .align(Alignment.CenterHorizontally),
                                     onClick = {
                                         CoroutineScope(Dispatchers.IO).launch {
@@ -205,7 +207,7 @@ suspend fun searchBooks(query: String): List<Book> {
     // Replace with your server's URL
     val url = HttpUrl.Builder()
         .scheme("https")
-        .host("collie-enjoyed-marmoset.ngrok-free.app")
+        .host("reliably-expert-mammoth.ngrok-free.app")
         .addPathSegment("search")
         .addQueryParameter("q", query)
         .build()

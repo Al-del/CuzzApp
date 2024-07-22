@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.room.Dao
 import com.example.cuzzapp.ui.theme.CuzzAppTheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.room.Entity
 import androidx.room.Insert
@@ -83,7 +84,7 @@ class Learning_pathways_profesor : ComponentActivity() {
             var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color(0xffFFFFFF)),onSearchQueryChange = { searchQuery = it }) {
             Box(modifier =Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     LearningPath()
                 }
