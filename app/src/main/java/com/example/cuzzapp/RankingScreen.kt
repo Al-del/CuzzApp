@@ -56,6 +56,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import points
@@ -72,7 +73,7 @@ class RankingScreen : ComponentActivity() {
             var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color.White) ,onSearchQueryChange = { searchQuery = it }) {
             // Your content
                 Scaffold(
                     bottomBar = { StatusHomeModeDarkPreview() }
@@ -173,6 +174,9 @@ class RankingScreen : ComponentActivity() {
                                                 .clickable {
                                                     username_for_all = user.name
                                                     val intent = Intent(this@RankingScreen, Profile::class.java)
+                                                    intent.putExtra("userr_to",user.name)
+                                                    intent.putExtra("img_link",user.photoUrl)
+
                                                     startActivity(intent)
                                                 }
                                         )

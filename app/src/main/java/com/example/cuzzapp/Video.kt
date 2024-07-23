@@ -77,7 +77,9 @@ class Video : ComponentActivity() {
             var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor =     Brush.verticalGradient(
+                colors = listOf(Color(0xFF345E2A), Color(0xFF403182))
+            ),onSearchQueryChange = { searchQuery = it }) {
 
             val navController = rememberNavController() // Create a NavController
 

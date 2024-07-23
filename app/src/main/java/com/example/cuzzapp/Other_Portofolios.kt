@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -75,6 +76,7 @@ import coil.compose.rememberImagePainter
 import com.example.cuzzapp.ui.theme.CuzzAppTheme
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import username_for_all
+import username_true
 import viewedProfile
 
 class Other_Portofolios : ComponentActivity() {
@@ -83,7 +85,11 @@ class Other_Portofolios : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-       setContent {
+        val prof_sel = intent.getStringExtra("userr")
+
+        setContent {
+            Toast.makeText(this, "The user is: $prof_sel", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "The user is: $username_true", Toast.LENGTH_SHORT).show()
     val gradientBrush = Brush.linearGradient(
         colors = listOf(
             Color(0xFF345E2A),
@@ -98,9 +104,13 @@ class Other_Portofolios : ComponentActivity() {
         var searchQuery by remember { mutableStateOf("") }
         val scaffoldState = rememberScaffoldState()
 
-        Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+        Drawer(scaffoldState, searchQuery, backgroundColor = gradientBrush,onSearchQueryChange = { searchQuery = it }) {
             Box(modifier = Modifier.fillMaxSize()) {
-                DisplayAchievements(achivement, intent, modifier =  Modifier.background(brush = gradientBrush))
+                if(username_true == prof_sel){
+                    DisplayAchievements(achivement, intent, modifier =  Modifier.background(brush = gradientBrush))
+                }else{
+                    DisplayAchievements(achivement_other, intent, modifier =  Modifier.background(brush = gradientBrush))
+                }
             }
         }
 

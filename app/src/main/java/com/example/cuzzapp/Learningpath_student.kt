@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,7 +81,7 @@ class Learningpath_student : ComponentActivity() {
             var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color.White) ,onSearchQueryChange = { searchQuery = it }) {
 
             val database = Firebase.database
                 val myRef = database.getReference("LearningPathStages")

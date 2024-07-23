@@ -77,7 +77,7 @@ public var descriptiones:String = ""
 public var achivement:   MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
 var achivement_other : MutableList<achievementuriUSER?> = ArrayList<achievementuriUSER?>()
 
-val API_KEY = "AIzaSyDtBdFT630ndufK-b4rGExvvWwcsby15eA"
+val API_KEY = "AIzaSyCY05brSzUg7_N9c4ONx4EWC5OHxFtcHVE"
 
 sealed class Screen(val route: String, val label: String, val icon: Int) {
     object Home : Screen("home", "Home", R.drawable.home)

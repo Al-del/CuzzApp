@@ -19,5 +19,9 @@
     <string name="title_activity_quizz_teacher">Quizz_teacher</string>
     <string name="title_activity_quizz_student">Quizz_student</string>
     <string name="title_activity_add_question">Add_Question</string>
+    <string name="title_activity_recepie_idk">Recepie_idk</string>
+    <string name="title_activity_main">Main</string>
+    <string name="title_activity_recepies">Recepies</string>
+    <string name="title_activity_show_recepies">Show_recepies</string>
 
 </resources>

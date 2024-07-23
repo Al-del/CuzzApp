@@ -48,8 +48,11 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -64,6 +67,7 @@ import com.itextpdf.kernel.pdf.PdfDocument as iTextPdfDocument
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.itextpdf.io.image.ImageDataFactory
+import com.itextpdf.styledxmlparser.jsoup.safety.Whitelist
 import kotlinx.coroutines.Dispatchers
 import username_for_all
 import username_true
@@ -77,18 +81,32 @@ class Quizz_student : ComponentActivity() {
             var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, onSearchQueryChange = { searchQuery = it }) {
-
             val quizViewModel = QuizViewModel()
-                // Call the QuizzesList composable and pass the ViewModel
-                QuizzesList(viewModel = quizViewModel)
+
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFF6A5AE0)), onSearchQueryChange = { searchQuery = it }) {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFF6A5AE0))) { // Fill the parent to allow alignment
+                    Box(modifier = Modifier.align(Alignment.Center)) {
+                        CardPreview()
+                    }
+                    Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+                        LiveQuizzesPreview(quizViewModel)
+                    }
+                    Box(modifier = Modifier
+                        .align(Alignment.Center)
+                        .offset(y = -300.dp)) {
+                        CardusPreview()
+                    }
+
+                }
             }
         }
     }
 }
 
 class QuizViewModel : ViewModel() {
-    private val _quizzes = MutableStateFlow<List<QuizInfo>>(emptyList())
+    val _quizzes = MutableStateFlow<List<QuizInfo>>(emptyList())
     val quizzes: StateFlow<List<QuizInfo>> = _quizzes
     val Quiz_List = mutableListOf<Question>()
     init {
