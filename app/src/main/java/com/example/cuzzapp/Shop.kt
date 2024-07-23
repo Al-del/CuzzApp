@@ -161,6 +161,7 @@ class Shop : ComponentActivity() {
         loadImage = true
 
     }
+
 @Composable
 fun ShopItemCard(item: Shop.ShopItem) {
     val gradientBrush = Brush.verticalGradient(
@@ -206,9 +207,10 @@ fun ShopItemCard(item: Shop.ShopItem) {
     }
 
 }
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
     @Composable
     fun dini(modifier: Modifier){
+
         val navController = rememberNavController() // Create a NavController
 
 
