@@ -1,6 +1,5 @@
 package com.example.cuzzapp
 
-import API_KEY
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -103,6 +102,7 @@ class HomeScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
        setContent {
+        Log.d("kilo", Show_recepies.Keys.APIKeys())
         HOmescreen(this) // Pass your specific composable content here
 
 }
@@ -241,7 +241,7 @@ fun Rectangle2(searchQuery: String, onQueryChange: (String) -> Unit, modifier: M
 
 suspend fun getEducationalVideos(query: String, maxResults: Int = 15): List<Map<String, String>> = withContext(Dispatchers.IO) {
     val client = OkHttpClient()
-    val url = "https://www.googleapis.com/youtube/v3/search?q=$query&part=id,snippet&maxResults=$maxResults&type=video&videoCategoryId=27&key=$API_KEY"
+    val url = "https://www.googleapis.com/youtube/v3/search?q=$query&part=id,snippet&maxResults=$maxResults&type=video&videoCategoryId=27&key=${Show_recepies.Keys.APIKeys()}"
     val request = Request.Builder().url(url).build()
     val response = client.newCall(request).execute()
     val jsonString = response.body?.string()

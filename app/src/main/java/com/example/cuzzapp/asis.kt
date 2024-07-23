@@ -3,6 +3,7 @@ package com.example.cuzzapp
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -59,6 +60,8 @@ import coil.compose.rememberImagePainter
 import com.example.cuzzapp.ui.theme.CuzzAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import points
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -128,7 +131,9 @@ class asis : ComponentActivity() {
             ) {
                 items(messages.size) { index ->
                     Row(
-                        modifier = Modifier.fillMaxWidth()  .offset(y = 40.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .offset(y = 40.dp),
                         horizontalArrangement = if (messages[index].startsWith("User:")) Arrangement.End else Arrangement.Start
                     ) {
                         Box(
@@ -177,20 +182,35 @@ class asis : ComponentActivity() {
 
 
     interface OpenAIApi {
-        @Headers(
-            "Content-Type: application/json",
-            "Authorization: Bearer sk-proj-VMQAv8g6fquZjMD1U0y8T3BlbkFJ5FSxP3Yi3XNcGzUrrgBX"
-        )
+
+
         @POST("v1/chat/completions")
         fun getChatResponse(@Body request: ChatGPTRequest): Call<ChatGPTResponse>
     }
 
+
     object RetrofitClient {
         private const val BASE_URL = "https://api.openai.com/"
+
+        // This replaces the direct use in annotations
+        private fun getApiKey(): String {
+            return Show_recepies.Keys.API_chat_gpt()
+        }
+        private val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(Interceptor { chain ->
+                val original = chain.request()
+                val requestBuilder = original.newBuilder()
+                    .header("Authorization", "Bearer ${getApiKey()}")
+                    .header("Content-Type", "application/json")
+                val request = requestBuilder.build()
+                chain.proceed(request)
+            })
+            .build()
 
         val instance: OpenAIApi by lazy {
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 

@@ -173,7 +173,7 @@ class Recepies : ComponentActivity() {
 suspend fun getRecipes(ingredient: String, context: Context): List<Recipe> = withContext(Dispatchers.IO) {
     val client = OkHttpClient()
     val request = Request.Builder()
-        .url("https://api.spoonacular.com/recipes/findByIngredients?ingredients=$ingredient&number=5&apiKey=5df674c4fc0242e38d2d0dd5cd94ffac")
+        .url("https://api.spoonacular.com/recipes/findByIngredients?ingredients=$ingredient&number=5&apiKey=${Show_recepies.Keys.API_spoonacular()}")
         .build()
 
     try {
@@ -199,7 +199,7 @@ suspend fun getRecipes(ingredient: String, context: Context): List<Recipe> = wit
 suspend fun getNutritionAnalysis(recipeId: String, context: Context): List<Pair<String, String>> = withContext(Dispatchers.IO){
     val client = OkHttpClient()
     val request = Request.Builder()
-        .url("https://api.spoonacular.com/recipes/$recipeId/nutritionWidget.json?apiKey=5df674c4fc0242e38d2d0dd5cd94ffac")
+        .url("https://api.spoonacular.com/recipes/$recipeId/nutritionWidget.json?apiKey=${Show_recepies.Keys.API_spoonacular()}")
         .build()
 
     try {

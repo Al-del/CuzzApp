@@ -607,7 +607,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                     ) {
 
                         Text(
-                            text = "Pathways",
+                            text = "Assistant",
                             color = Color(0xfff5f5f5),
                             lineHeight = 1.6.em,
                             style = TextStyle(
@@ -619,17 +619,11 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    if (state == "Student") {
                                         val intent =
-                                            Intent(context, Learningpath_student::class.java)
+                                            Intent(context, asis::class.java)
                                         startActivity(context, intent, null)
 
-                                    } else {
-                                        val intent =
-                                            Intent(context, Learning_pathways_profesor::class.java)
-                                        startActivity(context, intent, null)
 
-                                    }
                                 })
                     }
                 }

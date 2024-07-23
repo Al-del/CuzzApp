@@ -35,6 +35,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
@@ -65,7 +66,16 @@ class Show_recpie(){
 }
 class Show_recepies : ComponentActivity() {
     private val foodListState = mutableStateOf<List<FoodPair>?>(null)
-
+    object Keys{
+        init {
+            System.loadLibrary("native-lib")
+        }
+        external fun App_id() :String
+        external fun API_edeman() :String
+        external fun API_spoonacular() :String
+        external fun API_chat_gpt() :String
+        external fun APIKeys() :String
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val username= intent.getStringExtra("username")
@@ -132,14 +142,15 @@ fun FoodList(foodList: List<FoodPair>, lifecycleScope: LifecycleCoroutineScope, 
                                 lifecycleScope.launch {
                                     val recipeUrl = withContext(Dispatchers.IO) {
                                         getEdamamRecipes(
-                                            "eaa2c4366d4e55b3088a580edfaa5bd7",
-                                            "179c5048",
+                                            Show_recepies.Keys.API_edeman(),
+                                            Show_recepies.Keys.App_id(),
+
                                             item.first
                                         )
                                     }
                                     val obj_d = withContext(Dispatchers.IO) {
                                         getSpoonacularRecipes(
-                                            "5df674c4fc0242e38d2d0dd5cd94ffac",
+                                            Show_recepies.Keys.API_spoonacular(),
                                             recipeUrl.toString(),
                                             recepie_Name = item.first
                                         )
