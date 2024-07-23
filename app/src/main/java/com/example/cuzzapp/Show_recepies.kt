@@ -6,9 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +31,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
@@ -93,45 +100,71 @@ class Show_recepies : ComponentActivity() {
 }
 
 @Composable
-fun FoodList(foodList: List<FoodPair>, lifecycleScope: LifecycleCoroutineScope,context: Context) {
+fun FoodList(foodList: List<FoodPair>, lifecycleScope: LifecycleCoroutineScope, context: Context) {
+    val gradientBrush = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF345E2A),
+            Color(0xFF403182)
+        ),
+        start = Offset(0f, 0f),
+        end = Offset.Infinite
+    )
 
     LazyColumn {
         items(foodList) { item ->
-            Card(modifier = Modifier.padding(8.dp)) {
-                Text(text = "${item.first}", modifier = Modifier
-                    .padding(8.dp)
-                    .clickable {
-                        lifecycleScope.launch {
-                            val recipeUrl = withContext(Dispatchers.IO) {
-                                getEdamamRecipes(
-                                    "eaa2c4366d4e55b3088a580edfaa5bd7",
-                                    "179c5048",
-                                    item.first
-                                )
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp) // Increased padding around the card
+                    .offset(x = 0.dp, y = 120.dp) // Optionally increased offset for more vertical space
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize() // Make the column fill the card
+                        .background(brush = gradientBrush) // Apply the gradient
+                        .padding(24.dp) // Increased padding inside the card
+                ) {
+                    AsyncImage(
+                        model = item.second,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                lifecycleScope.launch {
+                                    val recipeUrl = withContext(Dispatchers.IO) {
+                                        getEdamamRecipes(
+                                            "eaa2c4366d4e55b3088a580edfaa5bd7",
+                                            "179c5048",
+                                            item.first
+                                        )
+                                    }
+                                    val obj_d = withContext(Dispatchers.IO) {
+                                        getSpoonacularRecipes(
+                                            "5df674c4fc0242e38d2d0dd5cd94ffac",
+                                            recipeUrl.toString(),
+                                            recepie_Name = item.first
+                                        )
+                                    }
+                                    val intent = Intent(context, Recepie_idk::class.java).apply {
+                                        putExtra("title", obj_d.title)
+                                        putExtra("image", obj_d.image)
+                                        putExtra("ingredients", obj_d.ingredients.toString())
+                                        putExtra("video", obj_d.video)
+                                        putExtra("instrutions", obj_d.instructions)
+                                        putExtra("urlus", recipeUrl)
+                                    }
+                                    context.startActivity(intent)
+                                }
                             }
-                            val obj_d=  withContext(Dispatchers.IO) {
-                                getSpoonacularRecipes(
-                                    "5df674c4fc0242e38d2d0dd5cd94ffac",
-                                    recipeUrl.toString(),
-                                    recepie_Name = item.first
-                                )
-                            }
-                            Log.d("kilo", "obj_d is: ${obj_d.title.toString()}")
-                            val intent = Intent(context, Recepie_idk::class.java)
-                            intent.putExtra("title",obj_d.title)
-                            intent.putExtra("image",obj_d.image)
-                            intent.putExtra("ingredients",obj_d.ingredients.toString())
-                            intent.putExtra("video",obj_d.video)
-                            intent.putExtra("instrutions",obj_d.instructions)
-                            intent.putExtra("urlus",recipeUrl)
-                            context.startActivity(intent)
-                        }
-                    }, style = MaterialTheme.typography.displayMedium)
-                LoadImageFromUrl(url = item.second)
+                            .fillMaxWidth() // Make the image fill the maximum width
+                            .height(200.dp) // Increased height for the image
+                    )
+
+                    Text(text = "Name: ${item.first}", color = Color.White)
+                    // Add more details as needed
+                }
             }
         }
     }
-
 }
 
 suspend fun getEdamamRecipes(apiKey: String, appId: String, food: String, numResults: Int = 5): String? {
