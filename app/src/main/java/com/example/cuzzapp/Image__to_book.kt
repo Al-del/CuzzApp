@@ -145,7 +145,7 @@ class Image__to_book : ComponentActivity() {
 
             Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color(0xFFac5288)),onSearchQueryChange = { searchQuery = it }) {
             val context = LocalContext.current
-                Scaffold(modifier = Modifier.offset(y=-27.dp)){ paddingValues ->
+                Scaffold(modifier = Modifier.offset(y = -35.dp)){ paddingValues ->
                     Box (
                         modifier = Modifier
                             .padding(paddingValues)
