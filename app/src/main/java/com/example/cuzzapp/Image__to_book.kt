@@ -17,12 +17,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -46,15 +50,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.content.FileProvider
 import coil.compose.rememberImagePainter
 import com.example.cuzzapp.components.MyImageArea
@@ -132,67 +141,143 @@ class Image__to_book : ComponentActivity() {
         setContent {
             val scaffoldState = rememberScaffoldState()
             var searchQuery by remember { mutableStateOf(seach_querr) }
+            var isvisible by remember { mutableStateOf(true) }
 
-            Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color.White),onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color(0xFFac5288)),onSearchQueryChange = { searchQuery = it }) {
             val context = LocalContext.current
-                Scaffold { paddingValues ->
+                Scaffold(modifier = Modifier.offset(y=-27.dp)){ paddingValues ->
                     Box (
                         modifier = Modifier
                             .padding(paddingValues)
-                    ){
-                        Column(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
+                            .fillMaxSize()
 
-                            val uri = remember { mutableStateOf<Uri?>(null) }
-
-                            //image to show bottom sheet
-                            MyImageArea(
-                                directory = File(cacheDir, "images"),
-                                uri = uri.value,
-                                onSetUri = {
-                                    uri.value = it
-                                },
-                                upload = { selectedUri ->
-                                    mdl.setContext(context) // Initialize context
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        val response = mdl.upload(selectedUri)
-                                        mesaj = response
-                                        mesajState.value = response
-                                        Log.d("img", "onCreate: $response")
-                                    }
-                                }
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(Color(0xFFac5288), Color(0xFF3c1053)), // Replace with your desired colors
+                                    startY = 0f, // Gradient start
+                                    endY = 1000f // Gradient end
+                                )
                             )
 
-                            // TextField to display the value of mesaj
-                            if (mesajState.value != null) {
-                                TextField(
-                                    value = mesajState.value ?: "",
-                                    onValueChange = {mesajState.value = it},
-                                    label = { Text("Response") },
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+
+                    ){
+
+                        // Top left box
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .fillMaxWidth(0.6f)
+                                .fillMaxHeight(0.4f)
+                                .clip(RoundedCornerShape(topStart = 0.dp, bottomEnd = 0.dp, topEnd = 150.dp, bottomStart = 0.dp))
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(Color(0xFF8b3f79), Color(0xFF8b3f79), Color(0xFF3c1053)), // Replace with your desired colors
+                                        startY = 0f, // Gradient start
+                                        endY = 1000f // Gradient end
+                                    )
                                 )
-                                // Button click handler
-                                Button(
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally),
-                                    onClick = {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            books = searchBooks(mesajState.value ?: "")
-                                            // Update the UI to display the list of books
-                                            // Replace with the actual code to update the UI
-                                            Log.d("img", "onCreate: $books")
-                                            isGot.value = true
+
+                        )
+                        {
+                            Image(
+                                painter = painterResource(id = R.drawable.om3),
+                                contentDescription = "human",
+                                modifier = Modifier.align(Alignment.Center).offset(y=-25.dp).scale(0.8f)
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .fillMaxWidth(1f)
+                                    .fillMaxHeight(0.35f)
+                                    .clip(RoundedCornerShape(topStart = 200.dp, topEnd = 0.dp, bottomEnd = 0.dp, bottomStart = 0.dp))
+                                    .background(Color(0xFFCB3066))
+                            )
+                        }
+
+                        // Bottom right box
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .fillMaxWidth(0.7f)
+                                .fillMaxHeight(0.6f)
+                                .clip(RoundedCornerShape(bottomStart = 250.dp, topEnd = 0.dp, bottomEnd = 0.dp, topStart = 0.dp))
+
+
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(Color(0xFFac5288), Color(0xFF7c5c8c),Color(0xFF7c5c8c)), // Replace with your desired colors
+                                        startY = 0f, // Gradient start
+                                        endY = 1000f // Gradient end
+                                    )
+                                )
+                        )
+
+                        {
+                            Column(
+                                modifier = Modifier.fillMaxSize().offset(x=52.dp)//.padding(end = 20.dp)
+                            ) {
+                                val uri = remember { mutableStateOf<Uri?>(null) }
+
+                                //image to show bottom sheet
+                                if(isvisible==true) {
+                                    MyImageArea(
+                                        directory = File(cacheDir, "images"),
+                                        uri = uri.value,
+                                        onSetUri = {
+                                            uri.value = it
+                                        },
+                                        upload = { selectedUri ->
+                                            mdl.setContext(context) // Initialize context
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                val response = mdl.upload(selectedUri)
+                                                mesaj = response
+                                                mesajState.value = response
+                                                Log.d("img", "onCreate: $response")
+                                            }
                                         }
-                                    }
-                                ) {
-                                    Text(text = "Search for book")
+
+                                    )
                                 }
-                                if(isGot.value){
-                                    BookList(books)
+                                // TextField to display the value of mesaj
+                                if (mesajState.value != null) {
+                                    isvisible = false
+                                    Spacer(modifier = Modifier.height(25.dp))
+                                    TextField(
+                                        value = mesajState.value ?: "",
+                                        onValueChange = {mesajState.value = it},
+                                        label = { Text("Response") },
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .alpha(0.25f).padding(end=20.dp)
+
+                                    )
+                                    // Button click handler
+                                    Button(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
+                                            ,
+                                        onClick = {
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                books = searchBooks(mesajState.value ?: "")
+                                                // Update the UI to display the list of books
+                                                // Replace with the actual code to update the UI
+                                                Log.d("img", "onCreate: $books")
+                                                isGot.value = true
+                                            }
+                                        }
+                                    ) {
+                                        Text(text = "Search for book")
+                                    }
+                                    if(isGot.value){
+                                        BookList(books)
+                                    }
                                 }
                             }
                         }
+
+
+
+
 
                     }
                 }
@@ -256,7 +341,7 @@ suspend fun searchBooks(query: String): List<Book> {
 @Composable
 fun BookList(books: List<Book>) {
     val context = LocalContext.current
-    LazyColumn {
+    LazyColumn(modifier =Modifier.offset(x=-50.dp)) {
         items(books) { book ->
             BookItem(book = book) {
                 // Handle book click
@@ -274,7 +359,8 @@ fun BookItem(book: Book, onBookClick: (Book) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onBookClick(book) }
-            .padding(8.dp)
+            .padding(20.dp)
+            .alpha(0.2f)
     ) {
         Row(
             modifier = Modifier
