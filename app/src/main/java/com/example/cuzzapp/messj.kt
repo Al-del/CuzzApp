@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
@@ -59,18 +62,20 @@ class messj : ComponentActivity() {
         setContent {
             var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
-            val sentBrush = Brush.linearGradient(
-                colors = listOf(
-                    Color(0xFFeb3f21),
-                    Color(0xFF1ed4b8)
-                ),
-                start = Offset(0f, 0f),
-                end = Offset.Infinite
-            )
 
-            Drawer(scaffoldState, searchQuery, backgroundColor = sentBrush ,onSearchQueryChange = { searchQuery = it }) {
-            MessagingScreen(username = username_true, messagingService = messagingService)
-            }
+
+     /*    Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(Color(0xffeee6f0))
+) {*/
+
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFF6A5AE0)), show_Top_bar = false, onSearchQueryChange = { searchQuery = it }) {
+        MessagingScreen(username = username_true, messagingService = messagingService)
+
+    }
+
+
 
         }
     }

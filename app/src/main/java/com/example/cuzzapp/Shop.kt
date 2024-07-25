@@ -2,6 +2,7 @@ package com.example.cuzzapp
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -149,16 +150,24 @@ class Shop : ComponentActivity() {
     val db = FirebaseDatabase.getInstance().getReference("UserPoints")
 
     // Function to decrease points
-    fun decreasePoints(puncte_ : Int) {
+    fun decreasePoints(puncte_ : Int,context: Context) {
         val database = FirebaseDatabase.getInstance()
-
         // Get a reference to the "accounts" node
         val accountsRef = database.getReference("accounts")
 
         // Update the points to 100
-        points-= puncte_
-        accountsRef.child(username_true).child("points").setValue(points)
-        loadImage = true
+
+        if(points >puncte_){
+            points-= puncte_
+            accountsRef.child(username_true).child("points").setValue(points)
+            loadImage = true
+            Toast.makeText(context, "You have successfully bought the item. You will soon hear an email from us!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, Shop::class.java)
+            ContextCompat.startActivity(context, intent, null)
+        }
+        else{
+            Toast.makeText(this, "You don't have enough points", Toast.LENGTH_SHORT).show()
+        }
 
     }
 
@@ -169,12 +178,13 @@ fun ShopItemCard(item: Shop.ShopItem) {
         startY = 0f,
         endY = 500f
     )
-
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .offset(x = 0.dp, y = 100.dp)
+
     ) {
         Column(
             modifier = Modifier
@@ -187,9 +197,7 @@ fun ShopItemCard(item: Shop.ShopItem) {
                 painter = painter,
                 contentDescription = null,
                 modifier = Modifier
-                    .clickable {
-                        decreasePoints(item.price)
-                    }
+
                     .fillMaxWidth() // Make the image fill the maximum width
                     .height(100.dp) // Keep the height as 100.dp
             )
@@ -197,8 +205,8 @@ fun ShopItemCard(item: Shop.ShopItem) {
             Text(text = "Name: ${item.name}", color = Color.White)
             Text(text = "Price: ${item.price}", color = Color.White)
             Button(
-                onClick = { decreasePoints(item.price) },
-                modifier = Modifier.padding(top = 16.dp),
+                onClick = { decreasePoints(item.price, context = context) },
+                modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF964B00)) // Set the button background color to brown
             ) {
                 Text("Get ${item.name}")
@@ -245,11 +253,7 @@ fun shop(modifier: Modifier, shopitem: MutableList<Shop_item>){
     val context = LocalContext.current
 
     //Iterate through all od the shop items list and print each name
-    Log.d("Shop","VIATA")
-    for (item in shopitem) {
 
-        Log.d("Shop","VIATA ${item.name}")
-    }
     Scaffold(
 
         modifier = modifier.fillMaxSize()
@@ -260,7 +264,7 @@ fun shop(modifier: Modifier, shopitem: MutableList<Shop_item>){
         LazyColumn(modifier = modifier.fillMaxSize()) {
             itemsIndexed(shopitem) { index, achievement ->
                 // Now you have access to both the index and the achievement
-                ShopItem(achievement, index)
+                ShopItem(achievement, index+1)
                 Spacer(modifier = modifier.padding(8.dp))
             }
         }
@@ -269,7 +273,7 @@ fun shop(modifier: Modifier, shopitem: MutableList<Shop_item>){
     @Composable
     fun ShopItem(item: Shop_item?, indx: Int) {
         val painter = rememberImagePainter(data = item?.image_link)
-
+        val context = LocalContext.current
         // Display your achievement here
         if (item != null) {
             Box(
@@ -278,6 +282,10 @@ fun shop(modifier: Modifier, shopitem: MutableList<Shop_item>){
                     .requiredHeight(height = 184.dp)
                     .clip(shape = RoundedCornerShape(20.dp))
                     .background(color = Color.White)
+                    .clickable {
+                        decreasePoints(item.price,context)
+
+                    }
                    ,
             ) {
                 androidx.compose.material3.Text(

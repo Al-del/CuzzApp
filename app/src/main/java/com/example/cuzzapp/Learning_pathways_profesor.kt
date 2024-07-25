@@ -31,22 +31,21 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
@@ -84,8 +83,14 @@ class Learning_pathways_profesor : ComponentActivity() {
             var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color(0xffFFFFFF)),onSearchQueryChange = { searchQuery = it }) {
-            Box(modifier =Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xffb379df)) ,onSearchQueryChange = { searchQuery = it }) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 68.dp) // Assuming the height of the bottom bar is 56.dp
+                        .padding(6.dp), // Add padding here
+                    contentAlignment = Alignment.Center
+                ){
                     LearningPath()
                 }
             }
@@ -94,9 +99,10 @@ class Learning_pathways_profesor : ComponentActivity() {
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter",
+    "SuspiciousIndentation"
+)
 @Composable
 fun LearningPath() {
     var showDialog by remember { mutableStateOf(false) }
@@ -126,7 +132,7 @@ fun LearningPath() {
                     )
                     ColorPicker(selectedColor = completedColor,
                         onColorSelected = { completedColor = it },
-                         label = "Completed Color")
+                        label = "Completed Color")
                     ColorPicker(         selectedColor = uncompletedColor,
                         onColorSelected = { uncompletedColor = it }, label = "Uncompleted Color")
                 }
@@ -159,85 +165,131 @@ fun LearningPath() {
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    TextField(
-                        value = title,
-                        onValueChange = { title = it },
-                        label = { Text("Title") },
-                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
-                    )
-                },
-                colors = topAppBarColors(containerColor = completedColor),
-                actions = {
-                    val database = Firebase.database
-                    val myRef = database.getReference("LearningPathStages/${title}")
-                    val storage = Firebase.storage
-
-                    IconButton(onClick = {
-                        // Save all the cards to Firebase Realtime Database
-                        learningPathStages.forEachIndexed { index, stage ->
-                            // Create a unique key for each card
-                            val key = myRef.push().key
-                            if (key != null) {
-                                // Create a HashMap to store the card data
-                                val cardData = hashMapOf(
-                                    "title" to stage.title,
-                                    "description" to stage.description,
-                                    "isCompleted" to stage.isCompleted,
-                                    "backgroundColor" to backgroundColor.toString(),
-                                    "completedColor" to completedColor.toString(),
-                                    "uncompletedColor" to uncompletedColor.toString()
-                                )
-
-                                    // Save the card data to Firebase Realtime Database
-                                    myRef.child(key).setValue(cardData)
-
-                            }
-                        }
-                    }) {
-                        Icon(Icons.Default.Add, contentDescription = "Add")
-                    }
-                }
+        modifier = Modifier.fillMaxSize().background(
+            brush = Brush.verticalGradient(
+                colors = listOf(Color(0xFFEA8D8D), Color(0xFFA890FE)),
+                startY = 0f,
+                endY = Float.POSITIVE_INFINITY
             )
-        },
+        ),
         floatingActionButton = {
-            FloatingActionButton(onClick = { showDialog = true }) {
+            FloatingActionButton(modifier = Modifier.offset(y=-60.dp),onClick = { showDialog = true }) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize().background(backgroundColor), contentAlignment = Alignment.Center) {
-            LazyColumn(modifier = Modifier.align(Alignment.Center).padding(top = 70.dp) // Add padding at the top equal to the height of the TopAppBar
+        Column(modifier = Modifier.fillMaxSize())
+        {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(45.dp))
+                    .padding(6.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(Color(0xFFa8c0ff), Color(0xFF3f2b96)),
+                            startX = 0f,
+                            endX = Float.POSITIVE_INFINITY
+                        ))
+                    .height(56.dp) ,// default height of TopAppBar
+
+            ) {
+                Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    TextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = { Text("Title") },
+
+                        colors = TextFieldDefaults.textFieldColors(textColor = Color(0xFFffff66), backgroundColor= Color.Transparent,
+                            focusedIndicatorColor = Color.Black,
+
+                            )
+                    )
+
+                    val database = Firebase.database
+                    val myRef = database.getReference("LearningPathStages/${title}")
+                    val storage = Firebase.storage
+
+                    IconButton(modifier = Modifier.offset(x=-15.dp, y=7.dp),
+                        onClick = {
+
+                            // Save all the cards to Firebase Realtime Database
+                            learningPathStages.forEachIndexed { index, stage ->
+                                // Create a unique key for each card
+                                val key = myRef.push().key
+                                if (key != null) {
+                                    // Create a HashMap to store the card data
+                                    val cardData = hashMapOf(
+                                        "title" to stage.title,
+                                        "description" to stage.description,
+                                        "isCompleted" to stage.isCompleted,
+                                        "backgroundColor" to backgroundColor.toString(),
+                                        "completedColor" to completedColor.toString(),
+                                        "uncompletedColor" to uncompletedColor.toString()
+                                    )
+
+                                    // Save the card data to Firebase Realtime Database
+                                    myRef.child(key).setValue(cardData)
+
+                                }
+                            }
+                        },
+
+                        ) {
+                        Icon(Icons.Default.Add, contentDescription = "Add")
+                    }
+
+
+
+
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(16.dp)) // Adjust the corner size as needed
+                    .background(backgroundColor)
+                    .padding(horizontal = 16.dp, vertical=5.dp),
+                contentAlignment = Alignment.Center
+            ) {              LazyColumn(
+                modifier = Modifier.align(Alignment.Center)
+                    .padding(top = 70.dp) // Add padding at the top equal to the height of the TopAppBar
             ) {
                 itemsIndexed(learningPathStages) { index, stage ->
                     LearningPathStageCard(
                         stage,
                         alignToEnd = if (index == 0) false else index % 4 == 2 || index % 4 == 3,
                         modifier = Modifier
-                            .offset(x = when (index%8) {
-                                0 -> 0.dp
-                                1-> 50.dp
-                                2-> 100.dp
-                                3-> 50.dp
-                                4-> 0.dp
-                                5 -> -50.dp
-                                6-> -100.dp
-                                7-> -130.dp
-                                else -> 0.dp // Adjust this value for the 9th card and onwards
-                            }),
+                            .offset(
+                                x = when (index % 8) {
+                                    0 -> 0.dp
+                                    1 -> 50.dp
+                                    2 -> 100.dp
+                                    3 -> 50.dp
+                                    4 -> 0.dp
+                                    5 -> -50.dp
+                                    6 -> -100.dp
+                                    7 -> -130.dp
+                                    else -> 0.dp // Adjust this value for the 9th card and onwards
+                                }
+                            )
+                            .padding(horizontal = 6.dp),
                         completedColor = completedColor,
                         uncompletedColor = uncompletedColor,
                         backgroundColor = backgroundColor
                     )
 
                 }
-                }
             }
 
+            }
+
+
         }
+
     }
+}
+
 
 
 
@@ -310,6 +362,45 @@ data class LearningPathStageEntity(
 @Composable
 fun ColorPicker(selectedColor: Color, onColorSelected: (Color) -> Unit, label: String) {
     val colors = listOf(
+
+
+        Color(0xFF4dd0e1),
+        Color(0xFF558799),
+        Color(0xFF00162c),
+
+        Color(0xFFf1f8e9),
+        Color(0xFF4cbb17),
+        Color(0xFF558b2f),
+
+        Color(0xFFff6247),
+        Color(0xFFd73022),
+        Color(0xFF9d0002),
+
+        Color(0xFFf1c3c3),
+        Color(0xFFeda3b9),
+        Color(0xFFf987c1),
+
+
+        Color(0xFF9966cd),
+        Color(0xFF855693),
+        Color(0xFF6040ad),
+
+
+        Color(0xFFf7a90a),
+        Color(0xFFff7418),
+        Color(0xFFe75a23),
+
+        Color(0xFFf3d942),
+        Color(0xFFefb51c),
+        Color(0xFFbd9d22),
+
+        Color(0xFF625551),
+        Color(0xFF835332),
+        Color(0xFF543b32),
+
+
+
+        /*
         Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Cyan,
         Color.Magenta, Color.Gray, Color(0xff4b4b4b), Color(0xffFFFFFF),
         Color.LightGray, // Silver color
@@ -317,6 +408,8 @@ fun ColorPicker(selectedColor: Color, onColorSelected: (Color) -> Unit, label: S
         Color(0xFFFF9600),
         Color(0xFFCE82FF),
         Color(0xFF2B70C9),
+
+         */
     )
 
     Column {
@@ -327,6 +420,7 @@ fun ColorPicker(selectedColor: Color, onColorSelected: (Color) -> Unit, label: S
                     modifier = Modifier
                         .size(50.dp)
                         .background(color = color)
+
                         .border(
                             width = if (color == selectedColor) 5.dp else 1.dp,
                             color = if (color == selectedColor) Color.Black else Color.Gray
@@ -374,7 +468,7 @@ fun LearningPathTopBar(completedColor: Color) {
                 value = title,
                 onValueChange = { title = it },
                 label = { Text("Title") },
-                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+                colors = TextFieldDefaults.textFieldColors( Color.Transparent)
             )
         },
         colors = topAppBarColors(containerColor = completedColor),

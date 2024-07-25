@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -33,11 +34,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,13 +59,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.cuzzapp.ui.theme.CuzzAppTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -83,7 +97,8 @@ class asis : ComponentActivity() {
             var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color.Black) ,onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color.Black), show_Top_bar = false ,onSearchQueryChange = { searchQuery = it }) {
+
             final() // Adjusted to call without homeScreen parameter
             }
         }
@@ -96,30 +111,31 @@ class asis : ComponentActivity() {
         val messages = remember { mutableStateListOf<String>() }
         messages.add("Cuza: Hello! How can I help you today?")
         Scaffold(
-            modifier = Modifier.background(color = Color(0xff000000)),
+            modifier = Modifier.background(color = Color(0xffFFFFFF)),
             bottomBar = {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .offset(y = -60.dp)
+                        .offset(y = -70.dp)
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TextField(
-                        value = message,
-                        onValueChange = { message = it },
-                        modifier = Modifier.weight(1f)
-                    )
-                    Button(
+               TextField(
+                value = message,
+                onValueChange = { message = it },
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(26.dp) // Adjust the corner radius as needed
+            )
+                    IconButton(
                         onClick = {
                             getChatGPTResponse(message) { response ->
                                 messages.add("User: $message")
                                 messages.add("Cuza: $response")
                                 message = ""
                             }
-                        }
+                        },
                     ) {
-                        Text(text = "Send")
+                        Icon(imageVector = Icons.Default.Send, contentDescription = "Send Message")
                     }
                 }
             }
@@ -127,7 +143,7 @@ class asis : ComponentActivity() {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = Color(0xff000000))
+                    .background(color = Color(0xffFFFFFF))
             ) {
                 items(messages.size) { index ->
                     Row(
@@ -142,14 +158,12 @@ class asis : ComponentActivity() {
                                 .wrapContentSize(Alignment.Center)
                                 .padding(10.dp)
                                 .clip(shape = RoundedCornerShape(20.dp))
-                                .background(color = Color(0xff9d9d9d))
+                                .background(color =  if (messages[index].startsWith("User:")) Color(0xFFEBEAEA) else Color(0xFF9747FF))
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
                                 text = messages[index],
-                                color = if (messages[index].startsWith("User:")) Color(0xffDC5F00) else Color(
-                                    0xffCF0A0A
-                                ),
+                                color = if (messages[index].startsWith("User:")) Color.Black else Color.White,
                                 modifier = Modifier.padding(8.dp)
                             )
                         }
@@ -244,6 +258,7 @@ class asis : ComponentActivity() {
             }
         })
     }
+    @Preview
     @Composable
     fun final(){
         Box(
@@ -251,9 +266,38 @@ class asis : ComponentActivity() {
                 .fillMaxSize()
                 .background(Color.Black)
         ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                // Top bar with friend's name and profile picture
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .requiredHeight(80.dp)
+                        .background(Color(0xFFf75E54))
+                        .padding(8.dp)
+                        .offset(y = 20.dp)
+                ) {
+                    AsyncImage(
+                        model = R.drawable.cuzascan,
+                        contentDescription = "Friend's Profile Picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
 
-                ChatScreen()
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "CuzzGenius",
+                        color = Color.White,
+                        style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    )
+                }
+                  ChatScreen()
+
+            }
 
         }
     }
+
 }

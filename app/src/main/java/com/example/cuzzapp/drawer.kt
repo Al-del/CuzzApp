@@ -60,6 +60,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -81,6 +82,9 @@ import com.example.cuzzapp.ui.theme.LightOrange
 import com.example.cuzzapp.ui.theme.LightYellow
 import com.example.cuzzapp.ui.theme.LighterRed
 import com.example.cuzzapp.ui.theme.Pink
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.BlurEffect
+
 import mail
 import points
 import seach_querr
@@ -89,7 +93,6 @@ import url_photo
 import username_for_all
 import username_true
 import viewedProfile
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Drawer(
@@ -97,6 +100,7 @@ fun Drawer(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     backgroundColor : Brush,
+    show_Top_bar:Boolean = true,
     content: @Composable () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -140,80 +144,85 @@ bottomBar = {
     StatusHomeModeDarkPreview()
 },
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .background(brush = backgroundColor) // Use the passed backgroundColor
-                    .padding(horizontal = 10.dp)
+            if (show_Top_bar == true) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .background(brush = backgroundColor) // Use the passed backgroundColor
+                        .padding(horizontal = 13.dp)
+                        .offset(y = 20.dp)
                     //add rounded corners
-            ) {
-                Box(modifier = Modifier.offset(y = 15.dp)) {
-                    AsyncImage(
-                        model = url_photo,
-                        contentDescription = "plangus",
-                        modifier = Modifier
-                            .size(55.dp)
-                            .offset(y = 10.dp)
-                            .align(Alignment.CenterStart)
-                            .clip(CircleShape), // Apply offset if needed
-                        contentScale = ContentScale.Crop // Ensures the image fills the circle, cropping if necessary
-                    )
-                }
-
-
-                TextField(
-    value = searchQuery,
-    onValueChange = { newValue ->
-        onSearchQueryChange(newValue) // Correct way to update the state
-    },
-    modifier = Modifier
-        .requiredHeight(50.dp)
-        .requiredWidth(250.dp)
-        .offset(x = 10.dp)
-        .align(Alignment.Center)
-        .background(Color.White, shape = RoundedCornerShape(8.dp)),
-    leadingIcon = {
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "Search",
-            tint = Color.Gray
-        )
-    },
-    colors = TextFieldDefaults.textFieldColors(
-        backgroundColor = Color.White,
-        cursorColor = Color.Black,
-        leadingIconColor = Color.Gray,
-        textColor = Color.Black,
-        focusedIndicatorColor = Color.Transparent, // Hide the indicator
-        unfocusedIndicatorColor = Color.Transparent
-    ),
-    placeholder = {
-        Text(text = "Search ...", color = Color.Gray)
-    },
-    singleLine = true
-)
-                FloatingActionButton(
-                    onClick = {
-seach_querr = searchQuery
-                        val intent = Intent(context, HomeScreen::class.java)
-                        startActivity(context, intent, null)
-                    },
-                    containerColor = Color(0xFFE9FF97),
-                    modifier = Modifier.size(56.dp) // Standard Material Design FAB size
-                        .align(Alignment.CenterEnd) // Align the FAB to the end (right side for LTR, left side for RTL)
-                        .offset(x = 10.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Search",
-                        tint = Color.Black
+                    Box(modifier = Modifier.offset(y = 15.dp)) {
+                        AsyncImage(
+                            model = url_photo,
+                            contentDescription = "plangus",
+                            modifier = Modifier
+                                .size(55.dp)
+                                .offset(y = 10.dp)
+                                .align(Alignment.CenterStart)
+                                .clip(CircleShape), // Apply offset if needed
+                            contentScale = ContentScale.Crop // Ensures the image fills the circle, cropping if necessary
+                        )
+                    }
+
+
+                    TextField(
+                        value = searchQuery,
+                        onValueChange = { newValue ->
+                            onSearchQueryChange(newValue) // Correct way to update the state
+                        },
+                        modifier = Modifier
+                            .requiredHeight(50.dp)
+                            .requiredWidth(250.dp)
+                            .offset(x = 5.dp)
+                            .align(Alignment.Center)
+
+                            .background(Color.White, shape = RoundedCornerShape(13.dp)),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search",
+                                tint = Color.Gray
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.White,
+                            cursorColor = Color.Black,
+                            leadingIconColor = Color.Gray,
+                            textColor = Color.Black,
+                            focusedIndicatorColor = Color.Transparent, // Hide the indicator
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        placeholder = {
+                            Text(text = "Search ...", color = Color.Gray)
+                        },
+                        singleLine = true,
+                        shape = RoundedCornerShape(13.dp)
                     )
+                    FloatingActionButton(
+                        onClick = {
+                            seach_querr = searchQuery
+                            val intent = Intent(context, HomeScreen::class.java)
+                            startActivity(context, intent, null)
+                        },
+                        containerColor = Color(0xFFE9FF97),
+                        modifier = Modifier.size(56.dp) // Standard Material Design FAB size
+                            .align(Alignment.CenterEnd) // Align the FAB to the end (right side for LTR, left side for RTL)
+                            .offset(x = 10.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search",
+                            tint = Color.Black
+                        )
+                    }
                 }
             }
         }
-
     )
+
 }
 @Composable
 fun AppNavigator(navController: NavHostController) {
@@ -390,7 +399,7 @@ fun Frame866(modifier: Modifier = Modifier) {
             painter = painterResource(id = R.drawable.home),
             contentDescription = "wallet",
             modifier = Modifier
-                .requiredSize(size = 45.dp)
+                .requiredSize(size = 40.dp)
                 .offset(y = -10.dp)
                 .clickable {
                     val intent = Intent(context, HomeScreen::class.java)
@@ -504,23 +513,26 @@ fun drawer_content(modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .weight(weight = 1f)
                     ) {
-
                         Text(
                             text = "Home",
                             color = Color(0xff6759ff),
                             lineHeight = 1.6.em,
                             style = TextStyle(
-                                letterSpacing = 0.3.em,
+                                fontFamily = FontFamily.Default,
+                                letterSpacing = 0.2.em,
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color.Yellow, Color.Magenta, Color.Cyan),
+                                    colors = listOf(Color(0xffFEA05C), Color(0xffFEA05C), Color(0xffFEA05C)),
                                 ),
-                                fontSize = 20.sp),
+                                fontSize = 20.sp
+                            ),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
                                     val intent = Intent(context, HomeScreen::class.java)
                                     startActivity(context, intent, null)
-                                })
+                                }
+                        )
+
                         }
 
                 }
@@ -546,7 +558,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             style = TextStyle(
                                 letterSpacing = 0.3.em,
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color.Red, Color.Magenta, Color.Yellow),
+                                    colors = listOf(Color(0xffFDDF61), Color(0xffFDDF61), Color(0xffFDDF61)),
                                 ),
                                 fontSize = 20.sp),
                             modifier = Modifier
@@ -580,7 +592,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             style = TextStyle(
                                 letterSpacing = 0.3.em,
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color.Cyan, Color.Magenta, Color.Yellow),
+                                    colors = listOf(Color(0xffC4E4FE), Color(0xffC4E4FE), Color(0xffC4E4FE)),
                                 ),
                                 fontSize = 20.sp),
                             modifier = Modifier
@@ -607,13 +619,13 @@ fun drawer_content(modifier: Modifier = Modifier) {
                     ) {
 
                         Text(
-                            text = "Assistant",
+                            text = "CuzzGenius",
                             color = Color(0xfff5f5f5),
                             lineHeight = 1.6.em,
                             style = TextStyle(
                                 letterSpacing = 0.3.em,
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color.Yellow, Color.Magenta, Color.Red),
+                                    colors = listOf(Color(0xffE6FE5D), Color(0xffE6FE5D), Color(0xffE6FE5D)),
                                 ),
                                 fontSize = 20.sp),
                             modifier = Modifier
@@ -643,13 +655,13 @@ fun drawer_content(modifier: Modifier = Modifier) {
                     ) {
 
                         Text(
-                            text = "Image to book",
+                            text = "CuzaScan",
                             color = Color(0xfff5f5f5),
                             lineHeight = 1.6.em,
                             style = TextStyle(
                                 letterSpacing = 0.3.em,
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color.Magenta, Color.Cyan, Color.Yellow),
+                                    colors = listOf(Color(0xff755DFE), Color(0xff755DFE), Color(0xff755DFE)),
                                 ),
                                 fontSize = 20.sp),
                             modifier = Modifier
@@ -683,7 +695,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             style = TextStyle(
                                 letterSpacing = 0.3.em,
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color.Red, Color.Magenta, Color.Yellow),
+                                    colors = listOf(Color(0xffFEDEC4), Color(0xffFEDEC4), Color(0xffFEDEC4)),
                                 ),
                                 fontSize = 20.sp),
                             modifier = Modifier
@@ -717,7 +729,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             style = TextStyle(
                                 letterSpacing = 0.3.em,
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color.Cyan, Color.Magenta, Color.Yellow),
+                                    colors = listOf(Color(0xff617FFD), Color(0xff617FFD), Color(0xff617FFD)),
                                 ),
                                 fontSize = 20.sp),
                             modifier = Modifier
@@ -757,7 +769,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             style = TextStyle(
                                 letterSpacing = 0.3.em,
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color.Cyan, Color.Magenta, Color.Yellow),
+                                    colors = listOf(Color(0xff5CBAFE), Color(0xff5CBAFE), Color(0xff5CBAFE)),
                                 ),
                                 fontSize = 20.sp),
                             modifier = Modifier
@@ -997,8 +1009,3 @@ fun RoundedCircleBackgroundFitIconMicColorWhite(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(widthDp = 450, heightDp = 60)
-@Composable
-private fun SamplePreview() {
-    Sample(Modifier)
-}

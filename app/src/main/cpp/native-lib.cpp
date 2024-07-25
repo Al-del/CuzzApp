@@ -3,7 +3,7 @@
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_cuzzapp_Show_1recepies_00024Keys_APIKeys(JNIEnv* env, jobject /* this is it */) {
-    std::string api_key = "AIzaSyCY05brSzUg7_N9c4ONx4EWC5OHxFtcHVE";
+    std::string api_key = "AIzaSyCI2klvI40Y5sZckwgLv2ipWCisVUbu-Kc";
     return env->NewStringUTF(api_key.c_str());
 }
 extern "C" JNIEXPORT jstring JNICALL
@@ -23,6 +23,6 @@ Java_com_example_cuzzapp_Show_1recepies_00024Keys_API_1spoonacular(JNIEnv* env, 
 }
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_cuzzapp_Show_1recepies_00024Keys_API_1chat_1gpt(JNIEnv* env, jobject /* this is it */) {
-        std::string app_id = "YOUR_API_KEY";
+        std::string app_id = "sk-proj-lLN8BgV2uRtUCCoCoZ4VT3BlbkFJP5b7XrFtW6iRslSxXJTc";
     return env->NewStringUTF(app_id.c_str());
 }

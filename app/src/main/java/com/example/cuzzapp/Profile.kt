@@ -414,8 +414,6 @@ fun Show_friend_list(friends: List<String>, onFriendClick: (String) -> Unit) {
                                 .border(BorderStroke(4.dp, Color.White), CircleShape)
                                 .padding(4.dp)
                         )
-                    } else {
-                        Text("Loading image...", Modifier.padding(4.dp))
                     }
                 }
                 Button(
