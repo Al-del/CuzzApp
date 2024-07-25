@@ -23,6 +23,6 @@ Java_com_example_cuzzapp_Show_1recepies_00024Keys_API_1spoonacular(JNIEnv* env, 
 }
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_cuzzapp_Show_1recepies_00024Keys_API_1chat_1gpt(JNIEnv* env, jobject /* this is it */) {
-        std::string app_id = "sk-proj-lLN8BgV2uRtUCCoCoZ4VT3BlbkFJP5b7XrFtW6iRslSxXJTc";
+        std::string app_id = "YOUR API KEY";
     return env->NewStringUTF(app_id.c_str());
 }
