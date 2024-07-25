@@ -3,8 +3,15 @@ package com.example.cuzzapp
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.ComponentActivity
@@ -12,6 +19,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -44,6 +52,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.key.Key.Companion.Notification
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -59,6 +68,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.cuzzapp.ui.theme.LightOrange
 import com.example.cuzzapp.ui.theme.LightYellow
@@ -77,6 +87,27 @@ class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, HydrationReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        // Schedule the alarm to repeat every 30 minutes
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis(),
+            30*1000*60, // 30 minutes in milliseconds
+            pendingIntent
+        )
+
+        val breakReminderIntent = Intent(this, BreakReminderReceiver::class.java)
+        val breakReminderPendingIntent = PendingIntent.getBroadcast(this, 1, breakReminderIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+// Schedule the alarm to repeat every 2 hours
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis(),
+            120*60*1000, // 2 hours in milliseconds
+            breakReminderPendingIntent
+        )
         enableEdgeToEdge()
         takePictureLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -663,8 +694,7 @@ TextField(
                     style = TextStyle(
                         fontSize = 11.329999923706055.sp,
                         fontWeight = FontWeight.Medium
-                    )
-                )
+                ))
             }
         }
 
@@ -673,5 +703,52 @@ TextField(
     @Composable
     private fun RegisterPrev() {
         Register_Screen(Modifier)
+    }
+}
+
+
+class HydrationReminderReceiver : BroadcastReceiver() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                "hydration_reminder",
+                "Hydration Reminder",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+
+        val notification = NotificationCompat.Builder(context, "hydration_reminder")
+            .setContentTitle("Nu uita sa te hidratezi!")
+            .setContentText("Apa este foart iportanta si racoritoare!\uD83E\uDD5B")
+            .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app's icon
+            .build()
+        notificationManager.notify(0, notification)
+    }
+}
+
+class BreakReminderReceiver : BroadcastReceiver() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                "break_reminder",
+                "Break Reminder",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+
+        val notification = NotificationCompat.Builder(context, "break_reminder")
+            .setContentTitle("Ia o pauza!")
+            .setContentText("Pune-ti sangele in miscare!\uD83C\uDFC3")
+            .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app's icon
+            .build()
+        notificationManager.notify(1, notification)
     }
 }

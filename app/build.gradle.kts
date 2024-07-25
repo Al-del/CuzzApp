@@ -68,6 +68,7 @@ android {
 
 dependencies {
 
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -110,6 +111,7 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:1.4.0")
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
+    implementation ("androidx.core:core:1.9.0")
 
     implementation("io.sanghun:compose-video:1.2.0")
     implementation("androidx.media3:media3-exoplayer:1.1.0") // [Required] androidx.media3 ExoPlayer dependency
