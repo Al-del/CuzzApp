@@ -23,6 +23,6 @@
     <string name="title_activity_main">Main</string>
     <string name="title_activity_recepies">Recepies</string>
     <string name="title_activity_show_recepies">Show_recepies</string>
-    <string name="title_activity_messages">messages</string>
+    <string name="title_activity_hydratation_reminder_receiver">HydratationReminderReceiver</string>
 
 </resources>
