@@ -32,8 +32,6 @@ class Main : ComponentActivity() {
     private lateinit var photoUri: Uri
     private var shouldShowPhoto: MutableState<Boolean> = mutableStateOf(false)
     private var shouldShowCamera: MutableState<Boolean> = mutableStateOf(false)
-    var obj=Short_Meal_obj()
-    var a = profil()
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -43,7 +41,6 @@ class Main : ComponentActivity() {
             Log.i("kilo", "Permission denied")
         }
     }
-    // ...
 
     private fun requestCameraPermission() {
         when {

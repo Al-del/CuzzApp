@@ -7,18 +7,23 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,16 +32,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.example.cuzzapp.Short_Meal_obj
 
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -66,7 +75,6 @@ data class USR(
 )
 data class Recipe(val title: String, val imageUrl: String, val id: String)
 class Recepies : ComponentActivity() {
-    var obj = Short_Meal_obj()
 
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,84 +94,99 @@ class Recepies : ComponentActivity() {
                     getRecipes(ingredient, this@Recepies)
                 } ?: emptyList()
                 setContent {
-                    var searchQuery by remember { mutableStateOf("") }
-                    val scaffoldState = rememberScaffoldState()
+               var searchQuery by remember { mutableStateOf("") }
+val scaffoldState = rememberScaffoldState()
 
-                    Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFFffffff)) ,onSearchQueryChange = { searchQuery = it }) {
-
-                    val navController = rememberNavController()
-                    NavHost(navController, startDestination = "recipeList") {
-                        composable("recipeList") {
-                            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                                items(recipes) { recipe ->
-                                    Column(modifier = Modifier.padding(16.dp)) {
-                                        Text(recipe.title, color = Color.Black)
-                                        Text("ID: ${recipe.id}", color = Color.Black)
-                                        LoadImageFromUrl(recipe.imageUrl)
-                                        Button(onClick = {
-                                            lifecycleScope.launch {
-                                                val nutritionAnalysis =
-                                                    getNutritionAnalysis(recipe.id, this@Recepies)
-                                                Log.d(
-                                                    "Nutrition Analysis",
-                                                    nutritionAnalysis.joinToString()
-                                                )
-                                                //Show each nutrient in a column who has a back button that destroy the column
-                                                //and show the recipe again
-                                                setContent {
-                                                    if (usernamuss != null) {
-                                                        ShowNutritionAnalysis(
-                                                            nutritionAnalysis,
-                                                            navController,
-                                                            this@Recepies,
-                                                            usernamus = usernamuss,
-                                                            food = recipe.title,
-                                                            img_url = recipe.imageUrl,
-                                                            username = usernamuss
-                                                        )
-                                                    } else {
-                                                        ShowNutritionAnalysis(
-                                                            nutritionAnalysis,
-                                                            navController,
-                                                            this@Recepies,
-                                                            usernamus = "unknown",
-                                                            food = recipe.title,
-                                                            img_url = recipe.imageUrl,
-                                                            username = usernamuss
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                        }) {
-                                            Text("Nutrition Analysis")
-                                        }
-                                        //Add another button on the right
-                                        Button(
-                                            onClick = {
-                                                // getUserParameters(usernamuss!!,recipe.title,recipe.imageUrl)
-                                                if (usernamuss != null) {
-                                                    updateUserRecipes(
-                                                        username_true,
-                                                        recipe.title,
-                                                        recipe.imageUrl
-                                                    )
-                                                }
-                                            },
-                                            modifier = Modifier.align(Alignment.End)
-                                        ) {
-                                            Text(text = "Add ")
+Drawer(
+    scaffoldState = scaffoldState,
+    searchQuery = searchQuery,
+    backgroundColor = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF345E2A),
+            Color(0xFF403182)
+        ),
+        start = Offset(0f, 0f),
+        end = Offset.Infinite
+    ),
+    onSearchQueryChange = { searchQuery = it }
+) {
+    val navController = rememberNavController()
+    NavHost(navController, startDestination = "recipeList") {
+        composable("recipeList") {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                Color(0xFF345E2A),
+                                Color(0xFF403182)
+                            ),
+                            start = Offset(0f, 0f),
+                            end = Offset.Infinite
+                        )
+                    )
+            ) {
+                items(recipes) { recipe ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(recipe.title, color = Color.Black)
+                            Text("ID: ${recipe.id}", color = Color.Black)
+                            LoadImageFromUrl(recipe.imageUrl)
+                            Button(onClick = {
+                                lifecycleScope.launch {
+                                    val nutritionAnalysis = getNutritionAnalysis(recipe.id, this@Recepies)
+                                    Log.d("Nutrition Analysis", nutritionAnalysis.joinToString())
+                                    setContent {
+                                        if (usernamuss != null) {
+                                            ShowNutritionAnalysis(
+                                                nutritionAnalysis,
+                                                this@Recepies, // Pass the current ComponentActivity
+                                                this@Recepies,
+                                                usernamus = usernamuss,
+                                                food = recipe.title,
+                                                img_url = recipe.imageUrl,
+                                                username = usernamuss
+                                            )
+                                        } else {
+                                            ShowNutritionAnalysis(
+                                                nutritionAnalysis,
+                                                this@Recepies, // Pass the current ComponentActivity
+                                                this@Recepies,
+                                                usernamus = "unknown",
+                                                food = recipe.title,
+                                                img_url = recipe.imageUrl,
+                                                username = usernamuss
+                                            )
                                         }
                                     }
-                                    //Log image URL
-                                    Log.d("Image URL", recipe.imageUrl)
                                 }
+                            }) {
+                                Text("Nutrition Analysis")
                             }
-                            Box(modifier = Modifier.fillMaxSize()) {
-
+                            Button(
+                                onClick = {
+                                    if (usernamuss != null) {
+                                        updateUserRecipes(username_true, recipe.title, recipe.imageUrl)
+                                    }
+                                },
+                                modifier = Modifier.align(Alignment.End)
+                            ) {
+                                Text(text = "Add ")
                             }
                         }
                     }
+                    Log.d("Image URL", recipe.imageUrl)
                 }
+            }
+        }
+    }
+}
                 }
             }
         }
@@ -223,25 +246,108 @@ suspend fun getNutritionAnalysis(recipeId: String, context: Context): List<Pair<
     }
 }
 @Composable
-fun ShowNutritionAnalysis(nutritionAnalysis: List<Pair<String, String>>, navController: NavController,context: Context,usernamus:String,food:String,img_url: String,username:String?) {
-    Column {
-        for (nutrient in nutritionAnalysis) {
-            Text("${nutrient.first}: ${nutrient.second}")
+fun ShowNutritionAnalysis(
+    nutritionAnalysis: List<Pair<String, String>>,
+    activity: ComponentActivity,
+    context: Context,
+    usernamus: String,
+    food: String,
+    img_url: String,
+    username: String?
+) {
+
+    val primaryColor = Color(0xFF6A5AE0)
+    val secondaryColor = Color(0xFFE0B8F2)
+    val accentColor = Color(0xFFD1E8F2)
+    val primaryTextColor = Color.Black
+    var searchQuery by remember { mutableStateOf("") }
+    val scaffoldState = rememberScaffoldState()
+
+    Drawer(
+        scaffoldState = scaffoldState,
+        searchQuery = searchQuery,
+        backgroundColor = Brush.linearGradient(
+            colors = listOf(
+                primaryColor,
+                primaryColor
+            ),
+            start = Offset(0f, 0f),
+            end = Offset.Infinite
+        ),
+        onSearchQueryChange = { searchQuery = it }
+    ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(primaryColor)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Back button at the top
+        Button(
+            onClick = { activity.finish() },
+            colors = ButtonDefaults.buttonColors(containerColor = secondaryColor),
+            modifier = Modifier.align(Alignment.Start)
+        ) {
+            Text(text = "Back", color = Color.White)
         }
 
+        // Food image at the top center
+        AsyncImage(
+            model = img_url,
+            contentDescription = null,
+            modifier = Modifier
+                .size(200.dp)
+                .clip(RoundedCornerShape(16.dp)),
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop
+        )
 
-        Button(onClick = {
-            //Read from firebase Register/usernamer
-          //  val onj = getUserParameters(usernamus,food,img_url)
-            if (username_true != null) {
-                updateUserRecipes(username_true, food, img_url)
+        // Food name below the image
+        Text(
+            text = food,
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = accentColor
+            ),
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
+        // Nutrients list in the center
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+                .background(secondaryColor, RoundedCornerShape(8.dp))
+                .padding(16.dp)
+        ) {
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(nutritionAnalysis) { nutrient ->
+                    Text("${nutrient.first}: ${nutrient.second}", color = primaryTextColor)
+                }
             }
-        }) {
-            Text(text = "Add ${usernamus} to your list")
+        }
+
+        // Button at the bottom to add the recipe to the user's list
+        Button(
+            onClick = {
+                if (username != null) {
+                    updateUserRecipes(username, food, img_url)
+                }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "Add ${usernamus} to your list", color = Color.White)
         }
     }
-
 }
+}
+
 
 fun updateUserRecipes(userName: String, foodus: String, img_url: String) {
     // Get a reference to the Firebase database

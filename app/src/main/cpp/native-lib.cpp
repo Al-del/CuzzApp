@@ -3,7 +3,7 @@
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_cuzzapp_Show_1recepies_00024Keys_APIKeys(JNIEnv* env, jobject /* this is it */) {
-    std::string api_key = "AIzaSyCI2klvI40Y5sZckwgLv2ipWCisVUbu-Kc";
+    std::string api_key = "AIzaSyDyvfzxxnKyY3sw9P-ETxY7scm4vGcI-Zg";
     return env->NewStringUTF(api_key.c_str());
 }
 extern "C" JNIEXPORT jstring JNICALL

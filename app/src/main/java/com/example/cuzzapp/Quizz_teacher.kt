@@ -309,7 +309,7 @@ fun CircularButton(onClick: () -> Unit) {
     }
 }
 @Composable
-fun Card(modifier: Modifier = Modifier) {
+fun Cardi(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .requiredWidth(width = 327.dp)
@@ -436,7 +436,7 @@ fun Property1Small(modifier: Modifier = Modifier) {
 @Preview(widthDp = 327, heightDp = 232)
 @Composable
 fun CardPreview() {
-    Card(Modifier.offset(y = -100.dp))
+    Cardi(Modifier.offset(y = -100.dp))
 }
 @Composable
 fun Cardus(modifier: Modifier = Modifier) {

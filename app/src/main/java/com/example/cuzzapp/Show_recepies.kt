@@ -9,16 +9,19 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -78,14 +81,21 @@ class Show_recepies : ComponentActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val username= intent.getStringExtra("username")
         setContent {
             var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFFffffff)) ,onSearchQueryChange = { searchQuery = it }) {
-
             // A surface container using the 'background' color from the theme
+            val gradientBrush = Brush.linearGradient(
+                colors = listOf(
+                    Color(0xFF345E2A),
+                    Color(0xFF403182)
+                ),
+                start = Offset(0f, 0f),
+                end = Offset.Infinite
+            )
+            Drawer(scaffoldState, searchQuery, backgroundColor = gradientBrush ,onSearchQueryChange = { searchQuery = it }) {
+
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
@@ -120,64 +130,71 @@ fun FoodList(foodList: List<FoodPair>, lifecycleScope: LifecycleCoroutineScope, 
         end = Offset.Infinite
     )
 
-    LazyColumn {
-        items(foodList) { item ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp) // Increased padding around the card
-                    .offset(x = 0.dp, y = 120.dp) // Optionally increased offset for more vertical space
-            ) {
-                Column(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = gradientBrush) // Apply the gradient background to the entire activity
+            .clip(RoundedCornerShape(16.dp)) // Apply rounded corners
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp)) // Apply rounded corners
+        ) {
+            items(foodList) { item ->
+                Card(
                     modifier = Modifier
-                        .fillMaxSize() // Make the column fill the card
-                        .background(brush = gradientBrush) // Apply the gradient
-                        .padding(24.dp) // Increased padding inside the card
+                        .fillMaxWidth()
+                        .padding(16.dp) // Increased padding around the card
+                        .clip(RoundedCornerShape(16.dp)) // Apply rounded corners
                 ) {
-                    AsyncImage(
-                        model = item.second,
-                        contentDescription = null,
+                    Column(
                         modifier = Modifier
-                            .clickable {
-                                lifecycleScope.launch {
-                                    val recipeUrl = withContext(Dispatchers.IO) {
-                                        getEdamamRecipes(
-                                            Show_recepies.Keys.API_edeman(),
-                                            Show_recepies.Keys.App_id(),
-
-                                            item.first
-                                        )
+                            .fillMaxSize() // Make the column fill the card
+                            .padding(24.dp) // Increased padding inside the card
+                    ) {
+                        AsyncImage(
+                            model = item.second,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clickable {
+                                    lifecycleScope.launch {
+                                        val recipeUrl = withContext(Dispatchers.IO) {
+                                            getEdamamRecipes(
+                                                Show_recepies.Keys.API_edeman(),
+                                                Show_recepies.Keys.App_id(),
+                                                item.first
+                                            )
+                                        }
+                                        val obj_d = withContext(Dispatchers.IO) {
+                                            getSpoonacularRecipes(
+                                                Show_recepies.Keys.API_spoonacular(),
+                                                recipeUrl.toString(),
+                                                recepie_Name = item.first
+                                            )
+                                        }
+                                        val intent = Intent(context, Recepie_idk::class.java).apply {
+                                            putExtra("title", obj_d.title)
+                                            putExtra("image", obj_d.image)
+                                            putExtra("ingredients", obj_d.ingredients.toString())
+                                            putExtra("video", obj_d.video)
+                                            putExtra("instrutions", obj_d.instructions)
+                                            putExtra("urlus", recipeUrl)
+                                        }
+                                        context.startActivity(intent)
                                     }
-                                    val obj_d = withContext(Dispatchers.IO) {
-                                        getSpoonacularRecipes(
-                                            Show_recepies.Keys.API_spoonacular(),
-                                            recipeUrl.toString(),
-                                            recepie_Name = item.first
-                                        )
-                                    }
-                                    val intent = Intent(context, Recepie_idk::class.java).apply {
-                                        putExtra("title", obj_d.title)
-                                        putExtra("image", obj_d.image)
-                                        putExtra("ingredients", obj_d.ingredients.toString())
-                                        putExtra("video", obj_d.video)
-                                        putExtra("instrutions", obj_d.instructions)
-                                        putExtra("urlus", recipeUrl)
-                                    }
-                                    context.startActivity(intent)
                                 }
-                            }
-                            .fillMaxWidth() // Make the image fill the maximum width
-                            .height(200.dp) // Increased height for the image
-                    )
+                                .fillMaxWidth() // Make the image fill the maximum width
+                                .height(200.dp) // Increased height for the image
+                        )
 
-                    Text(text = "Name: ${item.first}", color = Color.White)
-                    // Add more details as needed
+                        Text(text = "Name: ${item.first}", color = Color.Black) // Set text color to black for better contrast
+                        // Add more details as needed
+                    }
                 }
             }
         }
     }
 }
-
 suspend fun getEdamamRecipes(apiKey: String, appId: String, food: String, numResults: Int = 5): String? {
     val baseUrl = "https://api.edamam.com/search"
 
