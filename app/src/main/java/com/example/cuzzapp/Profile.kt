@@ -61,6 +61,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.painter.Painter
@@ -114,14 +115,7 @@ class Profile : ComponentActivity() {
                 var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, backgroundColor = Brush.linearGradient(
-                colors = listOf(
-                    Color(0xFFeb3f21),
-                    Color(0xFF1ed4b8)
-                ),
-                start = Offset(0f, 1f),
-                end = Offset.Infinite
-            ),onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFF6A5AE0)),onSearchQueryChange = { searchQuery = it }) {
                 Log.d(TAG, "onCreate: $url_photo_prof")
 
                 if (url_photo_prof != null) {
@@ -206,14 +200,7 @@ fun ProfileScreen(url_photo_prof: String, user_to_show: String?, messagingServic
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFFeb3f21),
-                                Color(0xFF1ed4b8)
-                            ),
-                            start = Offset(0f, 1f),
-                            end = Offset.Infinite
-                        )
+                        Color(0xFF6A5AE0)
                     )
                 ,
                 horizontalAlignment = Alignment.End
@@ -227,8 +214,8 @@ fun ProfileScreen(url_photo_prof: String, user_to_show: String?, messagingServic
                             triggerFetch = true // Set trigger to launch coroutine
 
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF639e55)),
-                        modifier = Modifier.align(Alignment.BottomEnd)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFf7f76d)),
+                        modifier = Modifier.align(Alignment.BottomEnd).offset(y = -20.dp, x = -20.dp)
                     ) {
                         Text(text = "See Portofolio")
                     }
@@ -312,7 +299,7 @@ fun ProfileScreen(url_photo_prof: String, user_to_show: String?, messagingServic
             modifier = Modifier
                 .size(height = dynamicHeight.dp, width = getScreenWidthDp().dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(Color(0xff212121))
+                .background(Color.White)
                 .pointerInput(Unit) {
                     detectDragGestures { _, dragAmount ->
                         val heightChange = dragAmount.y.toInt()
@@ -385,7 +372,7 @@ fun Show_friend_list(friends: List<String>, onFriendClick: (String) -> Unit) {
                         style = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.White),
+                            color = Color.Black),
                     )
                     // Display points
                     profileData.points?.let {
@@ -394,7 +381,7 @@ fun Show_friend_list(friends: List<String>, onFriendClick: (String) -> Unit) {
                             style = TextStyle(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
-                                color = Color.White),
+                                color = Color.Black),
                         )
                     }
                 }
@@ -422,6 +409,7 @@ fun Show_friend_list(friends: List<String>, onFriendClick: (String) -> Unit) {
                         intent.putExtra("userr", friend)
                         startActivity(context, intent, null)
                     },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFf7f76d)),
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Text("See Portfolio")

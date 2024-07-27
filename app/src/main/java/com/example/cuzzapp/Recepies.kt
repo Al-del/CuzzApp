@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -79,6 +80,7 @@ class Recepies : ComponentActivity() {
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         val param = intent.getStringExtra("recepie")
         val usernamuss = intent.getStringExtra("username")
         lifecycleScope.launch {
@@ -100,14 +102,7 @@ val scaffoldState = rememberScaffoldState()
 Drawer(
     scaffoldState = scaffoldState,
     searchQuery = searchQuery,
-    backgroundColor = Brush.linearGradient(
-        colors = listOf(
-            Color(0xFF345E2A),
-            Color(0xFF403182)
-        ),
-        start = Offset(0f, 0f),
-        end = Offset.Infinite
-    ),
+    backgroundColor =SolidColor(Color(0xFF6A5AE0)),
     onSearchQueryChange = { searchQuery = it }
 ) {
     val navController = rememberNavController()
@@ -117,14 +112,7 @@ Drawer(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFF345E2A),
-                                Color(0xFF403182)
-                            ),
-                            start = Offset(0f, 0f),
-                            end = Offset.Infinite
-                        )
+                       color = Color(0xFF6A5AE0)
                     )
             ) {
                 items(recipes) { recipe ->

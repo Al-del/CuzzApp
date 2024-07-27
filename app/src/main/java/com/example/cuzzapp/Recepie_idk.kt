@@ -19,6 +19,7 @@ import coil.compose.rememberImagePainter
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 class Recepie_idk : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         val title = intent.getStringExtra("title")
         val image = intent.getStringExtra("image")
         val ingredients = intent.getStringExtra("ingredients")

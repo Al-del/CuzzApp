@@ -85,19 +85,11 @@ class Shop : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val gradientBrush = Brush.linearGradient(
-                colors = listOf(
-                    Color(0xFF345E2A),
-                    Color(0xFF403182)
-                ),
-                start = Offset(0f, 0f),
-                end = Offset.Infinite
-            )
             var searchQuery by remember { mutableStateOf(seach_querr) }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color(0xFF262323)),onSearchQueryChange = { searchQuery = it }) {
-            dini(Modifier.background(brush = gradientBrush))
+            Drawer(scaffoldState, searchQuery, backgroundColor =  SolidColor(Color(0xFF6A5AE0)),onSearchQueryChange = { searchQuery = it }) {
+            dini(Modifier.background(color = Color(0xFF6A5AE0)))
             }
   }
     }

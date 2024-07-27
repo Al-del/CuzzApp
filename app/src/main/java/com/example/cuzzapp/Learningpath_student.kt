@@ -104,7 +104,7 @@ class Learningpath_student : ComponentActivity() {
             var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
-            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xffb379df)) ,onSearchQueryChange = { searchQuery = it }) {
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFF6A5AE0)) ,onSearchQueryChange = { searchQuery = it }) {
 
                 val database = Firebase.database
                 val myRef = database.getReference("LearningPathStages")
@@ -134,6 +134,7 @@ class Learningpath_student : ComponentActivity() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color(0xFF6A5AE0))
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally

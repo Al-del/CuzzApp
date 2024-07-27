@@ -191,7 +191,7 @@ fun getFriendPoints(friend: String): CompletableFuture<Int> {
         val userRef = database.getReference("accounts/$friend/role")
 Log.d("kilo",friend)
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {""
                 val role = dataSnapshot.getValue(String::class.java)
                 if (role != null) {
                     future.complete(role)

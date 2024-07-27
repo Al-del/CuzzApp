@@ -116,8 +116,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         setContent {
-            //  RegisterPreview()
-          //  LoginScreen1Preview()
             RegisterPrev()
 
         }
@@ -133,7 +131,6 @@ class MainActivity : ComponentActivity() {
             contentAlignment = Alignment.TopEnd,
             modifier = modifier
                 .fillMaxSize()
-                .clip(shape = RoundedCornerShape(26.dp))
                 .background(color = Color(0xffb51316))
         ) {
             Image(
@@ -328,11 +325,10 @@ class MainActivity : ComponentActivity() {
                             .requiredHeight(height = 55.dp)
                             .offset(y = -50.dp)
                             .clip(shape = RoundedCornerShape(8.dp))
-
                             .background(
                                 brush = Brush.radialGradient(
                                     0f to Color.White,
-                                    0.77f to Color.White.copy(alpha = 0.22f),
+                                    0.77f to Color.White,
                                     1f to Color.White,
                                     center = Offset(48.1f, 11.57f),
                                     radius = 398.85f
@@ -351,10 +347,10 @@ class MainActivity : ComponentActivity() {
                             .offset(x = 38.dp, y = -50.dp),
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent
+                            unfocusedIndicatorColor = Color.Black,
+                            focusedIndicatorColor = Color.Black
                         ),
-                        label = { Text("Username") }
+                        label = { Text("Username", color = Color.Black) }
                     )
                 }
                 Image(
@@ -367,7 +363,7 @@ class MainActivity : ComponentActivity() {
             }
             Text(
                 text = "Email Adress",
-                color = Color(0xffa4a4a4),
+                color = Color.White,
                 style = TextStyle(
                     fontSize = 14.329999923706055.sp,
                     fontWeight = FontWeight.Medium),
@@ -379,7 +375,7 @@ class MainActivity : ComponentActivity() {
                     ))
             Text(
                 text = "Your Name",
-                color = Color(0xffa4a4a4),
+                color = Color.White,
                 style = TextStyle(
                     fontSize = 14.329999923706055.sp,
                     fontWeight = FontWeight.Medium),
@@ -392,7 +388,7 @@ class MainActivity : ComponentActivity() {
 
             Text(
                 text = "Password",
-                color = Color(0xffa4a4a4),
+                color = Color.White,
                 style = TextStyle(
                     fontSize = 14.329999923706055.sp,
                     fontWeight = FontWeight.Medium),
@@ -417,20 +413,22 @@ class MainActivity : ComponentActivity() {
                         .requiredWidth(width = 314.dp)
                         .requiredHeight(height = 55.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .requiredWidth(width = 314.dp)
-                            .requiredHeight(height = 55.dp)
-                            .offset(y = -60.dp)
-                            .background(
-                                brush = Brush.radialGradient(
-                                    0f to Color.White,
-                                    0.77f to Color.White.copy(alpha = 0.22f),
-                                    1f to Color.White,
-                                    center = Offset(48.1f, 11.57f),
-                                    radius = 398.85f
-                                )
-                            ))
+                 Box(
+    modifier = Modifier
+        .requiredWidth(width = 314.dp)
+        .requiredHeight(height = 55.dp)
+        .offset(y = -60.dp)
+        .clip(RoundedCornerShape(8.dp)) // Apply rounded corners
+        .background(
+            brush = Brush.radialGradient(
+                0f to Color.White,
+                0.77f to Color.White,
+                1f to Color.White,
+                center = Offset(48.1f, 11.57f),
+                radius = 398.85f
+            )
+        )
+)
                     TextField(
                         value = password,
                         onValueChange = { password = it },
@@ -439,6 +437,7 @@ class MainActivity : ComponentActivity() {
                             fontSize = 14.329999923706055.sp,
                             fontWeight = FontWeight.Medium
                         ),
+                        visualTransformation = PasswordVisualTransformation(),
                         modifier = Modifier
                             .align(alignment = Alignment.TopStart)
                             .offset(x = 38.dp, y = -57.dp),
@@ -454,8 +453,8 @@ class MainActivity : ComponentActivity() {
                     painter = painterResource(id = R.drawable.key),
                     contentDescription = "Vector",
                     modifier = Modifier
-                        .fillMaxSize()
-                        .offset(x = 100.dp, y = -60.dp))
+                        .size(40.dp)
+                        .offset(x = 230.dp, y = -50.dp))
 
             }
             Box(
@@ -562,7 +561,7 @@ class MainActivity : ComponentActivity() {
                             .background(
                                 brush = Brush.radialGradient(
                                     0f to Color.White,
-                                    0.77f to Color.White.copy(alpha = 0.22f),
+                                    0.77f to Color.White,
                                     1f to Color.White,
                                     center = Offset(48.1f, 11.57f),
                                     radius = 398.85f
@@ -589,7 +588,7 @@ TextField(
     label = { Text("Email address") }
 )
                 Image(
-                    painter = painterResource(id = R.drawable.email),
+                    painter = painterResource(id = R.drawable.mailus),
                     contentDescription = "Vector",
                     modifier = Modifier
                         .fillMaxSize()
@@ -646,10 +645,10 @@ TextField(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium),
                 modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
+                    .align(alignment = Alignment.BottomStart)
                     .offset(
                         x = 40.dp,
-                        y = 754.dp
+                        y = -80.dp
                     )
                     .requiredWidth(width = 303.dp)
                     .requiredHeight(height = 23.dp))
@@ -660,10 +659,10 @@ TextField(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium),
                 modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
+                    .align(alignment = Alignment.BottomStart)
                     .offset(
                         x = 72.dp,
-                        y = 804.dp
+                        y = -30.dp
                     )
                     .clickable {
                         val intent = Intent(context, Register::class.java)
@@ -678,28 +677,37 @@ TextField(
                 alignment = Alignment.TopEnd,
                 modifier = Modifier
                   )
-            Button(
-                onClick = {
-                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    takePictureLauncher.launch(takePictureIntent)
-                },
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .offset(y = 195.dp, x = 50.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-            ) {
-                Text(
-                    text = "Take profile picture",
-                    color = Color(0xffa4a4a4),
-                    style = TextStyle(
-                        fontSize = 11.329999923706055.sp,
-                        fontWeight = FontWeight.Medium
-                ))
+
+    Box(
+        modifier = Modifier
+            .requiredWidth(width = 170.dp)
+            .requiredHeight(height = 30.dp)
+            .align(Alignment.Center)
+            .offset(y = 195.dp, x = 50.dp)
+            .clip(shape = RoundedCornerShape(15.dp))
+            .clickable {
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                takePictureLauncher.launch(takePictureIntent)
             }
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xff9c3fe4),
+                        Color(0xffc65647)
+                    ),
+                    start = Offset(0f, 0f),
+                    end = Offset(320f, 0f)
+                )
+            )
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = "Take profile picture", color = Color.White)
+    }
+
         }
 
     }
-
     @Composable
     private fun RegisterPrev() {
         Register_Screen(Modifier)

@@ -58,6 +58,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -104,12 +105,12 @@ class Other_Portofolios : ComponentActivity() {
         var searchQuery by remember { mutableStateOf("") }
         val scaffoldState = rememberScaffoldState()
 
-        Drawer(scaffoldState, searchQuery, backgroundColor = gradientBrush,onSearchQueryChange = { searchQuery = it }) {
+        Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFF6A5AE0)),onSearchQueryChange = { searchQuery = it }) {
             Box(modifier = Modifier.fillMaxSize()) {
                 if(username_true == prof_sel){
-                    DisplayAchievements(achivement, intent, modifier =  Modifier.background(brush = gradientBrush))
+                    DisplayAchievements(achivement, intent, modifier =  Modifier.background(color = Color(0xFF6A5AE0)))
                 }else{
-                    DisplayAchievements(achivement_other, intent, modifier =  Modifier.background(brush = gradientBrush))
+                    DisplayAchievements(achivement_other, intent, modifier =  Modifier.background(color = Color(0xFF6A5AE0)))
                 }
             }
         }
@@ -128,10 +129,14 @@ fun DisplayAchievements(achievements: MutableList<achievementuriUSER?>, intent: 
             modifier = modifier.fillMaxSize()
                 ,
             floatingActionButton = {
-                FloatingActionButton( modifier = modifier.offset(y = -50.dp), onClick = {
-                    val intent = Intent(context, adaugare::class.java)
-                    ContextCompat.startActivity(context, intent, null)
-                }) {
+                FloatingActionButton(
+                    modifier = modifier.offset(y = -50.dp),
+                    onClick = {
+                        val intent = Intent(context, adaugare::class.java)
+                        ContextCompat.startActivity(context, intent, null)
+                    },
+                    backgroundColor = Color(0xFFf7f76d) // Set the custom color here
+                ) {
                     Icon(Icons.Filled.Add, contentDescription = "Add")
                 }
             },
@@ -139,7 +144,7 @@ fun DisplayAchievements(achievements: MutableList<achievementuriUSER?>, intent: 
         )
 
         {
-            LazyColumn(modifier = modifier.fillMaxSize()) {
+            LazyColumn(modifier = modifier.fillMaxSize().offset(y = 30.dp)) {
                 itemsIndexed(achievements) { index, achievement ->
                     // Now you have access to both the index and the achievement
                     AchievementItem(achievement, index+1)
@@ -151,7 +156,7 @@ fun DisplayAchievements(achievements: MutableList<achievementuriUSER?>, intent: 
     else
     {
         Scaffold{
-            LazyColumn(modifier = modifier.fillMaxSize()) {
+            LazyColumn(modifier = modifier.fillMaxSize().offset(y = 30.dp)) {
                 itemsIndexed(achievements) { index, achievement ->
                     // Now you have access to both the index and the achievement
                     AchievementItem(achievement, index+1)
@@ -171,8 +176,9 @@ fun AchievementItem(achievement: achievementuriUSER?, indx: Int) {
     if (achievement != null) {
         Box(
             modifier = Modifier
-                .requiredWidth(width = getScreenWidthDp().dp)
+                .requiredWidth(width = getScreenWidthDp().dp- 20.dp)
                 .requiredHeight(height = 184.dp)
+                .offset(x = 10.dp)
                 .clip(shape = RoundedCornerShape(20.dp))
                 .background(color = Color.White)
         ) {

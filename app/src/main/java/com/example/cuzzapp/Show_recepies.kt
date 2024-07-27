@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -81,25 +82,15 @@ class Show_recepies : ComponentActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
-            // A surface container using the 'background' color from the theme
-            val gradientBrush = Brush.linearGradient(
-                colors = listOf(
-                    Color(0xFF345E2A),
-                    Color(0xFF403182)
-                ),
-                start = Offset(0f, 0f),
-                end = Offset.Infinite
-            )
-            Drawer(scaffoldState, searchQuery, backgroundColor = gradientBrush ,onSearchQueryChange = { searchQuery = it }) {
 
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
+            Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFF6A5AE0)) ,onSearchQueryChange = { searchQuery = it }) {
+
+
                 foodListState.value?.let {
                     FoodList(
                         it,
@@ -107,7 +98,7 @@ class Show_recepies : ComponentActivity() {
                         context = this@Show_recepies
                     )
                 }
-            }
+
         }
         }
 
@@ -121,19 +112,12 @@ class Show_recepies : ComponentActivity() {
 
 @Composable
 fun FoodList(foodList: List<FoodPair>, lifecycleScope: LifecycleCoroutineScope, context: Context) {
-    val gradientBrush = Brush.linearGradient(
-        colors = listOf(
-            Color(0xFF345E2A),
-            Color(0xFF403182)
-        ),
-        start = Offset(0f, 0f),
-        end = Offset.Infinite
-    )
+
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = gradientBrush) // Apply the gradient background to the entire activity
+            .background(color = Color(0xFF6A5AE0)) // Apply the gradient background to the entire activity
             .clip(RoundedCornerShape(16.dp)) // Apply rounded corners
     ) {
         LazyColumn(
