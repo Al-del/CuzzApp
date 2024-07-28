@@ -429,6 +429,32 @@ class MainActivity : ComponentActivity() {
             )
         )
 )
+                    Box(
+                        modifier = Modifier
+                            .requiredWidth(width = 170.dp)
+                            .offset(y = -15.dp)
+                            .requiredHeight(height = 30.dp)
+                            .align(Alignment.Center)
+                            .clip(shape = RoundedCornerShape(15.dp))
+                            .clickable {
+                                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                                takePictureLauncher.launch(takePictureIntent)
+                            }
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xff9c3fe4),
+                                        Color(0xffc65647)
+                                    ),
+                                    start = Offset(0f, 0f),
+                                    end = Offset(320f, 0f)
+                                )
+                            )
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = "Take profile picture", color = Color.White)
+                    }
                     TextField(
                         value = password,
                         onValueChange = { password = it },
@@ -678,32 +704,7 @@ TextField(
                 modifier = Modifier
                   )
 
-    Box(
-        modifier = Modifier
-            .requiredWidth(width = 170.dp)
-            .requiredHeight(height = 30.dp)
-            .align(Alignment.Center)
-            .offset(y = 195.dp, x = 50.dp)
-            .clip(shape = RoundedCornerShape(15.dp))
-            .clickable {
-                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                takePictureLauncher.launch(takePictureIntent)
-            }
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xff9c3fe4),
-                        Color(0xffc65647)
-                    ),
-                    start = Offset(0f, 0f),
-                    end = Offset(320f, 0f)
-                )
-            )
-            .padding(horizontal = 12.dp, vertical = 6.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Take profile picture", color = Color.White)
-    }
+
 
         }
 

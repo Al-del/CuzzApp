@@ -455,6 +455,7 @@ fun drawer_content(modifier: Modifier = Modifier) {
                             Image(
                                 painter = painter,
                                 contentDescription = "81",
+                                contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .clip(shape = RoundedCornerShape(256.9054260253906.dp))
@@ -487,6 +488,21 @@ fun drawer_content(modifier: Modifier = Modifier) {
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
+                            )
+                            Text(
+                                text = "Log out",
+                                color = Color(0xffd1d3d4),
+                                lineHeight = 1.em,
+                                style = TextStyle(
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        val intent = Intent(context, MainActivity::class.java)
+                                        startActivity(context, intent, null)
+                                    }
                             )
                         }
                     }

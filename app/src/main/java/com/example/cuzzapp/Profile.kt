@@ -111,7 +111,6 @@ class Profile : ComponentActivity() {
         setContent {
             val messagingService = MessagingService()
 
-            Toast.makeText(this, "The user is: $user_", Toast.LENGTH_SHORT).show()
                 var searchQuery by remember { mutableStateOf("") }
             val scaffoldState = rememberScaffoldState()
 
@@ -168,7 +167,6 @@ fun ProfileScreen(url_photo_prof: String, user_to_show: String?, messagingServic
     LaunchedEffect(key1 = Unit) {
         coroutineScope.launch {
             friends = user_to_show?.let { messagingService.getFriends(it).await() }!!
-            Toast.makeText(context, "Friends: $friends", Toast.LENGTH_SHORT).show()
         }
     }
     // Coroutine launch logic moved here
@@ -355,6 +353,7 @@ fun fetchFriendPhotoUrl(friend: String): StateFlow<FriendProfileData> {
 fun Show_friend_list(friends: List<String>, onFriendClick: (String) -> Unit) {
     val context = LocalContext.current
     val triggerFetch = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(friends) { friend ->
@@ -394,6 +393,7 @@ fun Show_friend_list(friends: List<String>, onFriendClick: (String) -> Unit) {
                         AsyncImage(
                             model = profileData.photoUrl,
                             contentDescription = "Friend's Profile Picture",
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .size(100.dp)
                                 .clip(CircleShape)
@@ -405,9 +405,16 @@ fun Show_friend_list(friends: List<String>, onFriendClick: (String) -> Unit) {
                 }
                 Button(
                     onClick = {
-                        val intent = Intent(context, Other_Portofolios::class.java)
-                        intent.putExtra("userr", friend)
-                        startActivity(context, intent, null)
+                        coroutineScope.launch {
+                            val result = fetchShopItems(friend)
+                            photo_URL = result.photoUrl
+                            descriptiones_ = result.description
+                            pointss = result.points
+
+                            val intent = Intent(context, Other_Portofolios::class.java)
+                            intent.putExtra("userr", friend)
+                            startActivity(context, intent, null)
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFf7f76d)),
                     modifier = Modifier.align(Alignment.CenterVertically)

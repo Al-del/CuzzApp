@@ -121,7 +121,6 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:1.1.0") // [Optional] If your media item is DASH
     implementation("androidx.media3:media3-exoplayer-hls:1.1.0") // [Optional] If your media item is HLS (m3u8..)
 
- //   implementation("com.chaquo.python:gradle:15.0.1")
 
     implementation( "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28")
 

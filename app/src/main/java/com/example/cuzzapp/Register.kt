@@ -131,7 +131,6 @@ class Register : ComponentActivity() {
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .clip(shape = RoundedCornerShape(26.dp))
                 .background(color = Color(0xff151316))
         ) {
             Column(

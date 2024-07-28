@@ -89,17 +89,6 @@ class Other_Portofolios : ComponentActivity() {
         val prof_sel = intent.getStringExtra("userr")
 
         setContent {
-            Toast.makeText(this, "The user is: $prof_sel", Toast.LENGTH_SHORT).show()
-            Toast.makeText(this, "The user is: $username_true", Toast.LENGTH_SHORT).show()
-    val gradientBrush = Brush.linearGradient(
-        colors = listOf(
-            Color(0xFF345E2A),
-            Color(0xFF403182)
-        ),
-        start = Offset(0f, 0f),
-        end = Offset.Infinite
-    )
-
 
         println("The length of the achievements list is: ${achivement.size}")
         var searchQuery by remember { mutableStateOf("") }
@@ -108,9 +97,11 @@ class Other_Portofolios : ComponentActivity() {
         Drawer(scaffoldState, searchQuery, backgroundColor = SolidColor(Color(0xFF6A5AE0)),onSearchQueryChange = { searchQuery = it }) {
             Box(modifier = Modifier.fillMaxSize()) {
                 if(username_true == prof_sel){
-                    DisplayAchievements(achivement, intent, modifier =  Modifier.background(color = Color(0xFF6A5AE0)))
+                    DisplayAchievements(achivement, intent, modifier =  Modifier.background(color = Color(0xFF6A5AE0)),prof_sel)
                 }else{
-                    DisplayAchievements(achivement_other, intent, modifier =  Modifier.background(color = Color(0xFF6A5AE0)))
+                    if (prof_sel != null) {
+                        DisplayAchievements(achivement_other, intent, modifier =  Modifier.background(color = Color(0xFF6A5AE0)),prof_sel)
+                    }
                 }
             }
         }
@@ -120,7 +111,7 @@ class Other_Portofolios : ComponentActivity() {
 }
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DisplayAchievements(achievements: MutableList<achievementuriUSER?>, intent: Intent?,modifier: Modifier){
+fun DisplayAchievements(achievements: MutableList<achievementuriUSER?>, intent: Intent?,modifier: Modifier, prof_sel:String){
     val context = LocalContext.current
     if(viewedProfile == username_for_all) {
 
@@ -129,6 +120,7 @@ fun DisplayAchievements(achievements: MutableList<achievementuriUSER?>, intent: 
             modifier = modifier.fillMaxSize()
                 ,
             floatingActionButton = {
+                if(username_true == prof_sel){
                 FloatingActionButton(
                     modifier = modifier.offset(y = -50.dp),
                     onClick = {
@@ -139,6 +131,7 @@ fun DisplayAchievements(achievements: MutableList<achievementuriUSER?>, intent: 
                 ) {
                     Icon(Icons.Filled.Add, contentDescription = "Add")
                 }
+            }
             },
             floatingActionButtonPosition = FabPosition.End,
         )
