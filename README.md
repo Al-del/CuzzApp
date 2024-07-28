@@ -22,7 +22,7 @@ Audiența principală este formată din orice persoană dornică să învețe sa
 ### 2.1📲Instalarea pe dispozitive
 Pentru instalarea aplicației, este necesar să folosiți un distribuitor precum Google Play sau site-ul nostru dedicat, ai-cuza.ro, de unde puteți descărca APK-ul pentru platforma dorită. Tehnologia aleasă permite utilizarea aplicației pe orice platformă, dar vom detalia acest aspect în secțiunea 4.
 ### 2.1📲Construirea aplicatiei
-Pentru a contrui aplicația trebuie să aveți ![Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) și să instalati ultima versiune ![grade](https://gradle.org/install/)
+Pentru a contrui aplicația trebuie să aveți [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) și să instalati ultima versiune [grade](https://gradle.org/install/)
 ```
 git clone https://github.com/Al-del/CuzzApp.git 
 ```
