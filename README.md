@@ -4,6 +4,7 @@
 ![GitHub license](https://img.shields.io/badge/licence-MIT-green)
 ![Github issues](https://img.shields.io/badge/issues-0%20open-yellow)
 ### [Server pentru self trained AI model](https://github.com/Al-del/Cuzzapp_Server)
+### [Modelul de AI pentru food detection](https://github.com/Al-del/AI_model_tf_foods)
 ### Tabel de conținut:
 1. [Informații generale](#informații-generale)
 2. [Ghid de instalare și utilizare](#ghid-de-instalare-și-utilizare)
