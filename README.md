@@ -94,8 +94,7 @@ Din punct de vedere tehnologic, proiectul oferă o soluție logică și clară p
 - Profesor Coordonator: Doamna Profesoară Rădulescu Ramona
 - Membrii:
   - David Gheorghică Istrate
-  - Lupu Cezar
 ## ❔ Contact
 
 - 📧E-Mail: cuzzapp2024@gmail.com
-- 🗣️Discord: cuzzapp
+- 🗣️Discord: Cuzzapp
